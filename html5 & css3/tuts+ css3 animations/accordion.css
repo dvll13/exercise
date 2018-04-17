@@ -1,0 +1,42 @@
+/* LIMITED - behaves weirdly when there's a scroller on the page*/
+
+.accordion {
+	list-style-type: none;
+	padding: 0;
+}
+.accordion li {
+	background-color: #888;
+	border: 1px solid #333;
+	border-bottom: none;
+	position: relative;
+}
+.accordion li:last-child {
+	border-bottom: 1px solid #333;
+}
+.accordion li a {
+	color: #fff;
+	font-size: 14px;
+	margin: 0;
+	text-decoration: none;
+}
+.accordion li a h4 {
+	margin: 0;
+	padding: 10px;
+}
+div.hidden {
+	background-color: #aaa;
+	height: 0;
+	/* max-height: 0; */
+	overflow: hidden;
+	transition: all .3s ease;
+}
+div.hidden p {
+	color: #555;
+	font-size: 14px;
+	margin: 10px;
+}
+
+.accordion li a:target + div.hidden {
+	height: 150px;
+	/* max-height: 500px; */
+}

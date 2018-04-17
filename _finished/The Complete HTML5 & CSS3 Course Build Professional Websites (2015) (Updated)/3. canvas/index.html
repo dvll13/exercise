@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Canvas</title>
+	<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+	<h2>Drawing a rectangle</h2>
+	<canvas id='canvas1' style="border: 1px solid #333; width: 300px; height:300px; background: black"></canvas>
+	<canvas id='myCanvas' style="border: 1px solid #333; width: 300px; height:150px; background: blue">Your browser does not support the HTML5 canvas tag.</canvas>
+
+	<h2>Drawing a line</h2>
+	<canvas id='canvas2' style="border: 1px solid #333; width: 300px; height:300px; background: gray"></canvas>
+
+	<h2>Drawing a circle</h2>
+	<canvas id='canvas3' style="border: 1px solid #333; width: 300px; height:300px; background: gray"></canvas>
+
+	<h2>Drawing a circle (not distorted)</h2>
+	<canvas id='canvas4' style="border: 1px solid #333; background: gray" width="300" height="300"></canvas>
+	<script>
+
+		// draw rectangle #1
+		var c = document.getElementById('canvas1');
+		var ctx = c.getContext('2d');
+
+		ctx.fillStyle = 'orange';
+		ctx.fillRect(10, 10, 100, 100);
+
+		// draw rectangle #2
+		c = document.getElementById("myCanvas");
+		ctx = c.getContext("2d");
+		ctx.fillRect(20, 20, 100, 100);
+
+		// draw a line
+		c = document.getElementById("canvas2");
+		ctx = c.getContext("2d");
+
+		ctx.moveTo(50, 50)
+		ctx.lineTo(100, 100)
+		ctx.lineTo(150, 50)
+		ctx.strokeStyle = 'red'
+		ctx.stroke()
+
+		// draw a circle
+		c = document.getElementById("canvas3");
+		ctx = c.getContext("2d");
+
+		ctx.beginPath()
+		ctx.arc(60, 60, 30, 0, 2*Math.PI)
+		//ctx.arc(x, y, radius, start, end)
+		ctx.fillStyle = 'blue'
+		ctx.fill()
+		ctx.strokeStyle = 'red'
+		ctx.lineWidth = 5
+		ctx.stroke()
+
+		// draw a circle (not distorted)
+		c = document.getElementById("canvas4");
+		ctx = c.getContext("2d");
+
+		ctx.beginPath()
+		ctx.arc(60, 60, 30, 0, 2*Math.PI)
+		ctx.fillStyle = 'green'
+		ctx.fill()
+		ctx.strokeStyle = 'yellow'
+		ctx.lineWidth = 15
+		ctx.stroke()
+	</script>
+</body>
+</html>

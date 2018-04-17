@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Flex centering</title>
+	<link rel="stylesheet" href="../../base.css">
+	<style>
+		main {background-color: gray}
+		div {background-color: brown}
+		aside {background-color: blue}
+
+		main {
+			/* it is still a block element though */
+			display: flex;
+			max-width: 1000px;
+			margin: 0 auto;
+		}
+
+		div {
+			/* This makes the element grow and take all available space, not taken by the sidebar */
+			flex-grow: 1;
+		}
+
+		aside {
+			/* Give the sidebar a default width, and prevent it from shrinking */
+			flex-shrink: 0;
+			width: 300px;
+		}
+
+		@media all and (max-width: 800px) {
+			main {
+				flex-flow: column;
+			}
+
+			aside {
+				min-height: 200px;
+				width: auto;
+			}
+		}
+
+		/* OR:
+		div {
+			flex: 1;
+		}
+		aside {
+			width: 300px;
+		}
+		*/
+	</style>
+</head>
+<body>
+	<main>
+		<div>Done! Our layout is nearly finished. When the content of the #main element causes it to become longer, it will enlarge the #page, which in turn would also grow the aside (and the other way around).  The last thing to do is make the sidebar go beneath the main content on small screens, which can be done with a simple media queryDone! Our layout is nearly finished. When the content of the #main element causes it to become longer, it will enlarge the #page, which in turn would also grow the aside (and the other way around).  The last thing to do is make the sidebar go beneath the main content on small screens, which can be done with a simple media queryDone! Our layout is nearly finished. When the content of the #main element causes it to become longer, it will enlarge the #page, which in turn would also grow the aside (and the other way around).  The last thing to do is make the sidebar go beneath the main content on small screens, which can be done with a simple media queryDone! Our layout is nearly finished. When the content of the #main element causes it to become longer, it will enlarge the #page, which in turn would also grow the aside (and the other way around).  The last thing to do is make the sidebar go beneath the main content on small screens, which can be done with a simple media query</div>
+		<aside>
+			SIDEBAR!!!
+		</aside>
+	</main>
+</body>
+</html>

@@ -1,0 +1,87 @@
+.banner {
+	width: 500px;
+	height: 100px;
+	overflow: hidden;
+	position: relative;
+}
+#sky, #planeContainer {
+	height: 100px;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+#sky {
+	width: 1000px;
+	background: linear-gradient(to right, blue, lightblue, blue);
+	animation-name: sky;
+	animation-duration: 10s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+}
+#planeContainer {
+	width: 500px;
+	animation: plane 12s linear infinite;
+}
+#planeContainer #plane {
+	margin-top: 40px;
+	width: 50px;
+	height: 20px;
+	background: orange;
+}
+
+@keyframes sky {
+	from {
+		left: 0;
+	}
+	to {
+		left: -500px;
+	}
+}
+
+@keyframes plane {
+	from {
+		left: -70px;
+		top: 0;
+	}
+
+	10% {
+		top: 25px;
+	}
+
+	20% {
+		top: -25px;
+	}
+	
+	30% {
+		top: 25px;
+	}
+
+	40% {
+		top: -25px;
+	}
+	
+	50% {
+		top: 25px;
+	}
+
+	60% {
+		top: -25px;
+	}
+
+	70% {
+		top: 25px;
+	}
+
+	80% {
+		top: -25px;
+	}
+	
+	90% {
+		top: 25px;
+	}
+
+	to {
+		left: 500px;
+		top: 0;
+	}
+}

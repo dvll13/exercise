@@ -1,0 +1,271 @@
+@import 'https://fonts.googleapis.com/css?family=Alegreya+Sans';
+
+* {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+body {
+    background: #f5f5f5;
+    color: #67727a;
+    font-family: 'Alegreya', sans-serif;
+}
+h2 {
+    font-size: 250%;
+    font-weight: 700;
+    padding-top: 2%;
+    text-align: center;
+    color: #f5f5f5;
+}
+h3 {
+    font-size: 175%;
+    line-height: 155%;
+    padding: 5% 0;
+    font-weight: 400;
+    color: #f5f5f5;
+}
+p {
+    font-family: 'Alegreya', sans-serif;
+    color: #f5f5f5;
+    font-size: 160%;
+    line-height: 150%;
+    padding: 3%;
+    text-indent: 2%;
+    text-align: justify;
+}
+img {
+    max-width: 100%;
+    height: auto;
+    width: auto;
+    margin-bottom: -4px; /* align after float??? */
+}
+header {
+    background-color: #6991ac;
+    width: 100%;
+    height: 86px;
+}
+#header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+#logo {
+    margin: 20px;
+    float: left;
+    width: 200px;
+    height: 60px;
+    background: url(img/RD.png) no-repeat center;
+}
+/*--- Start Navigation ---*/
+nav {
+    float: right;
+    padding: 25px 20px 0 0;
+}
+#menu-icon {
+    display: none;
+    height: 40px;
+    width: 40px;
+    background: url(img/nav.png) no-repeat center;
+}
+a:hover#menu-icon {
+    border-radius: 4px 4px 0 0;
+}
+ul {
+    list-style-type: none;
+}
+nav ul li {
+    font-family: 'Alegreya Sans', sans-serif;
+    font-size: 150%;
+    float: left;
+    padding: 10px;
+}
+nav ul li a {
+    color: #f5f5f5;
+    text-decoration: none;
+}
+nav ul li a:hover {
+    color: #c3d7df;
+}
+.current {
+    color: #c3d7df;
+}
+/*--- End of Navigation ---*/
+.banner {
+    background-color: #6991ac;
+}
+.banner-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+.one-fourth {
+    float: left;
+    text-align: center;
+    width: 25%;
+}
+#html {
+    background-color: #f1aa90;
+}
+#css {
+    background-color: #beb9ad;
+}
+#seo {
+    background-color: #aadcd2;
+}
+#social {
+    background-color: #a2b2c1;
+}
+.one-fourth i {
+    color: #f0f0f0;
+    font-size: 500%;
+    padding: 13% 0 4% 0;
+}
+.inner-wrapper {
+    float: left;
+    width: 100%;
+    background-color: #c3d7df;
+}
+article {
+    float: left;
+    width: 50%;
+}
+aside {
+    float: right;
+    width: 50%;
+}
+#tablet {
+    background-color: #a2b1c1;
+}
+#mobile {
+    background-color: #beb9ad;
+}
+#desktop {
+    background-color: #f1aa90;
+}
+.inner-wrapper-2 {
+    float: left;
+    width: 100%;
+    background-color: #c3d7df;
+}
+.inner-wrapper-3 {
+    float: left;
+    width: 100%;
+    background-color: #aadcd2;
+}
+.one-third {
+    float: left;
+    width: 33.333333%;
+    text-align: center;
+}
+#google {
+    background-color: #a2b1c1;
+}
+#marketing {
+    background-color: #beb9ad;
+}
+#customers {
+    background-color: #aadcd2;
+}
+#smiley {
+    background-color: #aadcd2;
+    padding: 0 0 1%;
+    clear: both;
+}
+/*--- Start Footer ---*/
+footer {
+    background-color: #6991ac;
+}
+.social {
+    list-style-type: none;
+    text-align: center;
+}
+.social li {
+    display: inline;
+}
+.social i {
+    font-size: 460%;
+    margin: 1%;
+    padding: 5% 5% 5% 4%;
+    color: #c3d7df;
+}
+.social i:hover {
+    color: #f5f5f5;
+}
+footer.second {
+    border-top: 1px solid #aadcd2;
+    background-color: #544b59;
+    max-height: 55px;
+    text-align: center;
+    margin: 0;
+}
+footer.second p {
+    padding:  5px 0 9px 0;
+    text-align: center;
+}
+
+
+/*--- MEDIA QUERIES!!! ---*/
+@media screen and (max-width: 768px) {
+    h2 {
+        font-size: 150%;
+    }
+    h3 {
+        font-size: 125%;
+    }
+    p {
+        font-size: 120%;
+    }
+    header {
+        position: absolute;
+    }
+    #logo {
+        margin: 15px 0 20px -25px;
+        background: url(img/RD_mobile.png) no-repeat center;
+    }
+    #menu-icon {
+        display: inline-block;
+    }
+    nav ul, nav:active ul {
+        display: none;
+        z-index: 1000;
+        position: absolute;
+        padding: 20px;
+        background: #6991ac;
+        right: 20px;
+        top: 60px;
+        border: 1px solid #fff;
+        border-radius: 2px 0 2px 2px;
+        width: 50%;
+    }
+    nav:hover ul {
+        display: block;
+    }
+    nav li {
+        text-align: center;
+        width: 100%;
+        padding: 10px 0;
+    }
+    .banner {
+        padding-top: 86px;
+    }
+    .one-fourth {
+        width: 100%;
+    }
+    .one-fourth i {
+        font-size: 350%;
+        padding: 4% 0 1% 0;
+    }
+    article {
+        width: 100%;
+    }
+    aside {
+        width: 100%;
+    }
+    .hand-mobile {
+        display: none;
+    }
+    .one-third {
+        width: 100%;
+    }
+    .social i {
+        font-size: 180%;
+    }
+}

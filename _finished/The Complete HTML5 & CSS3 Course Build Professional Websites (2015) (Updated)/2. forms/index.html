@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" href="../styles.css">
+	<link rel="stylesheet" href="forms.css">
+</head>
+<body>
+
+<header>header text</header>
+<main>
+	<!-- <form novalidate> -->
+	<form>
+		<h1>HTML5 form</h1><hr>
+		<table class="table">
+			<tr>
+				<td>Name *</td>
+				<td><input type="text" name="name" placeholder="Insert full name" required></td>
+			</tr>
+			<tr>
+				<td>Email *</td>
+				<td><input type="email" name="email" required autofocus></td>
+			</tr>
+			<tr>
+				<td>Rate our site</td>
+				<td><input type="number" name="rate" min="0" max="10" step=".5"></td>
+			</tr>
+			<tr>
+				<td>Your birthday</td>
+				<td><input type="date" name="date" min="2000-01-01" max="2016-12-31"></td>
+			</tr>
+			<tr>
+				<td>Your birthday (week)</td>
+				<td><input type="week" name="week" min="2000-01-01" max="2016-12-31"></td>
+			</tr>
+			<tr>
+				<td>Your birthday (month)</td>
+				<td><input type="month" name="month" min="2000-01-01" max="2016-12-31"></td>
+			</tr>
+			<tr>
+				<td>Your birthday (time)</td>
+				<td><input type="time" name="time"></td>
+			</tr>
+			<tr>
+				<td>Your birthday (date time local)</td>
+				<td><input type="datetime-local" name="datetime"></td>
+			</tr>
+			<tr>
+				<td>Your website</td>
+				<td><input type="url" name="url"></td>
+			</tr>
+				<td>Search</td>
+				<td><input type="search"></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><input type="submit" name=""></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td>Rate our site (range)</td>
+				<td><input type="range" name="range" min="0" max="10" value="6" step="2"></td>
+			</tr>
+			<tr>
+				<td>Choose color</td>
+				<td><input type="color" name="color"></td>
+			</tr>
+			<tr>
+				<td>Upload multiple files</td>
+				<td><input type="file" multiple></td>
+			</tr>
+			<tr>
+				<td>Choose country (datalist)</td>
+				<td>
+					<input list="country_list">
+					<datalist id="country_list">
+						<option>Albania</option>
+						<option>Armenia</option>
+						<option>Bulgaria</option>
+						<option>Brazil</option>
+						<option>Chile</option>
+					</datalist>
+				</td>
+			</tr>
+		</table>
+	</form>
+
+</main>
+<footer>footer text</footer>
+
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Rotation, scale</title>
+	<link rel="stylesheet" type="text/css" href="rotate.css">
+	<link rel="stylesheet" type="text/css" href="transition_delays.css">
+	<link rel="stylesheet" type="text/css" href="finish_anim.css">
+	<link rel="stylesheet" type="text/css" href="accordion.css">
+	<link rel="stylesheet" type="text/css" href="auto_animations.css">
+	<style>
+		body {
+			background: #555;
+			padding: 0 30px;
+			color: silver;
+		}
+		h3 {
+			margin-top:  30px;
+		}
+	</style>
+</head>
+<body>
+	<h3>Rotate</h3>
+	<div id="test1" class="rotate">F</div>
+	
+	<h3>Transition delays</h3>
+	<a class="button" href="#">
+		<div class="img"></div>
+		<span class="big-text">Settings</span>
+		<span class="small-text">Customize profile</span>
+	</a>
+
+	<h3>Finishing animation</h3>
+	<a class="button" href="#">
+		<div class="img over"></div>
+		<div class="img under"></div>
+		<span class="big-text">Settings</span>
+		<span class="small-text">Customize profile</span>
+	</a>
+
+	<h3>Accordion (LIMITED - behaves weirdly when there's a scroll on the page)</h3>
+	<ul class="accordion">
+		<li>
+			<a id="item1" href="#item1"><h4>Accordion item 1</h4></a>
+			<div class="hidden">
+				<p>
+					Lorem ipsum dolor sit amet, his labitur philosophia intellegebat at, nisl placerat te pri. Id has agam diceret, sit at iusto affert, est ad purto nullam. Duo graece phaedrum imperdiet id, soleat voluptua ius te. Dicta lucilius definitiones vim no, malis offendit persecuti ex vim, diam eros partiendo nam et. Agam case laoreet et pri, duo te percipit atomorum. Cum malis labitur facilis te, eu sea omnes maiestatis.
+				</p>
+				<p>
+					Mea recusabo consequat philosophia ei, quaeque aliquando repudiandae eam ad. Altera possit graecis eos cu, facete equidem voluptatum ea nec. Mel dicat sensibus sadipscing at, ad qui consul partem singulis, eum ad impetus tincidunt philosophia. Prima appetere ius ut.
+				</p>
+			</div>
+		</li>
+		<li>
+			<a id="item2" href="#item2"><h4>Accordion item 2</h4></a>
+			<div class="hidden">
+				<p>
+					Lorem ipsum dolor sit amet, his labitur philosophia intellegebat at, nisl placerat te pri. Id has agam diceret, sit at iusto affert, est ad purto nullam. Duo graece phaedrum imperdiet id, soleat voluptua ius te. Dicta lucilius definitiones vim no, malis offendit persecuti ex vim, diam eros partiendo nam et. Agam case laoreet et pri, duo te percipit atomorum. Cum malis labitur facilis te, eu sea omnes maiestatis.
+				</p>
+				<p>
+					Mea recusabo consequat philosophia ei, quaeque aliquando repudiandae eam ad. Altera possit graecis eos cu, facete equidem voluptatum ea nec. Mel dicat sensibus sadipscing at, ad qui consul partem singulis, eum ad impetus tincidunt philosophia. Prima appetere ius ut.
+				</p>
+			</div>
+		</li>
+		<li>
+			<a id="item3" href="#item3"><h4>Accordion item 3</h4></a>
+			<div class="hidden">
+				<p>
+					Lorem ipsum dolor sit amet, his labitur philosophia intellegebat at, nisl placerat te pri. Id has agam diceret, sit at iusto affert, est ad purto nullam. Duo graece phaedrum imperdiet id, soleat voluptua ius te. Dicta lucilius definitiones vim no, malis offendit persecuti ex vim, diam eros partiendo nam et. Agam case laoreet et pri, duo te percipit atomorum. Cum malis labitur facilis te, eu sea omnes maiestatis.
+				</p>
+				<p>
+					Mea recusabo consequat philosophia ei, quaeque aliquando repudiandae eam ad. Altera possit graecis eos cu, facete equidem voluptatum ea nec. Mel dicat sensibus sadipscing at, ad qui consul partem singulis, eum ad impetus tincidunt philosophia. Prima appetere ius ut.
+				</p>
+			</div>
+		</li>
+	</ul>
+
+	<h3>Automatic animations (animation and @keyframes)</h3>
+	<div class="banner">
+		<div id='sky'></div>
+		<div id='planeContainer'>
+			<div id="plane"></div>
+		</div>
+	</div>
+</body>
+</html>

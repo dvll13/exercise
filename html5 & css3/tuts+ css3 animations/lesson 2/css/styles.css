@@ -1,0 +1,80 @@
+body {
+	background: #777;
+}
+
+nav.main-nav {
+	/* background-image: linear-gradient(top, #2f2f2f, #4f4f4f); */
+	background: linear-gradient(#2f2f2f, #4f4f4f);
+	/* width: 100%; */
+}
+
+.top-nav {
+	border-bottom: 2px solid #111;
+	height: 30px;
+	list-style-type: none;
+	margin: 0;
+	padding-left: 0;
+	/* width: 100%; */
+}
+
+.top-nav li {
+	background: linear-gradient(#2f2f2f, #4f4f4f);
+	border-bottom: 2px solid #111;
+	border-right: 1px solid #555;
+	float: left;
+	font-size: 14px;
+	height: 20px;
+	/* line-height: 20px; */
+	padding-top: 10px;
+	position: relative;
+	text-align: center;
+	width: 150px;
+	/* transition-property: width; */
+	transition-property: height;
+	transition-duration: .3s;
+	/* transition: width .3s; */
+	/* transition: height .3s; */
+	/* transition: line-height .3s, height .3s; */
+}
+
+.top-nav li:hover {
+	/* width: 170px; */
+	height: 30px;
+	/* line-height: 30px; */
+}
+
+.top-nav li a {
+	color: #aaa;
+	padding-top: 5px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 150px;
+	height: 25px;
+	text-decoration: none;
+}
+
+
+#test {
+	color: #555;
+	margin: 50px 20px;
+	border: 1px solid #000;
+	width: 100px;
+	max-height: 20px;
+	overflow: hidden;
+	/* transition: height .3s; */
+	transition: max-height .4s;
+}
+#test:hover {
+	/* height: 100px; */
+	max-height: 200px;
+}
+
+#test div {
+	line-height: 20px;
+	background: linear-gradient(red, orange);
+	cursor: pointer;
+}
+#test div:first-child {
+	background: linear-gradient(#222, #333);
+}

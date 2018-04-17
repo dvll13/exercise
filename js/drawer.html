@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Drawer test</title>
+    
+    <style>
+        body { background-color: #000; }
+        
+        .drawer.show {
+            opacity: 1;
+            animation-name: drawer-show;
+            animation-duration: .4s;
+        }
+
+        .drawer.hide {
+            opacity: 0;
+            animation-name: drawer-hide;
+            animation-duration: .4s;
+        }
+
+        @keyframes drawer-show {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        @keyframes drawer-hide {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+        }
+
+        .drawer {
+            background-color: #999;
+            height: 100%;
+            width: 500px;
+            position: fixed;
+            top: 0;
+            right: 0;
+            overflow: auto;
+        }
+
+        .header, .content {
+            width:  100%;
+            box-sizing: border-box;
+        }
+
+        .header {
+            background-color: #fff;
+            height: 30px;
+            position: fixed;
+            top: 0;
+            border-right: 1px solid red;
+        }
+
+        .content {
+            background-color: #aaa;
+            height: 1000px;
+        }
+    </style>
+</head>
+<body>
+    <button id="showDrawerBtn">Show</button>
+    <button id="hideDrawerBtn">Hide</button>
+    <div id="drawer" class="drawer">
+        <div class="header">
+            Header
+        </div>
+        <div class="content">
+            <p>Content</p>
+            <p>Content</p>
+            <p>Content</p>
+            <p>Content</p>
+            <p>Content</p>
+            <p>Content</p>
+            <p>Content</p>
+        </div>
+    </div>
+
+    <script>
+        var bs = document.getElementById('showDrawerBtn'),
+            bh = document.getElementById('hideDrawerBtn'),
+            d = document.getElementById('drawer');
+
+        bs.onclick = function() {
+            d.classList.remove('hide');
+            d.classList.add('show');
+        }
+        bh.onclick = function() {
+            d.classList.remove('show');
+            d.classList.add('hide');
+        }
+    </script>
+</body>
+</html>
