@@ -18,13 +18,13 @@ import React from 'react'; // for the jsx syntax
 // they are dynamic and just render smth, but don't change application's state, which is important as the app grows
 const person = (props) =>
 {
-    let name = props.name || 'secret';
     return (
         <div className='Person'>
             <p onClick={props.click}>
-                I'm a {props.gender} person named {name} and I'm {Math.floor(Math.random() * 100)} years old.
+                I'm a {props.gender} person named {props.name} and I'm {Math.floor(Math.random() * 100)} years old.
             </p>
             <p>{props.children}</p>
+            <input type="text" onChange={props.change} value={props.name}/> {/*onChange & value = two-way binding*/}
         </div>
     );
 };

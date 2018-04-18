@@ -28,6 +28,15 @@ class App extends Component {
         });
     };
 
+    changeNameHandler = (event) => {
+        this.setState({
+            persons: [
+                { name: 'Stoyan', gender: 'male'},
+                { name: event.target.value, gender: 'unknown'}
+            ]
+        });
+    };
+
     //NOTE: don't use function()
     // switchNameHandler2 = function() {
     //     console.log(this); // undefined
@@ -50,7 +59,8 @@ class App extends Component {
                     gender={this.state.persons[1].gender}
                     // click - custom attr used to pass reference to a parent method to be later called in Person; the other components should not have direct access to the State, but call only methods defined in the States' container
                     // () => ... - this is not recommended, use bind instead
-                    click={() => this.switchNameHandler('NewName2')}>
+                    click={() => this.switchNameHandler('NewName2')}
+                    change={this.changeNameHandler}>
                         <i>{/*passing structured html:*/} My hobbies:</i> racing
                 </Person>
                 <Person />
