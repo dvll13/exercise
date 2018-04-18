@@ -1,0 +1,19 @@
+* {
+	margin: 0;
+	padding: 0
+}
+
+form {
+	margin: 0 auto;
+	width: 400px;
+	padding: 20px;
+	background: silver;
+}
+
+.table input {
+	width: 250px;
+	height: 30px;
+	margin: 10px;
+	box-shadow: inset 0 0 5px gray;
+	border: 1px solid black;
+}

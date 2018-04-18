@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>wazaaaaaaaaa</title>
+
+	<style>
+		body {background: #888 !important}
+	</style>
+</head>
+
+<body>
+<script>
+
+var c = 3;
+
+
+var myPlugin = (function() {
+
+	var private_var;
+	var innerC = c;
+
+	function private_function() {
+		console.log('private_function')
+	}
+
+	console.log('myPlugin-body');
+
+	return {
+		public_function1: function() {
+			console.log('public_function1')
+		},
+		public_function2: function() {
+			private_function();
+		},
+		showC: function() {
+			console.log('innerC: ', innerC);
+		},
+		multiply: function()
+		{
+			return innerC *= 2
+		}
+	}
+})();
+//usage: myPlugin.public_function2()
+//fn body runs once
+//showC: 3
+//multiply: 6, 12, 24, ...
+
+var myPlugin2 = function() {
+
+	var private_var = '1';	
+	var innerC = c;
+	var private_function = function() {
+		console.log('private_function')
+	}
+
+	console.log('myClosurePlugin-body');
+
+
+	return {
+		showVar: function() {
+			console.log(private_var);
+		},
+		showFun: function() {
+			private_function();
+		},
+		showTest: function() {
+			console.log('test');
+		},
+		multiply: function()
+		{
+			return innerC *= 2
+		}
+	}
+}
+//usage: myClosurePlugin().showVar()
+//fn body runs every time
+//showC: 4
+//multiply: 8, 8, 8, ...
+
+
+c = 4;
+
+</script>
+</body>
+</html>

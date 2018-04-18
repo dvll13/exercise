@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Transitions and animations</title>
+    <link rel="stylesheet" href="">
+    <style>
+        body { background-color: #000; color: #aaa}
+
+        .box {
+            background-color: blue;
+            height: 50px;
+            margin: 30px;
+            width: 50px;
+        }
+        .box.horizTranslate {
+            margin-left: 50% !important;
+            transition: 3s;
+        }
+    </style>
+</head>
+<body>
+    <p>To trigger an element's transition, toggle a class name on that element that triggers it.</p>
+
+    <p>To pause an element's transition, use getComputedStyle and getPropertyValue at the point in the transition you want to pause it. Then set those CSS properties of that element equal to those values you just got.</p>
+
+    <div class='box'></div> 
+    <button class='toggleButton' value='play'>Play</button>
+
+    <script>
+        var boxOne = document.getElementsByClassName('box')[0];
+
+        document.getElementsByClassName('toggleButton')[0].onclick = function() {
+            if (this.innerHTML === 'Play')
+            { 
+                this.innerHTML = 'Pause';
+                
+                boxOne.classList.add('horizTranslate');
+            }
+            else
+            {
+                this.innerHTML = 'Play';
+                
+                var computedStyle = window.getComputedStyle(boxOne),
+                marginLeft = computedStyle.getPropertyValue('margin-left');
+                console.log(marginLeft);
+                
+                boxOne.style.marginLeft = marginLeft;
+                boxOne.classList.remove('horizTranslate');    
+            }
+        }
+    </script>
+
+
+
+    <div class="zoomPic"></div>
+    <button class='zoom'>Zoom</button>
+    <button class='pause'>Pause</button>
+    <button class='zoomout'>Zoom Out</button>
+
+    <style>
+        .zoomPic {
+            margin: 30px;
+            width: 300px;
+            height: 180px;
+            background-color: blue;
+            background-image: url(http://placehold.it/1200x720);
+            background-repeat:no-repeat;
+            background-position:50% 50%;
+            background-size: 300px 180px;
+
+            transition: all 2.5s ease-in-out;
+        }
+        .zoomPic.zoom {
+            background-size: 1200px 720px !important; 
+        }
+    </style>
+
+    <script>
+        var zoomOne = document.getElementsByClassName('zoomPic')[0],
+            zoomOneBGSize = window.getComputedStyle(zoomOne).getPropertyValue('background-size');
+
+        document.getElementsByClassName('zoom')[0].onclick = function() {
+          if(!zoomOne.classList.contains('zoom'))
+          {
+            zoomOne.classList.add('zoom');
+          } 
+        }
+        document.getElementsByClassName('pause')[0].onclick = function() {
+            var computedStyle = window.getComputedStyle(zoomOne),
+                backgroundSize = computedStyle.getPropertyValue('background-size');
+            zoomOne.style.backgroundSize = backgroundSize;
+            zoomOne.classList.remove('zoom');
+          }
+        document.getElementsByClassName('zoomout')[0].onclick = function() {
+          zoomOne.classList.remove('zoom');
+          zoomOne.style.backgroundSize = zoomOneBGSize;
+        }
+    </script>
+
+
+
+    <h2>Using CSS "callback functions"</h2>
+
+    
+</body>
+</html>

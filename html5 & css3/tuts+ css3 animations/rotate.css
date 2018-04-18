@@ -1,0 +1,17 @@
+#test1 {
+	width: 30px;
+	line-height: 30px;
+	border:  1px solid orange;
+	font-weight: bold;
+	background-color: red;
+	color: white;
+	text-align: center;
+	border-radius: 5px;
+	cursor: pointer;
+}
+#test1:hover {
+	transform: scale(1.5) rotate(360deg);
+}
+.rotate {
+	transition: all .8s ease;
+}

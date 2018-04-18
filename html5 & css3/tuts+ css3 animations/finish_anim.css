@@ -1,0 +1,25 @@
+.button {
+	transition: all .5s ease;
+	margin-bottom: 10px;
+}
+.button:hover {
+	background-color: #6cf;
+	border:  1px solid #4ae;
+	box-shadow: 1px 1px 5px #aaa, 1px 1px 1px #9ef;
+}
+
+.button .img.over {
+	z-index: 500;
+	transition: all .3s ease;
+}
+.button .img.under {
+	opacity: .25;
+	z-index: 499;
+}
+
+.button:hover .img.over {
+	transform: scale(5) rotate(20deg);
+	opacity: 0;
+	/* visibility: hidden; <- nope */
+	/* display: none; <- nope */
+} 

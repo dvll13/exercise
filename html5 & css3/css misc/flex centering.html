@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Flex centering</title>
+	<link rel="stylesheet" href="../../base.css">
+	<style>
+		.container {border: 1px solid #aaa; margin: 5px; height: 150px; width: 150px;}
+		.item1 {background-color: blue; height: 90px; width: 90px}
+		.item21 {background-color: blue; height: 80px; width: 80px}
+		.item22 {background-color: yellow; height: 40px; width: 40px; position: absolute;}
+
+		/* one item centering */
+		.container {
+			display: flex
+		}
+		.container-1 .item1 {
+			margin: auto
+		}
+
+		.container-2 {
+			/* Center according to the main axis */
+			justify-content: center;
+
+			/* Center according to the secondary axis */
+			align-items: center;
+		}
+	</style>
+</head>
+<body>
+	<div class="container container-1">
+		<div class="item1"></div>
+	</div>
+	<div class="container container-2">
+		<div class="item21"></div>
+		<div class="item22"></div>
+	</div>
+</body>
+</html>

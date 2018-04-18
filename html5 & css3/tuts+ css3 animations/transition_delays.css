@@ -1,0 +1,49 @@
+.button {
+	background: #4ae;
+	border: 1px solid #28c;
+	display: block;
+	height: 65px;
+	width: 220px;
+	padding: 5px;
+	position: relative;
+	overflow: hidden;
+	border-radius: 3px;
+	box-shadow: 1px 1px 2px #222, 1px 1px 1px #6cf inset;
+}
+.button .img {
+	display: inline-block;
+	width: 50px;
+	height: 50px;
+	position: absolute;
+	top: 10px;
+	left: 5px;
+	background: brown;
+	box-shadow: 0 0 2px black;
+}
+.button span {
+	color: #fff;
+	text-decoration: none;
+	text-shadow: 0 1px #888;
+	position: absolute;
+}
+.button span.big-text {
+	font-size: 22px;
+	top: 25px;
+	right: 20px;
+	transition: all .3s ease;
+}
+.button span.small-text {
+	font-size: 14px;
+	top: 40px;
+	right: -200px;
+	transition: all .3s ease .3s; /* second timing = delay*/
+	/* transition-delay: .3s; */
+}
+
+.button:hover span.big-text {
+	top: 10px;
+}
+.button:hover span.small-text {
+	right: 20px;
+	/* ? don't touch texts on mouse out */
+}

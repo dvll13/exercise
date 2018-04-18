@@ -1,0 +1,19 @@
+body {
+		background: #000;
+		padding: 10px;
+    color:  #aaa;
+    font-family: monospace;
+}
+
+h3 {
+    color: #ddd;
+    margin-bottom: 15px;
+}
+
+h3:not(:first-child) {
+    margin-top: 40px;
+}
+
+p {
+    margin: 5px 0;
+}
