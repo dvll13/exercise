@@ -1,0 +1,7 @@
+p {
+    width: 50%;
+    margin: 20px auto;
+    border: 1px solid #aaa;
+    box-shadow: 0 2px 2px #ccc;
+    padding: 5px;
+}
