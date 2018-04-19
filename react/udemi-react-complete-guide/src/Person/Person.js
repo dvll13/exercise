@@ -4,6 +4,7 @@
 // import React, { Component } from 'react'; //this if we use the class instead
 
 import React from 'react'; // for the jsx syntax
+import './Person.css';
 
 // class Person extends Component {
 //     name = ...;
