@@ -13,7 +13,8 @@ class App extends Component {
             { name: 'Ivanka', gender: 'female'},
             { name: 'Stoyan', gender: 'male'}
         ],
-        showPersons: false
+        showPersons: false,
+        showMorePersons: false
     };
 
     // good practice in naming to add 'Handler'
@@ -41,6 +42,9 @@ class App extends Component {
     togglePersonsHandler = () => {
         this.setState({ showPersons: !this.state.showPersons });
     };
+    toggleMorePersonsHandler = () => {
+        this.setState({ showMorePersons: !this.state.showMorePersons });
+    };
 
     //NOTE: don't use function()
     // switchNameHandler2 = function() {
@@ -48,7 +52,7 @@ class App extends Component {
     //     console.log('was clicked');
     // };
 
-    render() {
+    render() { // everything within is executed on re-render
         const btnStyle = {
             backgroundColor: 'white',
             font: 'inherit',
@@ -57,12 +61,23 @@ class App extends Component {
             cursor: 'pointer'
         };
 
+        let morePersons = null;
+        if (this.state.showMorePersons) {
+            morePersons = (
+                <div>
+                    <p>More persons:</p>
+                    <Person />
+                    <Person />
+                </div>
+            );
+        }
+
         return (
             <div className="App">
                 <h1 onClick={() => console.log('aaa')}>React App header</h1>
 
+                {/*conditionals:*/}
                 <button onClick={this.togglePersonsHandler}>Toggle persons</button>
-
                 {
                     this.state.showPersons ?
                         <div>
@@ -88,6 +103,10 @@ class App extends Component {
                     :
                         null
                 }
+
+                {/*preferred way of conditionals:*/}
+                <button onClick={this.toggleMorePersonsHandler}>Toggle persons 2 (cleaner, with variable)</button>
+                {morePersons}
             </div>
         );
     }
