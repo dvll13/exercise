@@ -12,7 +12,8 @@ class App extends Component {
         persons: [
             { name: 'Ivanka', gender: 'female'},
             { name: 'Stoyan', gender: 'male'}
-        ]
+        ],
+        showPersons: false
     };
 
     // good practice in naming to add 'Handler'
@@ -37,6 +38,10 @@ class App extends Component {
         });
     };
 
+    togglePersonsHandler = () => {
+        this.setState({ showPersons: !this.state.showPersons });
+    };
+
     //NOTE: don't use function()
     // switchNameHandler2 = function() {
     //     console.log(this); // undefined
@@ -56,24 +61,33 @@ class App extends Component {
             <div className="App">
                 <h1 onClick={() => console.log('aaa')}>React App header</h1>
 
-                {/*bind - recommended than () => ... from below*/}
-                <button
-                    style={btnStyle}
-                    onClick={this.switchNameHandler.bind(this, 'NewName1')}>Change name</button>
+                <button onClick={this.togglePersonsHandler}>Toggle persons</button>
 
-                <Person
-                    name={this.state.persons[0].name}
-                    gender={this.state.persons[0].gender} />
-                <Person
-                    name={this.state.persons[1].name}
-                    gender={this.state.persons[1].gender}
-                    // click - custom attr used to pass reference to a parent method to be later called in Person; the other components should not have direct access to the State, but call only methods defined in the States' container
-                    // () => ... - this is not recommended, use bind instead
-                    click={() => this.switchNameHandler('NewName2')}
-                    change={this.changeNameHandler}>
-                        <i>{/*passing structured html:*/} My hobbies:</i> racing
-                </Person>
-                <Person />
+                {
+                    this.state.showPersons ?
+                        <div>
+                            {/*bind - recommended than () => ... from below*/}
+                            <button
+                                style={btnStyle}
+                                onClick={this.switchNameHandler.bind(this, 'NewName1')}>Change name</button>
+
+                            <Person
+                                name={this.state.persons[0].name}
+                                gender={this.state.persons[0].gender} />
+                            <Person
+                                name={this.state.persons[1].name}
+                                gender={this.state.persons[1].gender}
+                                // click - custom attr used to pass reference to a parent method to be later called in Person; the other components should not have direct access to the State, but call only methods defined in the States' container
+                                // () => ... - this is not recommended, use bind instead
+                                click={() => this.switchNameHandler('NewName2')}
+                                change={this.changeNameHandler}>
+                                    <i>{/*passing structured html:*/} My hobbies:</i> racing
+                            </Person>
+                            <Person />
+                        </div>
+                    :
+                        null
+                }
             </div>
         );
     }
