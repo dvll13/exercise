@@ -1,7 +1,7 @@
 import React from 'react';
 
 const UserInput = (props) => {
-    const style = {
+    const inputStyle = {
         border: '1px solid blue',
         fontWeight: 'bold',
         padding: '5px',
@@ -9,9 +9,11 @@ const UserInput = (props) => {
     };
 
     return (
-        <div className='UserInput'>
-            <input type='text' onChange={props.change} value={props.username} style={style}/>
-        </div>
+        <input
+            type='text'
+            onChange={props.change}
+            value={props.userName}
+            style={inputStyle}/>
     )
 };
 

@@ -6,16 +6,16 @@ import UserOutput from './UserOutput/UserOutput'
 class App extends Component {
     state = {
         userOutputs: [
-            { username: 'username1_static'},
-            { username: 'username2_static' }
+            { userName: 'username1_static'},
+            { userName: 'username2_static' }
         ]
     };
 
     changeUsernameHandler = (event) => {
         this.setState({
             userOutputs: [
-                { username: event.target.value },
-                { username: 'username2_static' }
+                { userName: event.target.value },
+                { userName: 'username2_static' }
             ]
         });
     };
@@ -23,10 +23,12 @@ class App extends Component {
     render() {
         return (
             <div className="App">
-                <UserInput change={this.changeUsernameHandler} username={this.state.userOutputs[0].username} />
+                <UserInput
+                    change={this.changeUsernameHandler}
+                    userName={this.state.userOutputs[0].userName} />
 
-                <UserOutput username={this.state.userOutputs[0].username}/>
-                <UserOutput username={this.state.userOutputs[1].username}/>
+                <UserOutput userName={this.state.userOutputs[0].userName}/>
+                <UserOutput userName={this.state.userOutputs[1].userName}/>
             </div>
         );
     }
