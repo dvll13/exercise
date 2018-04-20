@@ -246,6 +246,7 @@ const log = (...params /*to array*/) => console.log(...params /*split again*/),
     log('primitive vars (numbers, strings, booleans) store values which get copied to other vars');
     log('reference vars (arrays/objects) store pointers to a place in memory which pointers get copied to other vars');
     log('to workaround that and get a real copy of a reference var, we use the spread operator');
+    log('const pointing to a reference type - can change the reference values');
 
     const person = {name: 'Yo1'};
     

@@ -3,15 +3,15 @@ import './App.css';
 import Person from './Person/Person'; // component names should start with a capital letter
 
 
-// state - for managing some component internal data; re-renders where necessary on changes
+// state - for managing some component's internal data; re-renders where necessary on changes
 // use it with care, because manipulating it makes the app unpredictable and hard to manage
 
 class App extends Component {
     // it's called a container when it has state
     state = { // only for class based components
         persons: [
-            { name: 'Ivanka', gender: 'female'},
-            { name: 'Stoyan', gender: 'male'}
+            { id: 'pid1', name: 'Stoyanka', gender: 'female'},
+            { id: 'pid2', name: 'Stoyan', gender: 'male'}
         ],
         showPersons: false,
         showMorePersons: false
@@ -19,7 +19,7 @@ class App extends Component {
 
     // good practice in naming to add 'Handler'
     switchNameHandler = (newName) => {
-        // console.log(this); // App object
+        // this - always the component object
         //DON'T DO THIS: this.state.persons[0].name = 'Ivanka Ivanova';
 
         this.setState({ // gets merged with the original one
@@ -30,13 +30,13 @@ class App extends Component {
         });
     };
 
-    changeNameHandler = (event) => {
-        this.setState({
-            persons: [
-                { name: 'Stoyan', gender: 'male'},
-                { name: event.target.value, gender: 'unknown'}
-            ]
-        });
+    changeNameHandler = (event, id) => {
+        const personIndex = this.state.persons.findIndex(person => person.id === id);
+
+        const persons = [...this.state.persons];
+        persons[personIndex].name = event.target.value;
+
+        this.setState({ persons: persons });
     };
 
     togglePersonsHandler = () => {
@@ -46,10 +46,17 @@ class App extends Component {
         this.setState({ showMorePersons: !this.state.showMorePersons });
     };
 
+    deletePersonHandler = (index) => {
+        // const persons = this.state.persons; // BAD - points to the original array and modifies it directly
+        // const persons = this.state.persons.splice(); // BETTER - creates a new array
+        const persons = [...this.state.persons];
+        persons.splice(index, 1);
+        this.setState({persons: persons});
+    }
+
     //NOTE: don't use function()
     // switchNameHandler2 = function() {
-    //     console.log(this); // undefined
-    //     console.log('was clicked');
+    //     this - undefined
     // };
 
     render() { // everything within is executed on re-render
@@ -66,11 +73,13 @@ class App extends Component {
             morePersons = (
                 <div>
                     <p>More persons:</p>
-                    {/*create list:*/}
-                    {this.state.persons.map(person => {
+                    {this.state.persons.map((person, index) => { //create list
                         return <Person
                             name={person.name}
-                            gender={person.gender}/>
+                            gender={person.gender}
+                            click={() => this.deletePersonHandler(index)}
+                            change={(event) => this.changeNameHandler(event, person.id)}
+                            key={person.id}/> //unique key - needed for react to know which elements from the virtual (future) DOM to compare to which of the present one
                     })}
                 </div>
             );
@@ -78,9 +87,7 @@ class App extends Component {
 
         return (
             <div className="App">
-                <h1 onClick={() => console.log('aaa')}>React App header</h1>
-
-                {/*conditionals:*/}
+                {/*conditionals v1:*/}
                 <button onClick={this.togglePersonsHandler}>Toggle persons</button>
                 {
                     this.state.showPersons ?
@@ -102,13 +109,12 @@ class App extends Component {
                                 change={this.changeNameHandler}>
                                     <i>{/*passing structured html:*/} My hobbies:</i> racing
                             </Person>
-                            <Person />
                         </div>
                     :
                         null
                 }
 
-                {/*preferred way of conditionals:*/}
+                {/*conditionals v2 (preferred):*/}
                 <button onClick={this.toggleMorePersonsHandler}>Toggle persons 2 (cleaner, with variable + list)</button>
                 {morePersons}
             </div>
