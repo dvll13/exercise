@@ -66,8 +66,12 @@ class App extends Component {
             morePersons = (
                 <div>
                     <p>More persons:</p>
-                    <Person />
-                    <Person />
+                    {/*create list:*/}
+                    {this.state.persons.map(person => {
+                        return <Person
+                            name={person.name}
+                            gender={person.gender}/>
+                    })}
                 </div>
             );
         }
@@ -105,7 +109,7 @@ class App extends Component {
                 }
 
                 {/*preferred way of conditionals:*/}
-                <button onClick={this.toggleMorePersonsHandler}>Toggle persons 2 (cleaner, with variable)</button>
+                <button onClick={this.toggleMorePersonsHandler}>Toggle persons 2 (cleaner, with variable + list)</button>
                 {morePersons}
             </div>
         );
