@@ -1,34 +1,34 @@
 import React, { Component } from 'react';
 import './App.css';
-import ValidationComponent from './ValidationComponent/ValidationComponent';
-import CharComponent from './CharComponent/CharComponent';
+import Validation from './Validation/Validation';
+import Char from './Char/Char';
 
 class App extends Component {
     state = {
-        text: ''
+        userInput: ''
     };
 
     inputChangeHandler = (event) => {
-        this.setState({ text: event.target.value });
+        this.setState({ userInput: event.target.value });
     };
 
     charClickHandler = (index) => {
-        let textArray = this.state.text.split('');
+        const textArray = this.state.userInput.split('');
         textArray.splice(index, 1);
-        this.setState({ text: textArray.join('')});
+        this.setState({ userInput: textArray.join('')});
     };
 
 
     render() {
         let charComponents = null;
 
-        if (this.state.text.length > 0) {
-            let textArray = this.state.text.split('');
+        if (this.state.userInput.length > 0) {
+            let textArray = this.state.userInput.split('');
             charComponents = textArray.map((char, index) => {
                 return (
-                    <CharComponent
+                    <Char
                         char={char}
-                        key={'char_' + index}
+                        key={index}
                         click={this.charClickHandler.bind(this, index)} />
                 );
             });
@@ -46,9 +46,9 @@ class App extends Component {
                 </ol>
                 <p>Hint: Keep in mind that JavaScript strings are basically arrays!</p>
 
-                <input id='textInput' onChange={this.inputChangeHandler} value={this.state.text}/>
-                <p id="inputTextLength">{this.state.text.length}</p>
-                <ValidationComponent chars={this.state.text.length}/>
+                <input id='textInput' onChange={this.inputChangeHandler} value={this.state.userInput}/>
+                <p id="inputTextLength">{this.state.userInput.length}</p>
+                <Validation chars={this.state.userInput.length}/>
                 {charComponents}
             </div>
         );

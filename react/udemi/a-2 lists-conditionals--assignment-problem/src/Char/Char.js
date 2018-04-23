@@ -1,8 +1,8 @@
 import React from 'react';
-import './CharComponent.css';
+import './Char.css';
 
-const CharComponent = props => {
+const Char = props => {
     return <div className='CharComponent' onClick={props.click}>{props.char}</div>
 };
 
-export default CharComponent;
+export default Char;
