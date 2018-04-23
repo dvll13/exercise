@@ -60,8 +60,12 @@ class App extends Component {
     // };
 
     render() { // everything within is executed on re-render
-        const btnStyle = {
-            backgroundColor: 'white',
+        const btnShowMorePersonsStyle = {
+            position: 'absolute', 
+            top: '5px', 
+            right: '5px',
+            backgroundColor: 'green',
+            color: 'white',
             font: 'inherit',
             border: '1px solid blue',
             padding: '8px',
@@ -83,6 +87,7 @@ class App extends Component {
                     })}
                 </div>
             );
+            btnShowMorePersonsStyle.backgroundColor = 'red';
         }
 
         return (
@@ -93,9 +98,7 @@ class App extends Component {
                     this.state.showPersons ?
                         <div>
                             {/*bind - recommended than () => ... from below*/}
-                            <button
-                                style={btnStyle}
-                                onClick={this.switchNameHandler.bind(this, 'NewName1')}>Change name</button>
+                            <button onClick={this.switchNameHandler.bind(this, 'NewName1')}>Change name</button>
 
                             <Person
                                 name={this.state.persons[0].name}
@@ -115,7 +118,11 @@ class App extends Component {
                 }
 
                 {/*conditionals v2 (preferred):*/}
-                <button onClick={this.toggleMorePersonsHandler}>Toggle persons 2 (cleaner, with variable + list)</button>
+                <button 
+                    onClick={this.toggleMorePersonsHandler}
+                    style={btnShowMorePersonsStyle}>
+                        Toggle persons 2 (cleaner, with variable + list)
+                </button>
                 {morePersons}
             </div>
         );
