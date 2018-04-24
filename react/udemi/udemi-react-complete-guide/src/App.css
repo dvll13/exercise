@@ -5,3 +5,11 @@
 .App button {
     margin-bottom: 10px
 }
+
+.red {
+    color: red;
+}
+
+.bold {
+    font-weight: bold;
+}

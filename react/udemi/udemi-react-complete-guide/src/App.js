@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import './App.css';
+// import Radium, {StyleRoot} from 'radium';
 import Person from './Person/Person'; // component names should start with a capital letter
 
 
@@ -10,8 +11,8 @@ class App extends Component {
     // it's called a container when it has state
     state = { // only for class based components
         persons: [
-            { id: 'pid1', name: 'Stoyanka', gender: 'female'},
-            { id: 'pid2', name: 'Stoyan', gender: 'male'}
+            {id: 'pid1', name: 'Stoyanka', gender: 'female'},
+            {id: 'pid2', name: 'Stoyan', gender: 'male'}
         ],
         showPersons: false,
         showMorePersons: false
@@ -24,8 +25,8 @@ class App extends Component {
 
         this.setState({ // gets merged with the original one
             persons: [
-                { name: newName, gender: 'male'},
-                { name: 'Stoyan', gender: 'male'}
+                {name: newName, gender: 'male'},
+                {name: 'Stoyan', gender: 'male'}
             ]
         });
     };
@@ -36,14 +37,14 @@ class App extends Component {
         const persons = [...this.state.persons];
         persons[personIndex].name = event.target.value;
 
-        this.setState({ persons: persons });
+        this.setState({persons: persons});
     };
 
     togglePersonsHandler = () => {
-        this.setState({ showPersons: !this.state.showPersons });
+        this.setState({showPersons: !this.state.showPersons});
     };
     toggleMorePersonsHandler = () => {
-        this.setState({ showMorePersons: !this.state.showMorePersons });
+        this.setState({showMorePersons: !this.state.showMorePersons});
     };
 
     deletePersonHandler = (index) => {
@@ -61,8 +62,8 @@ class App extends Component {
 
     render() { // everything within is executed on re-render
         const btnShowMorePersonsStyle = {
-            position: 'absolute', 
-            top: '5px', 
+            position: 'absolute',
+            top: '5px',
             right: '5px',
             backgroundColor: 'green',
             color: 'white',
@@ -70,6 +71,10 @@ class App extends Component {
             border: '1px solid blue',
             padding: '8px',
             cursor: 'pointer'
+            // ':hover': { //radium
+            //     backgroundColor: 'lightgreen',
+            //     color: 'black'
+            // }
         };
 
         let morePersons = null;
@@ -88,45 +93,64 @@ class App extends Component {
                 </div>
             );
             btnShowMorePersonsStyle.backgroundColor = 'red';
+            btnShowMorePersonsStyle[':hover'] = { //radium
+                backgroundColor: 'salmon',
+                color: 'black'
+            };
+        }
+
+        let classes = [];
+        if (this.state.persons.length <= 1) {
+            classes.push('red');
+        }
+        if (this.state.persons.length === 0) {
+            classes.push('bold');
         }
 
         return (
-            <div className="App">
-                {/*conditionals v1:*/}
-                <button onClick={this.togglePersonsHandler}>Toggle persons</button>
-                {
-                    this.state.showPersons ?
-                        <div>
-                            {/*bind - recommended than () => ... from below*/}
-                            <button onClick={this.switchNameHandler.bind(this, 'NewName1')}>Change name</button>
+            // needed for advanced features like media-queries
+            //<StyleRoot>
+                <div className="App">
+                    <h1>App header</h1>
+                    <p className={classes.join(' ')}>Subheader text</p>
 
-                            <Person
-                                name={this.state.persons[0].name}
-                                gender={this.state.persons[0].gender} />
-                            <Person
-                                name={this.state.persons[1].name}
-                                gender={this.state.persons[1].gender}
-                                // click - custom attr used to pass reference to a parent method to be later called in Person; the other components should not have direct access to the State, but call only methods defined in the States' container
-                                // () => ... - this is not recommended, use bind instead
-                                click={() => this.switchNameHandler('NewName2')}
-                                change={this.changeNameHandler}>
+                    {/*conditionals v1:*/}
+                    <button onClick={this.togglePersonsHandler}>Toggle persons</button>
+                    {
+                        this.state.showPersons ?
+                            <div>
+                                {/*bind - recommended than () => ... from below*/}
+                                <button onClick={this.switchNameHandler.bind(this, 'NewName1')}>Change name</button>
+
+                                <Person
+                                    name={this.state.persons[0].name}
+                                    gender={this.state.persons[0].gender}/>
+                                <Person
+                                    name={this.state.persons[1].name}
+                                    gender={this.state.persons[1].gender}
+                                    // click - custom attr used to pass reference to a parent method to be later called in Person; the other components should not have direct access to the State, but call only methods defined in the States' container
+                                    // () => ... - this is not recommended, use bind instead
+                                    click={() => this.switchNameHandler('NewName2')}
+                                    change={this.changeNameHandler}>
                                     <i>{/*passing structured html:*/} My hobbies:</i> racing
-                            </Person>
-                        </div>
-                    :
-                        null
-                }
+                                </Person>
+                            </div>
+                            :
+                            null
+                    }
 
-                {/*conditionals v2 (preferred):*/}
-                <button 
-                    onClick={this.toggleMorePersonsHandler}
-                    style={btnShowMorePersonsStyle}>
+                    {/*conditionals v2 (preferred):*/}
+                    <button
+                        onClick={this.toggleMorePersonsHandler}
+                        style={btnShowMorePersonsStyle}>
                         Toggle persons 2 (cleaner, with variable + list)
-                </button>
-                {morePersons}
-            </div>
+                    </button>
+                    {morePersons}
+                </div>
+            //</StyleRoot>
         );
     }
 }
 
+// export default Radium(App);
 export default App;

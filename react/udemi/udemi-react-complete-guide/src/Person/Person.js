@@ -5,6 +5,7 @@
 
 import React from 'react'; // for the jsx syntax
 import './Person.css';
+// import Radium from 'radium';
 
 // class Person extends Component {
 //     name = ...;
@@ -17,8 +18,14 @@ import './Person.css';
 
 // you should use function components instead of classes as often as possible,
 // they are dynamic and just render smth, but don't change application's state, which is important as the app grows
-const person = (props) =>
-{
+const person = (props) => {
+    // Radium:
+    // const style = {
+    //     '@media (min-width: 500px)': {
+    //         width: '450px'
+    //     }
+    // };
+
     return (
         <div className='Person'>
             <p onClick={props.click}>
@@ -32,4 +39,5 @@ const person = (props) =>
 
 // React monitors 'state' and 'props' and re-renders when necessary
 
+// export default Radium(person);
 export default person;
