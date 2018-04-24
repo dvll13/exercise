@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import classes from  './App.css';
 // import Radium, {StyleRoot} from 'radium';
 import Person from './Person/Person'; // component names should start with a capital letter
-
+import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 
 // state - for managing some component's internal data; re-renders where necessary on changes
 // use it with care, because manipulating it makes the app unpredictable and hard to manage
@@ -32,7 +32,8 @@ class App extends Component {
     };
 
     changeNameHandler = (event, id) => {
-        const personIndex = this.state.persons.findIndex(person => person.id === id);
+        const personIndex = this.state.persons.findIndex(person => person.aaa === id);
+        // const personIndex = this.state.persons.findIndex(person => person.id === id);
 
         const persons = [...this.state.persons];
         persons[personIndex].name = event.target.value;
@@ -84,12 +85,14 @@ class App extends Component {
                 <div>
                     <p>More persons:</p>
                     {this.state.persons.map((person, index) => { //create list
-                        return <Person
-                            name={person.name}
-                            gender={person.gender}
-                            click={() => this.deletePersonHandler(index)}
-                            change={(event) => this.changeNameHandler(event, person.id)}
-                            key={person.id}/> //unique key - needed for react to know which elements from the virtual (future) DOM to compare to which of the present one
+                        return <ErrorBoundary key={person.id}>
+                            <Person
+                                // key={person.id} //unique key - needed for react to know which elements from the virtual (future) DOM to compare to which of the present one; should be on top when contained
+                                name={person.name}
+                                gender={person.gender}
+                                click={() => this.deletePersonHandler(index)}
+                                change={(event) => this.changeNameHandler(event, person.id)} />
+                        </ErrorBoundary>
                     })}
                 </div>
             );

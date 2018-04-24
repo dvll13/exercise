@@ -18,13 +18,18 @@ import classes from './Person.css';
 
 // you should use function components instead of classes as often as possible,
 // they are dynamic and just render smth, but don't change application's state, which is important as the app grows
-const person = (props) => {
+const Person = (props) => {
     // Radium:
     // const style = {
     //     '@media (min-width: 500px)': {
     //         width: '450px'
     //     }
     // };
+
+    const rnd = Math.random();
+    if (rnd > 0.7) {
+        throw new Error('Ops, something went wrong.');
+    }
 
     return (
         <div className={classes.Person}>
@@ -40,4 +45,4 @@ const person = (props) => {
 // React monitors 'state' and 'props' and re-renders when necessary
 
 // export default Radium(person);
-export default person;
+export default Person;
