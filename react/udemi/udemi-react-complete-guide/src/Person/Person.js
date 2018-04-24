@@ -4,7 +4,7 @@
 // import React, { Component } from 'react'; //this if we use the class instead
 
 import React from 'react'; // for the jsx syntax
-import './Person.css';
+import classes from './Person.css';
 // import Radium from 'radium';
 
 // class Person extends Component {
@@ -27,7 +27,7 @@ const person = (props) => {
     // };
 
     return (
-        <div className='Person'>
+        <div className={classes.Person}>
             <p onClick={props.click}>
                 I'm a {props.gender} person named {props.name} and I'm {Math.floor(Math.random() * 100)} years old.
             </p>

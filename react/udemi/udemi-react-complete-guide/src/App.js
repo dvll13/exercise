@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import './App.css';
+import classes from  './App.css';
 // import Radium, {StyleRoot} from 'radium';
 import Person from './Person/Person'; // component names should start with a capital letter
 
@@ -61,21 +61,22 @@ class App extends Component {
     // };
 
     render() { // everything within is executed on re-render
-        const btnShowMorePersonsStyle = {
-            position: 'absolute',
-            top: '5px',
-            right: '5px',
-            backgroundColor: 'green',
-            color: 'white',
-            font: 'inherit',
-            border: '1px solid blue',
-            padding: '8px',
-            cursor: 'pointer'
-            // ':hover': { //radium
-            //     backgroundColor: 'lightgreen',
-            //     color: 'black'
-            // }
-        };
+        // INLINE STYLES:
+        // const btnShowMorePersonsStyle = {
+        //     position: 'absolute',
+        //     top: '5px',
+        //     right: '5px',
+        //     backgroundColor: 'green',
+        //     color: 'white',
+        //     font: 'inherit',
+        //     border: '1px solid blue',
+        //     padding: '8px',
+        //     cursor: 'pointer'
+        //     // ':hover': { //radium
+        //     //     backgroundColor: 'lightgreen',
+        //     //     color: 'black'
+        //     // }
+        // };
 
         let morePersons = null;
         if (this.state.showMorePersons) {
@@ -92,30 +93,30 @@ class App extends Component {
                     })}
                 </div>
             );
-            btnShowMorePersonsStyle.backgroundColor = 'red';
-            btnShowMorePersonsStyle[':hover'] = { //radium
-                backgroundColor: 'salmon',
-                color: 'black'
-            };
+            // btnShowMorePersonsStyle.backgroundColor = 'red';
+            // btnShowMorePersonsStyle[':hover'] = { //radium
+            //     backgroundColor: 'salmon',
+            //     color: 'black'
+            // };
         }
 
-        let classes = [];
+        let assignedClasses = [];
         if (this.state.persons.length <= 1) {
-            classes.push('red');
+            assignedClasses.push(classes.red);
         }
         if (this.state.persons.length === 0) {
-            classes.push('bold');
+            assignedClasses.push(classes.bold);
         }
 
         return (
             // needed for advanced features like media-queries
             //<StyleRoot>
-                <div className="App">
-                    <h1>App header</h1>
-                    <p className={classes.join(' ')}>Subheader text</p>
+                <div className={classes.App}> {/*.App*/}
+                    <h1 className='unscopedClsTest'>App header (with unscoped className)</h1>
+                    <p className={assignedClasses.join(' ')}>Sub-header text</p>
 
-                    {/*conditionals v1:*/}
-                    <button onClick={this.togglePersonsHandler}>Toggle persons</button>
+                    {/* CONDITIONALS v1: */}
+                    <button className={classes.Red} onClick={this.togglePersonsHandler}>Toggle persons</button>
                     {
                         this.state.showPersons ?
                             <div>
@@ -139,10 +140,11 @@ class App extends Component {
                             null
                     }
 
-                    {/*conditionals v2 (preferred):*/}
+                    {/* CONDITIONALS v2 (preferred): */}
                     <button
-                        onClick={this.toggleMorePersonsHandler}
-                        style={btnShowMorePersonsStyle}>
+                        // style={btnShowMorePersonsStyle}
+                        className={classes.absBtn}
+                        onClick={this.toggleMorePersonsHandler}>
                         Toggle persons 2 (cleaner, with variable + list)
                     </button>
                     {morePersons}

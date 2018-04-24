@@ -1,10 +1,33 @@
+:global .unscopedClsTest {
+    color: blue;
+}
+
 .App {
   text-align: center;
 }
 
 .App button {
-    margin-bottom: 10px
+    margin-bottom: 10px;
+    cursor: pointer;
 }
+.App button:hover {
+    box-shadow: 0px 0px 3px 1px #0c5460;
+}
+.App button.Red {
+    background-color: red;
+    border-color: brown;
+}
+
+.absBtn {
+     position: absolute;
+     top: 5px;
+     right: 5px;
+     background-color: green;
+     color: white;
+     border: 1px solid blue;
+     padding: 5px;
+}
+
 
 .red {
     color: red;
