@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import classes from './App.css';
-import Person from '../components/Persons/Person/Person'; // component names should start with a capital letter
+import Persons from '../components/Persons/Persons'; // component names should start with a capital letter
+import Cockpit from '../Cockpit/Cockpit';
 // import Radium, {StyleRoot} from 'radium';
 // import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 
@@ -9,6 +10,8 @@ import Person from '../components/Persons/Person/Person'; // component names sho
 
 class App extends Component {
     // it's called a container when it has state
+    // containers should be as lean as possible mostly containing methods modifying the state
+    
     state = { // only for class based components
         persons: [
             {id: 'pid1', name: 'Stoyanka', gender: 'female'},
@@ -32,9 +35,7 @@ class App extends Component {
     };
 
     changeNameHandler = (event, id) => {
-        const personIndex = this.state.persons.findIndex(person => person.aaa === id);
-        // const personIndex = this.state.persons.findIndex(person => person.id === id);
-
+        const personIndex = this.state.persons.findIndex(person => person.id === id);
         const persons = [...this.state.persons];
         persons[personIndex].name = event.target.value;
 
@@ -84,7 +85,11 @@ class App extends Component {
             morePersons = (
                 <div>
                     <p>More persons:</p>
-                    {this.state.persons.map((person, index) => { //create list
+                    <Persons
+                        persons={this.state.persons}
+                        clicked={this.deletePersonHandler}
+                        changed={this.changeNameHandler} />
+                    {/* {this.state.persons.map((person, index) => { //create list
                         // return <ErrorBoundary key={person.id}>
                         return <Person
                                 key={person.id} //unique key - needed for react to know which elements from the virtual (future) DOM to compare to which of the present one; should be on top when contained
@@ -93,7 +98,7 @@ class App extends Component {
                                 click={() => this.deletePersonHandler(index)}
                                 change={(event) => this.changeNameHandler(event, person.id)} />
                         // </ErrorBoundary>
-                    })}
+                    })} */}
                 </div>
             );
             // btnShowMorePersonsStyle.backgroundColor = 'red';
@@ -103,53 +108,17 @@ class App extends Component {
             // };
         }
 
-        let assignedClasses = [];
-        if (this.state.persons.length <= 1) {
-            assignedClasses.push(classes.red);
-        }
-        if (this.state.persons.length === 0) {
-            assignedClasses.push(classes.bold);
-        }
-
         return (
             // needed for advanced features like media-queries
             //<StyleRoot>
                 <div className={classes.App}> {/*.App*/}
-                    <h1 className='unscopedClsTest'>App header (with unscoped className)</h1>
-                    <p className={assignedClasses.join(' ')}>Sub-header text</p>
-
-                    {/* CONDITIONALS v1: */}
-                    <button className={classes.Red} onClick={this.togglePersonsHandler}>Toggle persons</button>
-                    {
-                        this.state.showPersons ?
-                            <div>
-                                {/*bind - recommended than () => ... from below*/}
-                                <button onClick={this.switchNameHandler.bind(this, 'NewName1')}>Change name</button>
-
-                                <Person
-                                    name={this.state.persons[0].name}
-                                    gender={this.state.persons[0].gender}/>
-                                <Person
-                                    name={this.state.persons[1].name}
-                                    gender={this.state.persons[1].gender}
-                                    // click - custom attr used to pass reference to a parent method to be later called in Person; the other components should not have direct access to the State, but call only methods defined in the States' container
-                                    // () => ... - this is not recommended, use bind instead
-                                    click={() => this.switchNameHandler('NewName2')}
-                                    change={this.changeNameHandler}>
-                                    <i>{/*passing structured html:*/} My hobbies:</i> racing
-                                </Person>
-                            </div>
-                            :
-                            null
-                    }
-
-                    {/* CONDITIONALS v2 (preferred): */}
-                    <button
-                        // style={btnShowMorePersonsStyle}
-                        className={classes.absBtn}
-                        onClick={this.toggleMorePersonsHandler}>
-                        Toggle persons 2 (cleaner, with variable + list)
-                    </button>
+                    <Cockpit
+                        persons={this.state.persons}
+                        showPersons={this.state.showPersons}
+                        clickedPersonsToggle={this.togglePersonsHandler}
+                        clickedMorePersonsToggle={this.toggleMorePersonsHandler}
+                        clickedSwitchName={this.switchNameHandler}
+                        changedName={this.changeNameHandler} />
                     {morePersons}
                 </div>
             //</StyleRoot>

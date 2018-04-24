@@ -34,11 +34,11 @@ const Person = (props) => {
 
     return (
         <div className={classes.Person}>
-            <p onClick={props.click}>
+            <p onClick={props.clicked}>
                 I'm a {props.gender} person named {props.name} and I'm {Math.floor(Math.random() * 100)} years old.
             </p>
             <p>{props.children}</p>
-            <input type="text" onChange={props.change} value={props.name}/> {/*onChange & value = two-way binding*/}
+            <input type="text" onChange={props.changed} value={props.name}/> {/*onChange & value = two-way binding*/}
         </div>
     );
 };
