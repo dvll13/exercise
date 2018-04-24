@@ -26,10 +26,11 @@ const Person = (props) => {
     //     }
     // };
 
-    const rnd = Math.random();
-    if (rnd > 0.7) {
-        throw new Error('Ops, something went wrong.');
-    }
+    // Errors test:
+    // const rnd = Math.random();
+    // if (rnd > 0.7) {
+    //     throw new Error('Ops, something went wrong.');
+    // }
 
     return (
         <div className={classes.Person}>
