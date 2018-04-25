@@ -13,7 +13,7 @@ const Cockpit = (props) => {
 
     return (
         <div className={classes.Cockpit}>
-            <h1 className='unscopedClsTest'>App header (with unscoped className)</h1>
+            <h1 className='unscopedClsTest'>{props.appTitle}</h1>
             <p className={assignedClasses.join(' ')}>Sub-header text</p>
 
             {/* CONDITIONALS v1: */}

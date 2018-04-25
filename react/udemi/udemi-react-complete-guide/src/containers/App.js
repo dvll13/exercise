@@ -9,8 +9,9 @@ import Cockpit from '../Cockpit/Cockpit';
 // use it with care, because manipulating it makes the app unpredictable and hard to manage
 
 class App extends Component {
-    // it's called a container when it has state
+    // it's called a container when extends Component; it has this.state and this.props; use it when you need to manage State or access Lifecycle Hooks
     // containers should be as lean as possible mostly containing methods modifying the state
+    // the state should be changed in the main containers and passed down as props
     
     state = { // only for class based components
         persons: [
@@ -113,6 +114,7 @@ class App extends Component {
             //<StyleRoot>
                 <div className={classes.App}> {/*.App*/}
                     <Cockpit
+                        appTitle={this.props.title}
                         persons={this.state.persons}
                         showPersons={this.state.showPersons}
                         clickedPersonsToggle={this.togglePersonsHandler}
