@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from './Cockpit.css';
 import Person from '../Persons/Person/Person';
-// import Aux from '../../hoc/Aux';
+// import Auxilliary from '../../hoc/Auxilliary';
 
 const Cockpit = (props) => {
     let assignedClasses = [],
@@ -14,7 +14,7 @@ const Cockpit = (props) => {
     }
 
     return (
-        <React.Fragment> {/* or custom <Aux> - avoid html wrapping element*/}
+        <React.Fragment> {/* or custom <Auxilliary> - avoid html wrapping element*/}
             <h1 className='unscopedClsTest'>{props.appTitle}</h1>
             <p className={assignedClasses.join(' ')}>Sub-header text</p>
 

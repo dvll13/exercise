@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-// doesn't start with capital letter because it doesn't qualify as a component since it returns a function, not JSX
+// doesn't start with a capital letter because it doesn't qualify as a component since it returns a function, not JSX
 const withClass = (WrappedComponent, className) => {
     
     // return (props) => (
