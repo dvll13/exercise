@@ -2,7 +2,26 @@ import React, {Component} from 'react';
 import classes from './Person.css';
 
 class Person extends Component {
+    constructor(props) {
+        super(props);
+        console.log('[Person] constructor()', props);
+    }
+
+    componentWillMount() {
+        console.log('[Person] componentWillMount()');
+    }
+
+    componentDidMount() {
+        console.log('[Person] componentDidMount()');
+    }
+
+    componentWillUnmount() {
+        console.log('[Person] componentWillUnmount()');
+    }
+
     render() {
+        console.log('[Person] render()');
+
         return (
             <div className={classes.Person}>
                 <p onClick={this.props.clicked}>

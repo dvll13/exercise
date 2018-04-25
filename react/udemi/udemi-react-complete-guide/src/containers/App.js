@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import classes from './App.css';
 import Persons from '../components/Persons/Persons'; // component names should start with a capital letter
 import Cockpit from '../Cockpit/Cockpit';
@@ -8,11 +8,42 @@ import Cockpit from '../Cockpit/Cockpit';
 // state - for managing some component's internal data; re-renders where necessary on changes
 // use it with care, because manipulating it makes the app unpredictable and hard to manage
 
-class App extends Component {
+class App extends PureComponent {
     // it's called a container when extends Component; it has this.state and this.props; use it when you need to manage State or access Lifecycle Hooks
     // containers should be as lean as possible mostly containing methods modifying the state
     // the state should be changed in the main containers and passed down as props
-    
+
+    constructor(props) {
+        super(props);
+        console.log('[App] constructor()', props);
+        // this.state = ... - could be initialized here, but it's a bit old-school
+    }
+
+    componentWillMount() {
+        console.log('[App] componentWillMount()', arguments);
+    }
+
+    componentDidMount() {
+        console.log('[App] componentDidMount()', arguments);
+    }
+
+    // UPDATE triggered from internal changes (setState)
+
+    // shouldComponentUpdate(nextProps, nextState) {
+    //     console.log('[App] UPDATE shouldComponentUpdate()', nextProps, nextState);
+    //     return nextState.showPersons !== this.state.showPersons ||
+    //         nextState.persons !== this.state.persons;
+    // }
+
+    componentWillUpdate(nextProps, nextState) {
+        console.log('[App] UPDATE componentWillUpdate()', nextProps, nextState);
+    }
+
+    componentDidUpdate() {
+        console.log('[App] UPDATE componentDidUpdate()');
+    }
+
+
     state = { // only for class based components
         persons: [
             {id: 'pid1', name: 'Stoyanka', gender: 'female'},
@@ -64,6 +95,7 @@ class App extends Component {
     // };
 
     render() { // everything within is executed on re-render
+        console.log('[App] render()', arguments);
         // INLINE STYLES:
         // const btnShowMorePersonsStyle = {
         //     position: 'absolute',
@@ -113,6 +145,7 @@ class App extends Component {
             // needed for advanced features like media-queries
             //<StyleRoot>
                 <div className={classes.App}> {/*.App*/}
+                    <button onClick={() => {this.setState({showPersons: true})}}>Always show persons</button>
                     <Cockpit
                         appTitle={this.props.title}
                         persons={this.state.persons}
