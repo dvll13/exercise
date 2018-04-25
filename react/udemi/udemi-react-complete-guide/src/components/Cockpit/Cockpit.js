@@ -1,9 +1,11 @@
 import React from 'react';
 import classes from './Cockpit.css';
-import Person from '../components/Persons/Person/Person';
+import Person from '../Persons/Person/Person';
+// import Aux from '../../hoc/Aux';
 
 const Cockpit = (props) => {
-    let assignedClasses = [];
+    let assignedClasses = [],
+        btnClasses = `${classes.button} ${classes.Red}`;
     if (props.persons.length <= 1) {
         assignedClasses.push(classes.red);
     }
@@ -12,12 +14,12 @@ const Cockpit = (props) => {
     }
 
     return (
-        <div className={classes.Cockpit}>
+        <React.Fragment> {/* or custom <Aux> - avoid html wrapping element*/}
             <h1 className='unscopedClsTest'>{props.appTitle}</h1>
             <p className={assignedClasses.join(' ')}>Sub-header text</p>
 
             {/* CONDITIONALS v1: */}
-            <button className={classes.Red} onClick={props.clickedPersonsToggle}>Toggle persons</button>
+            <button className={btnClasses} onClick={props.clickedPersonsToggle}>Toggle persons</button>
             {
                 props.showPersons ?
                     <div>
@@ -48,7 +50,7 @@ const Cockpit = (props) => {
                 onClick={props.clickedMorePersonsToggle}>
                 Toggle persons 2 (cleaner, with variable + list)
             </button>
-        </div>
+        </React.Fragment>
     );
 };
 

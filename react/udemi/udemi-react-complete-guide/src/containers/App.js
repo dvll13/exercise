@@ -1,7 +1,8 @@
 import React, {PureComponent} from 'react';
 import classes from './App.css';
 import Persons from '../components/Persons/Persons'; // component names should start with a capital letter
-import Cockpit from '../Cockpit/Cockpit';
+import Cockpit from '../components/Cockpit/Cockpit';
+import withClass from '../hoc/withClass';
 // import Radium, {StyleRoot} from 'radium';
 // import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 
@@ -13,7 +14,7 @@ class App extends PureComponent {
     // containers should be as lean as possible mostly containing methods modifying the state
     // the state should be changed in the main containers and passed down as props
 
-    constructor(props) {
+    constructor(props) { //can be omitted (ES7)
         super(props);
         console.log('[App] constructor()', props);
         // this.state = ... - could be initialized here, but it's a bit old-school
@@ -144,7 +145,8 @@ class App extends PureComponent {
         return (
             // needed for advanced features like media-queries
             //<StyleRoot>
-                <div className={classes.App}> {/*.App*/}
+                // <div className={classes.App}> {/*.App*/}
+                <React.Fragment>
                     <button onClick={() => {this.setState({showPersons: true})}}>Always show persons</button>
                     <Cockpit
                         appTitle={this.props.title}
@@ -155,11 +157,11 @@ class App extends PureComponent {
                         clickedSwitchName={this.switchNameHandler}
                         changedName={this.changeNameHandler} />
                     {morePersons}
-                </div>
+                </React.Fragment>
             //</StyleRoot>
         );
     }
 }
 
 // export default Radium(App);
-export default App;
+export default withClass(App, classes.App);
