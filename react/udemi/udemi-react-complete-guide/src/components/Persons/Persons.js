@@ -46,11 +46,12 @@ class Persons extends PureComponent {
     render () {
         console.log('[Persons] render()');
 
-        return this.props.persons.map((person, index) => {
+        return this.props.persons.map((person, index) => { //create list
             return <Person
-                key={person.id}
+                key={person.id}  //unique key - needed for react to know which elements from the virtual (future) DOM to compare to which of the present one; should be on top when contained
                 name={person.name}
                 gender={person.gender}
+                age={person.age}
                 clicked={() => this.props.clicked(index)}
                 changed={(event) => this.props.changed(event, person.id)} />
         });

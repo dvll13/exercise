@@ -5,6 +5,7 @@ import Cockpit from '../components/Cockpit/Cockpit';
 import withClass from '../hoc/withClass';
 // import Radium, {StyleRoot} from 'radium';
 // import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
+// import Auxilliary from '../../hoc/Auxilliary';
 
 // state - for managing some component's internal data; re-renders where necessary on changes
 // use it with care, because manipulating it makes the app unpredictable and hard to manage
@@ -47,11 +48,12 @@ class App extends PureComponent {
 
     state = { // only for class based components
         persons: [
-            {id: 'pid1', name: 'Stoyanka', gender: 'female'},
-            {id: 'pid2', name: 'Stoyan', gender: 'male'}
+            {id: 'pid1', name: 'Stoyanka', gender: 'female', age: 32},
+            {id: 'pid2', name: 'Stoyan', gender: 'male', age: 35}
         ],
         showPersons: false,
-        showMorePersons: false
+        showMorePersons: false,
+        toggleClicked: 0
     };
 
     // good practice in naming to add 'Handler'
@@ -72,14 +74,24 @@ class App extends PureComponent {
         const persons = [...this.state.persons];
         persons[personIndex].name = event.target.value;
 
-        this.setState({persons: persons});
+        this.setState({ persons: persons });
     };
 
     togglePersonsHandler = () => {
-        this.setState({showPersons: !this.state.showPersons});
+        this.setState({ showPersons: !this.state.showPersons });
     };
     toggleMorePersonsHandler = () => {
-        this.setState({showMorePersons: !this.state.showMorePersons});
+        // this.setState({
+        //     showMorePersons: !this.state.showMorePersons,
+        //     toggleClicked: this.state.toggleClicked + 1
+        // });
+        // setState runs asynchronously, so other setStates may finish earlier and this.state can be not the latest version, so the following can be used where prevState won't be mutated from elsewhere while we are in this.setState call
+        this.setState((prevState, props) => {
+            return {
+                showMorePersons: !prevState.showMorePersons,
+                toggleClicked: prevState.toggleClicked + 1
+            }
+        });
     };
 
     deletePersonHandler = (index) => {
@@ -87,7 +99,7 @@ class App extends PureComponent {
         // const persons = this.state.persons.splice(); // BETTER - creates a new array
         const persons = [...this.state.persons];
         persons.splice(index, 1);
-        this.setState({persons: persons});
+        this.setState({ persons: persons });
     }
 
     //NOTE: don't use function()
@@ -123,16 +135,6 @@ class App extends PureComponent {
                         persons={this.state.persons}
                         clicked={this.deletePersonHandler}
                         changed={this.changeNameHandler} />
-                    {/* {this.state.persons.map((person, index) => { //create list
-                        // return <ErrorBoundary key={person.id}>
-                        return <Person
-                                key={person.id} //unique key - needed for react to know which elements from the virtual (future) DOM to compare to which of the present one; should be on top when contained
-                                name={person.name}
-                                gender={person.gender}
-                                click={() => this.deletePersonHandler(index)}
-                                change={(event) => this.changeNameHandler(event, person.id)} />
-                        // </ErrorBoundary>
-                    })} */}
                 </div>
             );
             // btnShowMorePersonsStyle.backgroundColor = 'red';
@@ -146,7 +148,7 @@ class App extends PureComponent {
             // needed for advanced features like media-queries
             //<StyleRoot>
                 // <div className={classes.App}> {/*.App*/}
-                <React.Fragment>
+                <React.Fragment> {/* or custom <Auxilliary> - avoid html wrapping element*/}
                     <button onClick={() => {this.setState({showPersons: true})}}>Always show persons</button>
                     <Cockpit
                         appTitle={this.props.title}
