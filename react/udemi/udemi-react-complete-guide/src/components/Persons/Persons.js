@@ -2,6 +2,9 @@ import React, {PureComponent} from 'react';
 import Person from './Person/Person';
 
 class Persons extends PureComponent {
+    lastPersonRef = React.createRef();
+
+    // life cycle hooks:
     constructor(props) {
         super(props);
         console.log('[Persons] constructor()', props);
@@ -13,6 +16,7 @@ class Persons extends PureComponent {
 
     componentDidMount() {
         console.log('[Persons] componentDidMount()');
+        this.lastPersonRef.current.focus(); // the HOC inbetween prevents this from working
     }
 
     componentWillUnmount() {
@@ -49,6 +53,8 @@ class Persons extends PureComponent {
         return this.props.persons.map((person, index) => { //create list
             return <Person
                 key={person.id}  //unique key - needed for react to know which elements from the virtual (future) DOM to compare to which of the present one; should be on top when contained
+                ref={this.lastPersonRef}
+                personIndex={index}
                 name={person.name}
                 gender={person.gender}
                 age={person.age}
