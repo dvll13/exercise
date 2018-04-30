@@ -2,25 +2,25 @@ import React, {Component} from 'react';
 import classes from './Person.css';
 // import WithCls from '../../../hoc/WithCls';
 import withClass from '../../../hoc/withClass';
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'; //for validation
+import {AuthContext} from "../../../containers/App";
 
 class Person extends Component {
-    inputRef = React.createRef(); // NEW
+    inputRef = React.createRef(); // reference: 1. init (only in stateful cmps)
 
     constructor(props) {
         super(props);
         console.log('[Person] constructor()', props);
     }
 
-    componentWillMount() {
-        console.log('[Person] componentWillMount()');
-    }
+    //deprecated
+    // componentWillMount() {
+    //     console.log('[Person] componentWillMount()');
+    // }
 
     componentDidMount() {
         console.log('[Person] componentDidMount()');
         if (this.props.personIndex === 0) {
-            // this.inputRef.focus();
-            // this.inputRef.current.focus();
             this.focus();
         }
     }
@@ -41,21 +41,22 @@ class Person extends Component {
         return (
             // <WithCls classes={classes.Person}>
             <React.Fragment>
+                <AuthContext.Consumer>
+                    {auth => auth ? <p>I'm authenticated</p> : null}
+                </AuthContext.Consumer>
                 <p onClick={this.props.clicked}>
                     I'm a {this.props.gender} person named {this.props.name} and I'm {this.props.age} years old.
                 </p>
                 <p>{this.props.children}</p>
                 <input
-                    // ref={(input) => {this.inputRef = input;}} //only in stateful cmps (DEPRECATED)
-                    ref={this.inputRef}
+                    ref={this.inputRef} //reference: 2.point
                     type="text"
                     onChange={this.props.changed}
                     value={this.props.name} />
             </React.Fragment>
             // </WithCls>
         )
-
-        // can return array with elements with keys WITHOUT WRAPPING EL
+        // can put in return an array with elements with keys WITHOUT A WRAPPING EL OR use React.Fragment
     }
 }
 

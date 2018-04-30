@@ -10,6 +10,9 @@ import withClass from '../hoc/withClass';
 // state - for managing some component's internal data; re-renders where necessary on changes
 // use it with care, because manipulating it makes the app unpredictable and hard to manage
 
+// Context API - for global values across components
+export const AuthContext = React.createContext(false); // false - default auth value
+
 class App extends PureComponent {
     // it's called a container when extends Component; it has this.state and this.props; use it when you need to manage State or access Lifecycle Hooks
     // containers should be as lean as possible mostly containing methods modifying the state
@@ -21,15 +24,16 @@ class App extends PureComponent {
         // this.state = ... - could be initialized here, but it's a bit old-school
     }
 
-    componentWillMount() {
-        console.log('[App] componentWillMount()', arguments);
-    }
+    //deprecated
+    // componentWillMount() {
+    //     console.log('[App] componentWillMount()', arguments);
+    // }
 
     componentDidMount() {
         console.log('[App] componentDidMount()', arguments);
     }
 
-    // UPDATE triggered from internal changes (setState)
+    // UPDATE hooks, triggered from internal changes (setState)
 
     // shouldComponentUpdate(nextProps, nextState) {
     //     console.log('[App] UPDATE shouldComponentUpdate()', nextProps, nextState);
@@ -37,10 +41,26 @@ class App extends PureComponent {
     //         nextState.persons !== this.state.persons;
     // }
 
-    componentWillUpdate(nextProps, nextState) {
-        console.log('[App] UPDATE componentWillUpdate()', nextProps, nextState);
+    //deprecated
+    // componentWillUpdate(nextProps, nextState) {
+    //     console.log('[App] UPDATE componentWillUpdate()', nextProps, nextState);
+    // }
+
+    // executes when props change
+    // rarely used, e.g. if you want to update state on props change
+    // static - method not attached to a single instance
+    static getDerivedStateFromProps(newProps, prevState) {
+        console.log('[App] UPDATE getDerivedStateFromProps()', newProps, prevState);
+        //merge newProps to the prevState and return this new state
+        return prevState;
     }
 
+    // fires before dom is updated
+    getSnapshotBeforeUpdate() {
+        console.log('[App] UPDATE getSnapshotBeforeUpdate()');
+    }
+
+    // fires after dom is updated
     componentDidUpdate() {
         console.log('[App] UPDATE componentDidUpdate()');
     }
@@ -53,7 +73,8 @@ class App extends PureComponent {
         ],
         showPersons: false,
         showMorePersons: false,
-        toggleClicked: 0
+        toggleClicked: 0,
+        authenticated: false
     };
 
     // good practice in naming to add 'Handler'
@@ -100,7 +121,11 @@ class App extends PureComponent {
         const persons = [...this.state.persons];
         persons.splice(index, 1);
         this.setState({ persons: persons });
-    }
+    };
+
+    loginHandler = () => {
+        this.setState({ authenticated: true });
+    };
 
     //NOTE: don't use function()
     // switchNameHandler2 = function() {
@@ -149,7 +174,7 @@ class App extends PureComponent {
             //<StyleRoot>
                 // <div className={classes.App}> {/*.App*/}
                 <React.Fragment> {/* or custom <Auxilliary> - avoid html wrapping element*/}
-                    <button onClick={() => {this.setState({showPersons: true})}}>Always show persons</button>
+                    <button onClick={() => {this.setState({showMorePersons: true})}}>Always show persons</button>
                     <Cockpit
                         appTitle={this.props.title}
                         persons={this.state.persons}
@@ -157,8 +182,12 @@ class App extends PureComponent {
                         clickedPersonsToggle={this.togglePersonsHandler}
                         clickedMorePersonsToggle={this.toggleMorePersonsHandler}
                         clickedSwitchName={this.switchNameHandler}
-                        changedName={this.changeNameHandler} />
-                    {morePersons}
+                        changedName={this.changeNameHandler}
+                        login={this.loginHandler}/>
+
+                    <AuthContext.Provider value={this.state.authenticated}> {/*value is passed on all children levels*/}
+                        {morePersons}
+                    </AuthContext.Provider>
                 </React.Fragment>
             //</StyleRoot>
         );

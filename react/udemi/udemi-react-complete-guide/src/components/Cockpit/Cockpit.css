@@ -9,16 +9,13 @@
 }
 
 .absBtn {
-     position: absolute;
-     top: 5px;
-     right: 5px;
      background-color: green;
      color: white;
      border: 1px solid blue;
      padding: 5px;
 }
 .absBtn:hover {
-    box-shadow: 0px 0px 3px 1px #0c5460;
+    box-shadow: 0 0 3px 1px #0c5460;
     cursor: pointer;
 }
 
@@ -28,4 +25,8 @@
 
 .bold {
     font-weight: bold;
+}
+
+.hidden {
+    display: none;
 }

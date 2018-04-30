@@ -10,9 +10,10 @@ class Persons extends PureComponent {
         console.log('[Persons] constructor()', props);
     }
 
-    componentWillMount() {
-        console.log('[Persons] componentWillMount()');
-    }
+    //deprecated
+    // componentWillMount() {
+    //     console.log('[Persons] componentWillMount()');
+    // }
 
     componentDidMount() {
         console.log('[Persons] componentDidMount()');
@@ -23,9 +24,10 @@ class Persons extends PureComponent {
         console.log('[Persons] componentWillUnmount()');
     }
 
-    componentWillReceiveProps(nextProps) {
-        console.log('[Persons] UPDATE componentWillReceiveProps()', nextProps);
-    }
+    //deprecated
+    // componentWillReceiveProps(nextProps) {
+    //     console.log('[Persons] UPDATE componentWillReceiveProps()', nextProps);
+    // }
 
     //UPDATING triggered from the outside (props changes)
 
@@ -38,9 +40,10 @@ class Persons extends PureComponent {
         // usually not needed if you have a PureComponent on an upper lever of the component tree, which filters the state/props updates which may come to the current components
     }
 
-    componentWillUpdate(nextProps, nextState) {
-        console.log('[Persons] UPDATE componentWillUpdate()', nextProps, nextState);
-    }
+    //deprecated
+    // componentWillUpdate(nextProps, nextState) {
+    //     console.log('[Persons] UPDATE componentWillUpdate()', nextProps, nextState);
+    // }
 
     componentDidUpdate() {
         console.log('[Persons] UPDATE componentDidUpdate()');
