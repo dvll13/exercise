@@ -66,6 +66,7 @@ class App extends PureComponent {
     }
 
 
+    // should be as low in the hierarchy as possible, over the components which rely on it
     state = { // only for class based components
         persons: [
             {id: 'pid1', name: 'Stoyanka', gender: 'female', age: 32},
