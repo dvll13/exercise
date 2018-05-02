@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 
 class BurgerIngredient extends Component {
   render() {
-    let ingredient = null;
+    let ingredient;
 
     switch (this.props.type) {
       case ('bread-bottom'):
-        inredient = <div className={classes.BreadBottom}></div>;
+        ingredient = <div className={classes.BreadBottom}></div>;
         break;
       case ('bread-top'):
         ingredient = (
@@ -19,21 +19,24 @@ class BurgerIngredient extends Component {
         );
         break;
       case ('meat'):
-        inredient = <div className={classes.Meat}></div>;
+        ingredient = <div className={classes.Meat}></div>;
         break;
       case ('cheese'):
-        inredient = <div className={classes.Cheese}></div>;
+        ingredient = <div className={classes.Cheese}></div>;
         break;
       case ('salad'):
-        inredient = <div className={classes.Salad}></div>;
+        ingredient = <div className={classes.Salad}></div>;
         break;
       case ('bacon'):
-        inredient = <div className={classes.Bacon}></div>;
+        ingredient = <div className={classes.Bacon}></div>;
+        break;
+      default:
+        ingredient = null;
     }
 
     return ingredient;
   }
-};
+}
 
 BurgerIngredient.propTypes = {
   type: PropTypes.string.isRequired
