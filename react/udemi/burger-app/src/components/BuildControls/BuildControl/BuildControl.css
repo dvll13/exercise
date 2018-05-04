@@ -5,6 +5,17 @@
   margin: 5px 0;
 }
 
+.Label {
+  padding: 10px;
+  font-weight: bold;
+  width: 80px;
+}
+
+.BuildControl button {
+  margin: 0 5px;
+}
+
+/*
 .BuildControl button {
   display: block;
   font: inherit;
@@ -29,11 +40,7 @@
   cursor: not-allowed;
 }
 
-.Label {
-  padding: 10px;
-  font-weight: bold;
-  width: 80px;
-}
+
 
 .BuildControl .Less {
   background-color: #D39952;
@@ -53,4 +60,4 @@
 .BuildControl .More:hover,.BuildControl .More:active {
   background-color: #99703F;
   color: white;
-}
+}*/
