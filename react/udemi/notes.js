@@ -1,5 +1,3 @@
-// everything within render() is executed on re-render
-
 { // state - for managing some component's internal data; re-renders where necessary on changes
   // use it with care, because manipulating it makes the app unpredictable and hard to manage
 
@@ -64,7 +62,7 @@
           char={char}
           key={index}
           click={this.charClickHandler.bind(this, index)} />
-    );
+    )
   );
 
   const sum = Object.keys(ingredients)
@@ -97,30 +95,34 @@ import {AuthContext} from "../../../containers/App";
 }
 
 { //lifecycle hooks:
-  constructor(props) { //can be omitted (ES7)
-    super(props);
-    // this.state = ... - could be initialized here, but it's a bit old-school
+  class App extends Component {
+    constructor(props) { //can be omitted (ES7)
+      super(props);
+      // this.state = ... - could be initialized here, but it's a bit old-school
+    }
+
+    // after all the elements of the page is rendered correctly, this method is called
+    // is the perfect place, where we can call the setState() method to change the state of our application and render() the updated data loaded JSX. For example, we are going to fetch any data from an API then API call should be placed in this lifecycle method, and then we get the response, we can call the setState() method and render the element with updated data.
+    componentDidMount() {}
+
+    componentWillUnmount() {}
+
+    // executes when props change
+    // rarely used, e.g. if you want to update state on props change
+    // static - method not attached to a single instance
+    static getDerivedStateFromProps(newProps, prevState) {
+      //merge newProps to the prevState and return this new state
+      return prevState;
+    }
+
+    // fires before dom is updated
+    getSnapshotBeforeUpdate() {}
+
+    // fires after dom is updated
+    componentDidUpdate() {}
+
+    render () {} // everything within is executed on re-render
   }
-
-  // after all the elements of the page is rendered correctly, this method is called
-  // is the perfect place, where we can call the setState() method to change the state of our application and render() the updated data loaded JSX. For example, we are going to fetch any data from an API then API call should be placed in this lifecycle method, and then we get the response, we can call the setState() method and render the element with updated data.
-  componentDidMount() {}
-
-  componentWillUnmount() {}
-
-  // executes when props change
-  // rarely used, e.g. if you want to update state on props change
-  // static - method not attached to a single instance
-  static getDerivedStateFromProps(newProps, prevState) {
-    //merge newProps to the prevState and return this new state
-    return prevState;
-  }
-
-  // fires before dom is updated
-  getSnapshotBeforeUpdate() {}
-
-  // fires after dom is updated
-  componentDidUpdate() {}
 }
 
 {
