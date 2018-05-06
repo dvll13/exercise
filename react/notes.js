@@ -14,6 +14,12 @@
   this.setState({ persons: persons });
 }
 
+{
+// that's the way to use images. point their path to webpack and it optimizes and copies them in production
+  import logo from '../../assets/images/burger-logo.png';
+  <img src={logo}/>
+}
+
 // it's called a container when extends Component; it has this.state and this.props; use it when you need to manage State or access Lifecycle Hooks
 // containers should be as lean as possible mostly containing methods modifying the state
 // the state should be changed in the main containers and passed down as props
