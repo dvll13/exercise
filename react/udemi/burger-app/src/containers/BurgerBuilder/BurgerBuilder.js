@@ -60,6 +60,16 @@ class BurgerBuilder extends Component {
     this.setState({ purchasing: true });
   }
 
+  purchaseCancelHandler = () => {
+    this.setState({ purchasing: false });
+  }
+
+  purchaseContinueHandler = () => {
+    alert('Continuing to purchase!')
+  }
+
+  getPrice = () => this.state.totalPrice.toFixed(2);
+
   render() {
     const disabledButtons = {...this.state.ingredients};
     for (let ingredient in disabledButtons) {
@@ -68,15 +78,19 @@ class BurgerBuilder extends Component {
 
     return (
       <React.Fragment>
-        <Modal show={this.state.purchasing}>
-          <OrderSummary ingredients={this.state.ingredients}/>
+        <Modal show={this.state.purchasing} cancel={this.purchaseCancelHandler}>
+          <OrderSummary
+            ingredients={this.state.ingredients}
+            price={this.getPrice}
+            purchaseCancelled={this.purchaseCancelHandler}
+            purchaseContinued={this.purchaseContinueHandler}/>
         </Modal>
         <Burger ingredients={this.state.ingredients}/>
         <BuildControls
           ingredientAdded={this.addIngredientHandler}
           ingredientRemoved={this.removeIngredientHandler}
           disabledButtons={disabledButtons}
-          price={this.state.totalPrice}
+          price={this.getPrice}
           purchasable={this.state.purchasable}
           purchased={this.purchaseHandler}/>
       </React.Fragment>
