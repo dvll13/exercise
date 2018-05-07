@@ -165,3 +165,8 @@ import {AuthContext} from "../../../containers/App";
     type: PropTypes.string.isRequired
   };
 }
+
+{
+  // passing boolean true values shorthand
+  <NavigationItem active></NavigationItem>
+}
