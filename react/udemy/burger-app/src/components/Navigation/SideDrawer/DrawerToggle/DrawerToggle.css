@@ -1,0 +1,10 @@
+.DrawerToggle {
+  opacity: .8;
+  cursor: pointer;
+  color: white;
+}
+
+.DrawerToggle:hover {
+  opacity: 1;
+  box-shadow: 0 0 5px 3px #ba8859;
+}

@@ -1,7 +1,7 @@
 { // state - for managing some component's internal data; re-renders where necessary on changes
   // use it with care, because manipulating it makes the app unpredictable and hard to manage
 
-  // setState runs asynchronously, so other setStates may finish earlier and this.state can be not the latest version, so the following can be used where prevState won't be mutated from elsewhere while we are in this.setState call
+  // setState runs asynchronously, so other setStates may finish earlier and this.state can be not the latest version, so the following can be used where prevState won't be mutated from elsewhere while we are in this.setState call, so if we plan to USE THE state IN setState:
   this.setState((prevState, props) => {
     return {
         showMorePersons: !prevState.showMorePersons,
