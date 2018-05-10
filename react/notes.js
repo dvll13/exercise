@@ -125,6 +125,7 @@ import {AuthContext} from "../../../containers/App";
     getSnapshotBeforeUpdate() {}
 
     // fires after dom is updated
+    // DON'T UPDATE THE STATE HERE since it will trigger a re-render and may cause infinite loop
     componentDidUpdate() {}
 
     render () {} // everything within is executed on re-render
