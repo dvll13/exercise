@@ -48,7 +48,7 @@ class App extends PureComponent {
 
     // executes when props change
     // rarely used, e.g. if you want to update state on props change
-    // static - method not attached to a single instance
+    // static - method not attached to a single instance, no access to 'this'
     static getDerivedStateFromProps(newProps, prevState) {
         console.log('[App] UPDATE getDerivedStateFromProps()', newProps, prevState);
         //merge newProps to the prevState and return this new state

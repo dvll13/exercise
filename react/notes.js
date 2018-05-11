@@ -115,7 +115,8 @@ import {AuthContext} from "../../../containers/App";
 
     // executes when props change
     // rarely used, e.g. if you want to update state on props change
-    // static - method not attached to a single instance
+    // static - method not attached to a single instance, no access to 'this'
+    // The function is used when a component is updated but also when it is mounted, right after the constructor was called, so you no longer need to use constructor or class property form of state if you want to set initial state from props.
     static getDerivedStateFromProps(newProps, prevState) {
       //merge newProps to the prevState and return this new state
       return prevState;
@@ -124,7 +125,7 @@ import {AuthContext} from "../../../containers/App";
     // fires before dom is updated
     getSnapshotBeforeUpdate() {}
 
-    // fires after dom is updated
+    // fires after dom is updated, good place to call after we receive a new prop
     // DON'T UPDATE THE STATE HERE since it will trigger a re-render and may cause infinite loop
     componentDidUpdate() {}
 
@@ -170,4 +171,20 @@ import {AuthContext} from "../../../containers/App";
 {
   // passing boolean true values shorthand
   <NavigationItem active></NavigationItem>
+}
+
+{
+    // axios.defaults.baseURL = 'https://jsonplaceholder.typicode.com';
+    // axios.defaults.headers.common['Authorization'], axios.defaults.headers.post['Content-Type'], ...
+    // let i = axios.interceptors.request/response.use(requestCfg => { ...; return requestCfg; }, error => {return Promise.reject(error);})
+    // axios.interceptors.request.eject(i); - remove interceptor
+    /*You can add interceptors to a custom instance of axios.
+      const instance = axios.create();
+      instance.interceptors.request.use(function () {/*...*/}); */
+
+    // using different axios instances
+    const instance = axios.create({...})
+
+    // axios.post, axios.get, axios.delete
+    // .then(response => {}), .catch(error => {})
 }

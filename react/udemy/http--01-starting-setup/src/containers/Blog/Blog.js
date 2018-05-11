@@ -13,7 +13,7 @@ class Blog extends Component {
     };
 
     componentDidMount() { // best place to cause side-effects
-        axios.get('https://jsonplaceholder.typicode.com/posts')
+        axios.get('/posts')
             .then(response => {
                 console.log(response);
 
@@ -48,7 +48,7 @@ class Blog extends Component {
                     {posts}
                 </section>
                 <section>
-                    <FullPost postid={this.state.selectedPostId}/>
+                    <FullPost selectedpostid={this.state.selectedPostId}/>
                 </section>
                 <section>
                     <NewPost />
