@@ -180,10 +180,10 @@ import {AuthContext} from "../../../containers/App";
     // axios.interceptors.request.eject(i); - remove interceptor
     /*You can add interceptors to a custom instance of axios.
       const instance = axios.create();
-      instance.interceptors.request.use(function () {/*...*/}); */
+      instance.interceptors.request.use(function () {...}); */
 
-    // using different axios instances
-    const instance = axios.create({...})
+    // using different axios instances ([axios.js and Blog.js] override defaults)
+    const instance = axios.create({})
 
     // axios.post, axios.get, axios.delete
     // .then(response => {}), .catch(error => {})

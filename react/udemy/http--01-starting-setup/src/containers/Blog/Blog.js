@@ -3,8 +3,7 @@ import Post from '../../components/Post/Post';
 import FullPost from '../../components/FullPost/FullPost';
 import NewPost from '../../components/NewPost/NewPost';
 import './Blog.css';
-
-import axios from 'axios';
+import axiosInstance from '../../axios'; // overrides defaults
 
 class Blog extends Component {
     state = {
