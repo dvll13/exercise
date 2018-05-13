@@ -8,13 +8,13 @@ class Modal extends Component {
   }
 
   componentWillUpdate() {
-    console.log('m-wu');
+    console.log('[Modal] componentWillUpdate');
   }
 
   render() {
     return (
       <React.Fragment>
-        <Backdrop show={this.props.show} cancel={this.props.cancel} />
+        <Backdrop show={this.props.show} clicked={this.props.cancel} />
         <div
           className={classes.Modal}
           style={{

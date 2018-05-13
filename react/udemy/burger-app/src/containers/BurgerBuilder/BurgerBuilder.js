@@ -3,8 +3,9 @@ import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
-import axios from '../../axios-orders';
+import axios from '../../axios-orders'; // the instance
 import Spinner from '../../components/UI/Spinner/Spinner';
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
 //capitals for global constants
 const INGREDIENT_PRICES = {
@@ -86,14 +87,15 @@ class BurgerBuilder extends Component {
       }
     }
 
+    // axios.post('/orders.json1', order)
     axios.post('/orders.json', order)
       .then(response => {
         this.setState({ loading: false, purchasing: false });
-        console.log(response);
+        console.log('RESPONSE:', response);
       })
       .catch(error => {
         this.setState({ loading: false, purchasing: false });
-        console.log(error);
+        console.log('ERROR:', error);
       });
   }
 
@@ -133,4 +135,4 @@ class BurgerBuilder extends Component {
   }
 }
 
-export default BurgerBuilder;
+export default withErrorHandler(BurgerBuilder, axios);

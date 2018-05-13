@@ -14,6 +14,8 @@
   this.setState({ persons: persons });
 }
 
+// BEWARE if shouldComponentUpdate() filters some state passed down in props
+
 {
 // that's the way to use images. point their path to webpack and it optimizes and copies them in production
   import logo from '../../assets/images/burger-logo.png';
@@ -174,10 +176,10 @@ import {AuthContext} from "../../../containers/App";
 }
 
 {
-    // axios.defaults.baseURL = 'https://jsonplaceholder.typicode.com';
+    axios.defaults.baseURL = 'https://jsonplaceholder.typicode.com';
     // axios.defaults.headers.common['Authorization'], axios.defaults.headers.post['Content-Type'], ...
-    // let i = axios.interceptors.request/response.use(requestCfg => { ...; return requestCfg; }, error => {return Promise.reject(error);})
-    // axios.interceptors.request.eject(i); - remove interceptor
+    let i = axios.interceptors.request/response.use(requestCfg => { /*...;*/ return requestCfg; }, error => {return Promise.reject(error);})
+    axios.interceptors.request.eject(i); //remove interceptor
     /*You can add interceptors to a custom instance of axios.
       const instance = axios.create();
       instance.interceptors.request.use(function () {...}); */
