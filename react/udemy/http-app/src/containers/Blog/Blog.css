@@ -20,3 +20,13 @@
 .Blog a:active {
     color: #fa923f
 }
+
+.Blog a.active,
+.Blog a.my-active {
+    color: lightgreen;
+    font-weight: bold;
+}
+
+.Blog a.my-active {
+    color: blanchedalmond;
+}

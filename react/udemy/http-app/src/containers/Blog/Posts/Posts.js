@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
+import './Posts.css';
 import axiosInstance from "../../../axios";
 import Post from '../../../components/Post/Post';
-import './Posts.css';
+import {Link} from 'react-router-dom';
 
 class Posts extends Component {
     state = {
@@ -9,6 +10,7 @@ class Posts extends Component {
     };
 
     componentDidMount() { // best place to cause side-effects
+        console.log(this.props);
         axiosInstance.get('/posts')
             .then(response => {
                 console.log(response);
@@ -34,11 +36,14 @@ class Posts extends Component {
 
     render() {
         const posts = this.state.posts.map(post => {
-            return <Post
-                key={post.id}
-                title={post.title}
-                author={post.author}
-                clicked={() => this.postSelectedHandler(post.id)} />
+            return (
+                <Link to={'/' + post.id} key={post.id}>
+                    <Post
+                        title={post.title}
+                        author={post.author}
+                        clicked={() => this.postSelectedHandler(post.id)} />
+                </Link>
+            )
         });
 
         return (

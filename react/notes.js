@@ -198,10 +198,45 @@ import {AuthContext} from "../../../containers/App";
     <BrowserRouter></BrowserRouter>
 
     import {Route} from 'react-router-dom';
-    // we can render as many routes as we want
+    // we can render as many routes as we want, every route that matches its path gets rendered
     <Route path='/' render={() => <h1>Home</h1>}/> // will always be rendered
     <Route path='/' exact render={() => <h2>Home 2</h2>}/>
     <Route path='/new-post' render={() => <h1>NewPost</h1>}/>
+    <Route path='/:my_id' exact component={FullPost}/> // overrides the similar ones above it,
+                    should be last, in order for the similar ones to be possible to be reached
 
-    <Route path='/' exact component={Posts}/>
+    // render only the first matched route
+    <Switch>
+        <Route/>
+        <Route/>
+    </Switch>
+
+    <Link to='/'>Home</Link>
+    <Link to={{
+        pathname: '/new-post', - absolute path
+        //pathname: this.props.match.url + /new-post - relative path
+        hash: '#submit',
+        search: '?quick-submit=true'
+    }}>New Post</Link>
+    <NavLink 
+        to='/' 
+        exact
+        activeClassName='my-active'
+        activeStyle={{textDecoration: 'underline'}}>Home</NavLink>
+
+    // pass down router props to children:
+    import {withRouter} from 'react-router-dom';
+    export default withRouter(Cmp);
+
+    // extracting query params:
+    componentDidMount() {
+        const query = new URLSearchParams(this.props.location.search);
+        for (let param of query.entries()) {
+            console.log(param); // yields ['start', '5']
+        }
+    }
+
+    // fragment:
+    <Link to="/my-path#start-position">Go to Start</Link> 
+    -> props.location.hash
 */}
