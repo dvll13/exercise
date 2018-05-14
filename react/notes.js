@@ -192,7 +192,7 @@ import {AuthContext} from "../../../containers/App";
     // .then(response => {}), .catch(error => {})
 }
 
-{
+{/*
     // npm install --save react-router react-router-dom
     // wrap whatever needs to use routing in the application:
     <BrowserRouter></BrowserRouter>
@@ -204,4 +204,4 @@ import {AuthContext} from "../../../containers/App";
     <Route path='/new-post' render={() => <h1>NewPost</h1>}/>
 
     <Route path='/' exact component={Posts}/>
-}
+*/}
