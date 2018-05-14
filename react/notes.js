@@ -111,6 +111,7 @@ import {AuthContext} from "../../../containers/App";
 
     // after all the elements of the page is rendered correctly, this method is called
     // is the perfect place, where we can call the setState() method to change the state of our application and render() the updated data loaded JSX. For example, we are going to fetch any data from an API then API call should be placed in this lifecycle method, and then we get the response, we can call the setState() method and render the element with updated data.
+    // good place for fetching data
     componentDidMount() {}
 
     componentWillUnmount() {}
@@ -179,7 +180,7 @@ import {AuthContext} from "../../../containers/App";
     axios.defaults.baseURL = 'https://jsonplaceholder.typicode.com';
     // axios.defaults.headers.common['Authorization'], axios.defaults.headers.post['Content-Type'], ...
     let i = axios.interceptors.request/response.use(requestCfg => { /*...;*/ return requestCfg; }, error => {return Promise.reject(error);})
-    axios.interceptors.request.eject(i); //remove interceptor
+    axios.interceptors.request.eject(i); //remove interceptor to prevent memory leaks
     /*You can add interceptors to a custom instance of axios.
       const instance = axios.create();
       instance.interceptors.request.use(function () {...}); */

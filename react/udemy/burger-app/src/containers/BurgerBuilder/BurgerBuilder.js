@@ -17,17 +17,23 @@ const INGREDIENT_PRICES = {
 
 class BurgerBuilder extends Component {
   state = {
-    ingredients: {
-      salad: 0,
-      bacon: 0,
-      cheese: 0,
-      meat: 0
-    },
+    ingredients: null,
     totalPrice: 4,
     purchasable: false,
     purchasing: false,
-    loading: false
+    loading: false,
+    error: false
   };
+
+  componentDidMount() {
+    axios.get('https://react-my-burger-dvll.firebaseio.com/ingredients.json')
+      .then(response => {
+        this.setState({ ingredients: response.data })
+      })
+      .catch(error => {
+        this.setState({ error: true });
+      });
+  }
 
   updatePurchaseState(ingredients) {
     const sum = Object.keys(ingredients)
@@ -62,11 +68,11 @@ class BurgerBuilder extends Component {
 
   purchaseHandler = () => {
     this.setState({ purchasing: true });
-  }
+  };
 
   purchaseCancelHandler = () => {
     this.setState({ purchasing: false });
-  }
+  };
 
   purchaseContinueHandler = () => {
     this.setState({ loading: true });
@@ -85,7 +91,7 @@ class BurgerBuilder extends Component {
         email: 'test@test.com',
         deliveryMethod: 'fastest'
       }
-    }
+    };
 
     // axios.post('/orders.json1', order)
     axios.post('/orders.json', order)
@@ -97,7 +103,7 @@ class BurgerBuilder extends Component {
         this.setState({ loading: false, purchasing: false });
         console.log('ERROR:', error);
       });
-  }
+  };
 
   getPrice = () => this.state.totalPrice.toFixed(2);
 
@@ -107,29 +113,42 @@ class BurgerBuilder extends Component {
       disabledButtons[ingredient] = disabledButtons[ingredient] <= 0;
     }
 
-    let orderSummary = <OrderSummary
-      ingredients={this.state.ingredients}
-      price={this.getPrice}
-      purchaseCancelled={this.purchaseCancelHandler}
-      purchaseContinued={this.purchaseContinueHandler}/>;
-    
+    let orderSummary = null;
+
+    let burger = this.state.error ? <p>Ingredients can't be loaded!</p> : <Spinner/>;
+    if (this.state.ingredients) {
+      // these rely on this.state.ingredients which could be not yet fetched
+      burger = (
+        <React.Fragment>
+          <Burger ingredients={this.state.ingredients}/>
+          <BuildControls
+            ingredientAdded={this.addIngredientHandler}
+            ingredientRemoved={this.removeIngredientHandler}
+            disabledButtons={disabledButtons}
+            price={this.getPrice}
+            purchasable={this.state.purchasable}
+            purchased={this.purchaseHandler}/>
+        </React.Fragment>
+      );
+
+      orderSummary = <OrderSummary
+        ingredients={this.state.ingredients}
+        price={this.getPrice}
+        purchaseCancelled={this.purchaseCancelHandler}
+        purchaseContinued={this.purchaseContinueHandler}/>;
+    }
+
     if (this.state.loading) {
       orderSummary = <Spinner />;
     }
+
 
     return (
       <React.Fragment>
         <Modal show={this.state.purchasing} cancel={this.purchaseCancelHandler}>
           {orderSummary}
         </Modal>
-        <Burger ingredients={this.state.ingredients}/>
-        <BuildControls
-          ingredientAdded={this.addIngredientHandler}
-          ingredientRemoved={this.removeIngredientHandler}
-          disabledButtons={disabledButtons}
-          price={this.getPrice}
-          purchasable={this.state.purchasable}
-          purchased={this.purchaseHandler}/>
+        {burger}
       </React.Fragment>
     )
   }
