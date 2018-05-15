@@ -197,7 +197,8 @@ import {AuthContext} from "../../../containers/App";
     // wrap whatever needs to use routing in the application:
     <BrowserRouter></BrowserRouter>
 
-    import {Route} from 'react-router-dom';
+    import {Route, /*Link*/ NavLink, Switch} from 'react-router-dom';
+
     // we can render as many routes as we want, every route that matches its path gets rendered
     <Route path='/' render={() => <h1>Home</h1>}/> // will always be rendered
     <Route path='/' exact render={() => <h2>Home 2</h2>}/>
@@ -223,6 +224,10 @@ import {AuthContext} from "../../../containers/App";
         exact
         activeClassName='my-active'
         activeStyle={{textDecoration: 'underline'}}>Home</NavLink>
+
+    // change page programmatically:
+    // this.props.history.push({ pathname: '/' + id }); or:
+    this.props.history.push('/' + id);
 
     // pass down router props to children:
     import {withRouter} from 'react-router-dom';
