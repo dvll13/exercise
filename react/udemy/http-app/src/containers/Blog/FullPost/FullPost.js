@@ -11,8 +11,17 @@ class FullPost extends Component {
     // good place to call after we receive a new prop.id
     // componentDidUpdate() {
     componentDidMount() { // change since after applied rooting it gets added and removed from dom
-        if (this.props.match.params.my_id) {
-            if (!this.state.loadedPost || (this.state.loadedPost && this.props.match.params.my_id !== this.state.loadedPost.id)) {
+        this.loadData();
+    }
+
+    // fires when clicking on posts (componentDidMount() doesn't) because in nested routes React doesn't unmount and mount again the same component with different data, but uses the same component and updates the route parameter
+    componentDidUpdate() {
+        this.loadData();
+    }
+
+    loadData() {
+        if (this.props.match.params.my_id) {// eslint-disable-next-line
+            if (!this.state.loadedPost || (this.state.loadedPost && this.props.match.params.my_id != this.state.loadedPost.id) /* string != number */ ) {
                 axios.get('/posts/' + this.props.match.params.my_id)
                     .then(response => {
                         console.log('get', response);

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Blog.css';
-import {Route, /*Link*/ NavLink, Switch} from 'react-router-dom';
+import {Route, /*Link*/ NavLink, Switch, Redirect} from 'react-router-dom';
 import Posts from './Posts/Posts';
 import NewPost from './NewPost/NewPost';
 
@@ -39,8 +39,9 @@ class Blog extends Component {
                 <Switch>
                     <Route path='/new-post' component={NewPost}/>
                     <Route path='/posts' component={Posts}/>
-                    {/*<Route path='/:my_id' exact component={FullPost}/>*/} {/* overrides the similar ones above it,
-                    should be last in order for the similar to be possible to be reached */}
+                    <Redirect from='/' to='/posts'/> {/*catches anything not yet redirected*/}
+                    {/* <Route render={() => <h1>404: Not found!</h1>}/> OR this, to catch 404 */}
+                    {/*<Route path='/:my_id' exact component={FullPost}/>*/} {/* overrides the similar ones above it, should be last in order for the similar to be possible to be reached */}
                 </Switch>
             </div>
         );

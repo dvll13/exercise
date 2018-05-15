@@ -192,29 +192,38 @@ import {AuthContext} from "../../../containers/App";
     // .then(response => {}), .catch(error => {})
 }
 
-{/*
+{
     // npm install --save react-router react-router-dom
     // wrap whatever needs to use routing in the application:
     <BrowserRouter></BrowserRouter>
 
-    import {Route, /*Link*/ NavLink, Switch} from 'react-router-dom';
+    import {Route, /*Link*/ NavLink, Switch, Redirect} from 'react-router-dom';
 
     // we can render as many routes as we want, every route that matches its path gets rendered
     <Route path='/' render={() => <h1>Home</h1>}/> // will always be rendered
     <Route path='/' exact render={() => <h2>Home 2</h2>}/>
     <Route path='/new-post' render={() => <h1>NewPost</h1>}/>
-    <Route path='/:my_id' exact component={FullPost}/> // overrides the similar ones above it,
-                    should be last, in order for the similar ones to be possible to be reached
+    <Route path='/:my_id' exact component={FullPost}/> // overrides the similar ones above it, should be last, in order for the similar ones to be possible to be reached
+
 
     // render only the first matched route
     <Switch>
         <Route/>
         <Route/>
+        <Redirect from='/' to='/posts'/>
+        {/* OR */}
+        <Route render={() => <h1>404: Not found!</h1>}/> {/*catch 404*/}
     </Switch>
+
+    // can be put conditionally in jsx to forward after some change in state
+    <Redirect to='/posts'/>
+    // or:
+    //this.props.history.push('/posts'); - adds a new history entry
+    //this.props.history.replace('/posts'); replaces like <Redirect/>
 
     <Link to='/'>Home</Link>
     <Link to={{
-        pathname: '/new-post', - absolute path
+        pathname: '/new-post', // absolute path
         //pathname: this.props.match.url + /new-post - relative path
         hash: '#submit',
         search: '?quick-submit=true'
@@ -243,5 +252,11 @@ import {AuthContext} from "../../../containers/App";
 
     // fragment:
     <Link to="/my-path#start-position">Go to Start</Link> 
-    -> props.location.hash
-*/}
+    // -> props.location.hash
+
+    // guard examples
+    componentDidMount() {
+        // if (!this.state.auth) this.props.history.replace('/posts')
+    }
+    //  this.state.auth ? <Route path='...'/> : null;
+}
