@@ -195,7 +195,9 @@ import {AuthContext} from "../../../containers/App";
 { // ROUTES
     // npm install --save react-router react-router-dom
     // wrap whatever needs to use routing in the application:
-    <BrowserRouter></BrowserRouter>
+    // <BrowserRouter basename='/my-app'> - if the root of the app is different from '/'
+    <BrowserRouter>
+    </BrowserRouter>
 
     import {Route, /*Link*/ NavLink, Switch, Redirect} from 'react-router-dom';
 
