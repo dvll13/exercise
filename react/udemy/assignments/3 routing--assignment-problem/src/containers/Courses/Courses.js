@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+// import {Link} from 'react-router-dom';
 
 import './Courses.css';
 
@@ -11,6 +12,11 @@ class Courses extends Component {
         ]
     }
 
+    handleClick = (id, title) => {
+        this.props.history.push(`/course/${id}/title/${title}`);
+        // this.props.history.push(`/course?id=${id}&title=${title}`);
+    }
+
     render() {
         return (
             <div>
@@ -18,7 +24,18 @@ class Courses extends Component {
                 <section className="Courses">
                     {
                         this.state.courses.map(course => {
-                            return <article className="Course" key={course.id}>{course.title}</article>;
+                            /* <Link to='/course' key={course.id}>
+                                <article className="Course">{course.title}</article>
+                            </Link> */
+                            return (
+                                <article
+                                    className="Course"
+                                    key={course.id}
+                                    onClick={() => this.handleClick(course.id, course.title)}
+                                >
+                                    {course.title}
+                                </article>
+                            );
                         })
                     }
                 </section>

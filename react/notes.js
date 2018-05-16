@@ -238,7 +238,9 @@ import {AuthContext} from "../../../containers/App";
 
     // change page programmatically:
     // this.props.history.push({ pathname: '/' + id }); or:
-    this.props.history.push('/' + id);
+    this.props.history.push('/' + id); //set
+    <Route path='/:my_id' exact component={FullPost}/>
+    this.props.match.params.my_id //get
 
     // pass down router props to children:
     import {withRouter} from 'react-router-dom';
