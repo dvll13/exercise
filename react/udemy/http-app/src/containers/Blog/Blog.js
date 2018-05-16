@@ -2,7 +2,13 @@ import React, { Component } from 'react';
 import './Blog.css';
 import {Route, /*Link*/ NavLink, Switch, Redirect} from 'react-router-dom';
 import Posts from './Posts/Posts';
-import NewPost from './NewPost/NewPost';
+import asyncComponent from "../../hoc/asyncComponent";
+// import NewPost from './NewPost/NewPost';
+
+const AsyncNewPost = asyncComponent(() => {
+    // whatever is in the () will be only imported when the anonymous fn is executed
+    return import('./NewPost/NewPost');
+});
 
 class Blog extends Component {
     render () {
@@ -37,7 +43,8 @@ class Blog extends Component {
                 {/*<Route path='/' exact render={() => <h2>Home 2</h2>}/>*/}
                 {/*<Route path='/new-post' render={() => <h1>NewPost</h1>}/>*/}
                 <Switch>
-                    <Route path='/new-post' component={NewPost}/>
+                    {/*<Route path='/new-post' component={NewPost}/>*/}
+                    <Route path='/new-post' component={AsyncNewPost}/>
                     <Route path='/posts' component={Posts}/>
                     <Redirect from='/' to='/posts'/> {/*catches anything not yet redirected*/}
                     {/* <Route render={() => <h1>404: Not found!</h1>}/> OR this, to catch 404 */}

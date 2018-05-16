@@ -176,7 +176,7 @@ import {AuthContext} from "../../../containers/App";
   <NavigationItem active></NavigationItem>
 }
 
-{
+{ // AXIOS
     axios.defaults.baseURL = 'https://jsonplaceholder.typicode.com';
     // axios.defaults.headers.common['Authorization'], axios.defaults.headers.post['Content-Type'], ...
     let i = axios.interceptors.request/response.use(requestCfg => { /*...;*/ return requestCfg; }, error => {return Promise.reject(error);})
@@ -192,7 +192,7 @@ import {AuthContext} from "../../../containers/App";
     // .then(response => {}), .catch(error => {})
 }
 
-{
+{ // ROUTES
     // npm install --save react-router react-router-dom
     // wrap whatever needs to use routing in the application:
     <BrowserRouter></BrowserRouter>
@@ -259,4 +259,18 @@ import {AuthContext} from "../../../containers/App";
         // if (!this.state.auth) this.props.history.replace('/posts')
     }
     //  this.state.auth ? <Route path='...'/> : null;
+}
+
+{ // ROUTES LAZY LOADING
+  //1. create hoc/asyncComponent
+  //2. usage:
+
+  import asyncComponent from "../../hoc/asyncComponent";
+
+  const AsyncNewPost = asyncComponent(() => {
+      // whatever is in the () will be only imported when the anonymous fn is executed
+      return import('./NewPost/NewPost');
+  });
+
+  <Route path='/new-post' component={AsyncNewPost}/>
 }
