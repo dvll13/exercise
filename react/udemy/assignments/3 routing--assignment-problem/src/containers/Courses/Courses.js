@@ -10,12 +10,12 @@ class Courses extends Component {
             { id: 2, title: 'Vue - The Complete Guide' },
             { id: 3, title: 'PWA - The Complete Guide' }
         ]
-    }
+    };
 
     handleClick = (id, title) => {
         this.props.history.push(`/course/${id}/title/${title}`);
         // this.props.history.push(`/course?id=${id}&title=${title}`);
-    }
+    };
 
     render() {
         return (
