@@ -214,7 +214,7 @@ import {AuthContext} from "../../../containers/App";
         <Route/>
         <Redirect from='/' to='/posts'/>
         {/* OR */}
-        <Route render={() => <h1>404: Not found!</h1>}/> {/*catch 404*/}
+        <Route render={() => <h1>404: Not found!</h1>}/> {/*catch anything else route (404)*/}
     </Switch>
 
     // can be put conditionally in jsx to forward after some change in state
@@ -241,7 +241,9 @@ import {AuthContext} from "../../../containers/App";
     this.props.history.push('/' + id); //set
     <Route path='/:my_id' exact component={FullPost}/>
     this.props.match.params.my_id //get
+    this.props.match.url // current url
 
+    //TODO: check!!!
     // pass down router props to children:
     import {withRouter} from 'react-router-dom';
     export default withRouter(Cmp);
