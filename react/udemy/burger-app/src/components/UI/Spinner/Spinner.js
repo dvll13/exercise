@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from './Spinner.css';
-import {CircularProgress} from 'material-ui/Progress';
+import {CircularProgress} from '@material-ui/core/CircularProgress';
 
 const Spinner = props => {
     const spinner = props.mui ?

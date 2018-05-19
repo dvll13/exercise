@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from './BuildControl.css';
-import Button from "material-ui/Button";
+import Button from '@material-ui/core/Button';
 
 const BuildControl = (props) => (
     <div className={classes.BuildControl}>

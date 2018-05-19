@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from './BuildControls.css';
 import BuildControl from './BuildControl/BuildControl';
-import Button from "material-ui/Button";
+import Button from '@material-ui/core/Button';
 
 const controls = [
     {label: 'Salad', type: 'salad'},

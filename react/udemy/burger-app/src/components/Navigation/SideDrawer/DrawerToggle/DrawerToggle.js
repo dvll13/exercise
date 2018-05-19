@@ -1,9 +1,12 @@
 import React from 'react';
 import classes from './DrawerToggle.css';
-import Icon from 'material-ui/Icon';
+import IconButton from '@material-ui/core/IconButton';
+import { Menu as MenuIcon } from '@material-ui/icons';
 
 const DrawerToggle = props => (
-    <Icon className={classes.DrawerToggle} onClick={props.clicked}>menu</Icon>
+    <IconButton className={classes.DrawerToggle} onClick={props.clicked}>
+        <MenuIcon />
+    </IconButton>
 );
 
 export default DrawerToggle;
