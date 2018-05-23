@@ -211,7 +211,6 @@ import {AuthContext} from "../../../containers/App";
     // render only the first matched route
     <Switch>
         <Route/>
-        <Route/>
         <Redirect from='/' to='/posts'/>
         {/* OR */}
         <Route render={() => <h1>404: Not found!</h1>}/> {/*catch anything else route (404)*/}
@@ -236,24 +235,44 @@ import {AuthContext} from "../../../containers/App";
         activeClassName='my-active'
         activeStyle={{textDecoration: 'underline'}}>Home</NavLink>
 
-    // change page programmatically:
+    // change page PROGRAMATICALLY:
+    // we have props.history, match (nearest matched route), location only if the component is loaded by a Route object
+    // if not then we can use withRouther to pass them to the current component
     // this.props.history.push({ pathname: '/' + id }); or:
     this.props.history.push('/' + id); //set
     <Route path='/:my_id' exact component={FullPost}/>
+    <Route path={this.props.match.path + '/contact-data'} component={ContactData}/>
+    this.props.history.goBack();
+    this.props.history.replace('/');
     this.props.match.params.my_id //get
     this.props.match.url // current url
 
-    //TODO: check!!!
-    // pass down router props to children:
+    // pass down router props to "non-routed" children
     import {withRouter} from 'react-router-dom';
     export default withRouter(Cmp);
 
-    // extracting query params:
+    // PASSING MORE query params
+    const queryParams = [];
+    for (let i in this.state.ingredients) {
+        queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]));
+    }
+    const queryString = queryParams.join('&');
+    this.props.history.push({
+        pathname: '/checkout',
+        search: '?' + queryString
+    });
+
+    // EXTRACTING query params:
     componentDidMount() {
         const query = new URLSearchParams(this.props.location.search);
+        const ingredients = {};
+        
         for (let param of query.entries()) {
-            console.log(param); // yields ['start', '5']
+            // param = ['salad', '1']
+            ingredients[param[0]] = +param[1];
         }
+
+        this.setState({ingredients: ingredients});
     }
 
     // fragment:

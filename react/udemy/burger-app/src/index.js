@@ -3,8 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
-import {BrowserRouter} from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
+const app = (
+    <BrowserRouter/* basename='burger'*/>
+        <App />
+    </BrowserRouter>
+);
 
-ReactDOM.render(<BrowserRouter basename='burger'><App/></BrowserRouter>, document.getElementById('root'));
+ReactDOM.render(app, document.getElementById('root'));
 registerServiceWorker();

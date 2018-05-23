@@ -21,8 +21,8 @@ class OrderSummary extends Component {
                 </ul>
                 <p>Continue to checkout?</p>
                 <p><strong>Total price: ${this.props.price()}</strong></p>
-                <Button type='Danger' click={this.props.purchaseCancelled}>CANCEL</Button>
-                <Button type='Success' click={this.props.purchaseContinued}>CONTINUE</Button>
+                <Button type='Danger' clicked={this.props.purchaseCancelled}>CANCEL</Button>
+                <Button type='Success' clicked={this.props.purchaseContinued}>CONTINUE</Button>
             </React.Fragment>
         )
     }
