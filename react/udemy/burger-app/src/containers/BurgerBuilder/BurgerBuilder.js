@@ -75,6 +75,10 @@ class BurgerBuilder extends Component {
     };
 
     purchaseContinueHandler = () => {
+        //TODO: l 208
+        this.props.history.push('/checkout');
+        return;
+
         this.setState({loading: true});
 
         // in a real env calculations should be done on the server so that they cannot be manipulated

@@ -52,7 +52,7 @@ class Person extends Component {
                     ref={this.inputRef} //reference: 2.point
                     type="text"
                     onChange={this.props.changed}
-                    value={this.props.name} />
+                    value={this.props.name} />  {/*onChange & value = two-way binding*/}
             </React.Fragment>
             // </WithCls>
         )
