@@ -79,6 +79,7 @@
     .map(igKey => ingredients[igKey])
     .reduce((sum, el) => sum + el);
 
+  // object to array
   let transformedIngredients = Object.keys(props.ingredients) // array of keys (ingredients)
     .map((ingredient) => { // for each ingredient
       return [...Array(props.ingredients[ingredient])].map((_, i) => { // [...Array(2)] -> [undefined, undefined]
@@ -88,6 +89,14 @@
     .reduce((arr, el) => { // strip empty array items
       return arr.concat(el); // array + empty_array = array
     }, []);
+}
+
+//alternative:
+for (let ingredientName in props.ingredients) {
+    ingredients.push({
+        name: ingredientName,
+        amount: props.ingredients[ingredientName]
+    })
 }
 
 { // Context API - for global values across components
@@ -180,6 +189,25 @@ import {AuthContext} from "../../../containers/App";
 
 { // AXIOS
     axios.defaults.baseURL = 'https://jsonplaceholder.typicode.com';
+
+    axios.get('/orders.json')
+    .then(res => {
+        console.log('res.data:', res.data);
+        for (let key in res.data) {
+            fetchedOrders.push({
+                id: key,
+                ...res.data[key]
+            })
+        }
+        this.setState({
+            orders: fetchedOrders,
+            loading: false
+        });
+    })
+    .catch(error => {
+        this.setState({loading: false});
+    })
+
     // axios.defaults.headers.common['Authorization'], axios.defaults.headers.post['Content-Type'], ...
     let i = axios.interceptors.request/response.use(requestCfg => { /*...;*/ return requestCfg; }, error => {return Promise.reject(error);})
     axios.interceptors.request.eject(i); //remove interceptor to prevent memory leaks
