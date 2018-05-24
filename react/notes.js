@@ -16,6 +16,8 @@
 
 // BEWARE if shouldComponentUpdate() filters some state passed down in props
 
+// componentDidMount() -> componentWillMount() {this.setState(...)} { changed in order to load the state before the child cmps are rendered
+
 {
 // that's the way to use images. point their path to webpack and it optimizes and copies them in production
   import logo from '../../assets/images/burger-logo.png';
@@ -241,11 +243,16 @@ import {AuthContext} from "../../../containers/App";
     // this.props.history.push({ pathname: '/' + id }); or:
     this.props.history.push('/' + id); //set
     <Route path='/:my_id' exact component={FullPost}/>
-    <Route path={this.props.match.path + '/contact-data'} component={ContactData}/>
     this.props.history.goBack();
     this.props.history.replace('/');
     this.props.match.params.my_id //get
     this.props.match.url // current url
+
+    // adding to current url and passing props to routed component ({...props} should pass the router data then)
+    <Route
+        path={this.props.match.path + '/contact-data'}
+        // component={ContactData}/>
+        render={ (props) => (<ContactData ingredients={this.state.ingredients} {...props}/>) }/>
 
     // pass down router props to "non-routed" children
     import {withRouter} from 'react-router-dom';

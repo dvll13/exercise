@@ -26,7 +26,6 @@ class BurgerBuilder extends Component {
     };
 
     componentDidMount() {
-        console.log(this.props);
         axios.get('https://react-my-burger-dvll.firebaseio.com/ingredients.json')
             .then(response => {
                 this.setState({ingredients: response.data})
@@ -76,38 +75,11 @@ class BurgerBuilder extends Component {
     };
 
     purchaseContinueHandler = () => {
-        // this.setState({loading: true});
-
-        // // in a real env calculations should be done on the server so that they cannot be manipulated
-        // const order = {
-        //     ingredients: this.state.ingredients,
-        //     price: this.getPrice(),
-        //     customer: {
-        //         name: 'Customer One',
-        //         address: {
-        //             street: 'Street One',
-        //             zipCode: '1234',
-        //             country: 'Bulgaria'
-        //         },
-        //         email: 'test@test.com',
-        //         deliveryMethod: 'fastest'
-        //     }
-        // };
-
-        // // axios.post('/orders.json1', order)
-        // axios.post('/orders.json', order)
-        //     .then(response => {
-        //         this.setState({loading: false, purchasing: false});
-        //         console.log('RESPONSE:', response);
-        //     })
-        //     .catch(error => {
-        //         this.setState({loading: false, purchasing: false});
-        //         console.log('ERROR:', error);
-        //     });
         const queryParams = [];
         for (let i in this.state.ingredients) {
             queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]));
         }
+        queryParams.push(`price=${this.state.totalPrice}`);
         const queryString = queryParams.join('&');
 
         this.props.history.push({
