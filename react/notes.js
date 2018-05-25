@@ -14,6 +14,23 @@
   this.setState({ persons: persons });
 }
 
+{
+    // updating a state value which is a few levels down
+    inputChangedHandler = (event, inputIdentifier) => {
+        const updatedOrderForm = {
+            ...this.state.orderForm //not a deep level copy, so we should manually clone the next level
+        };
+        const updatedFormElement = {
+            ...updatedOrderForm[inputIdentifier]
+        };
+
+        updatedFormElement.value = event.target.value;
+        updatedOrderForm[inputIdentifier] = updatedFormElement;
+
+        this.setState({orderForm: updatedOrderForm});
+    };
+}
+
 // BEWARE if shouldComponentUpdate() filters some state passed down in props
 
 // componentDidMount() -> componentWillMount() {this.setState(...)} { changed in order to load the state before the child cmps are rendered
