@@ -351,3 +351,5 @@ import {AuthContext} from "../../../containers/App";
 
   <Route path='/new-post' component={AsyncNewPost}/>
 }
+
+// VALIDATION: in ContactData.js and Input.js

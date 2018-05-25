@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import axios from '../../../axios-orders';
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
@@ -14,7 +14,12 @@ class ContactData extends Component {
                     type: 'text',
                     placeholder: 'Your Name'
                 },
-                value: ''
+                value: '',
+                validationRules: {
+                    required: true
+                },
+                valid: false,
+                touched: false
             },
             street: {
                 elementType: 'input',
@@ -22,7 +27,12 @@ class ContactData extends Component {
                     type: 'text',
                     placeholder: 'Street'
                 },
-                value: ''
+                value: '',
+                validationRules: {
+                    required: true
+                },
+                valid: false,
+                touched: false
             },
             zipCode: {
                 elementType: 'input',
@@ -30,7 +40,15 @@ class ContactData extends Component {
                     type: 'text',
                     placeholder: 'ZIP'
                 },
-                value: ''
+                value: '',
+                validationRules: {
+                    required: true,
+                    minLength: 5,
+                    maxLength: 5
+                },
+                valid: false,
+                touched: false,
+                valueType: 'ZIP code'
             },
             country: {
                 elementType: 'input',
@@ -38,7 +56,12 @@ class ContactData extends Component {
                     type: 'text',
                     placeholder: 'Country'
                 },
-                value: ''
+                value: '',
+                validationRules: {
+                    required: true
+                },
+                valid: false,
+                touched: false
             },
             email: {
                 elementType: 'input',
@@ -46,26 +69,34 @@ class ContactData extends Component {
                     type: 'email',
                     placeholder: 'Your Mail'
                 },
-                value: ''
+                value: '',
+                validationRules: {
+                    required: true
+                },
+                valid: false,
+                touched: false
             },
             deliveryMethod: {
                 elementType: 'select',
                 elementConfig: {
                     options: [
-                        { value: 'fastest', displayValue: 'Fastest'},
-                        { value: 'cheapest', displayValue: 'Cheapest'}
+                        { value: 'fastest', displayValue: 'Fastest' },
+                        { value: 'cheapest', displayValue: 'Cheapest' }
                     ],
                     //config: {}
                 },
-                value: ''
+                value: '',
+                validationRules: {},
+                valid: true
             }
         },
+        formIsValid: false,
         loading: false
     };
 
     orderHandler = (event) => {
         event.preventDefault();
-        this.setState({loading: true});
+        this.setState({ loading: true });
 
         const formData = {};
         for (let formElementIdentifier in this.state.orderForm) {
@@ -82,15 +113,33 @@ class ContactData extends Component {
         // axios.post('/orders.json1', order)
         axios.post('/orders.json', order)
             .then(response => {
-                this.setState({loading: false});
+                this.setState({ loading: false });
                 console.log('RESPONSE:', response);
                 this.props.history.push('/');
             })
             .catch(error => {
-                this.setState({loading: false});
+                this.setState({ loading: false });
                 console.log('ERROR:', error);
             });
     };
+
+    checkValidity(value, rules) {
+        let isValid = true;
+
+        if (rules.required && isValid) {
+            isValid = value.trim() !== '';
+        }
+
+        if (rules.minLength && isValid) {
+            isValid = value.length >= rules.minLength;
+        }
+
+        if (rules.maxLength && isValid) {
+            isValid = value.length <= rules.maxLength;
+        }
+
+        return isValid;
+    }
 
     inputChangedHandler = (event, inputIdentifier) => {
         const updatedOrderForm = {
@@ -101,9 +150,21 @@ class ContactData extends Component {
         };
 
         updatedFormElement.value = event.target.value;
+        
+        updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validationRules);
+        updatedFormElement.touched = true;
+
         updatedOrderForm[inputIdentifier] = updatedFormElement;
 
-        this.setState({orderForm: updatedOrderForm});
+        let formIsValid = true;
+        for (let inputIdentifier in updatedOrderForm) {
+            if (typeof updatedOrderForm[inputIdentifier].valid !== 'undefined') {
+                formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid;
+            }
+        }
+        console.log(formIsValid);
+
+        this.setState({ orderForm: updatedOrderForm, formIsValid: formIsValid });
     };
 
     render() {
@@ -123,14 +184,19 @@ class ContactData extends Component {
                         elementType={formElement.config.elementType}
                         elementConfig={formElement.config.elementConfig}
                         value={formElement.config.value}
+                        invalid={!formElement.config.valid}
+                        shouldValidate={formElement.config.validationRules}
+                        touched={formElement.config.touched}
+                        valueType={formElement.config.valueType}
                         changed={(event) => this.inputChangedHandler(event, formElement.id)} />
                 ))}
-                <Button type="Success">ORDER</Button>
+                
+                <Button type="Success" disabled={!this.state.formIsValid}>ORDER</Button>
             </form>
         );
 
         if (this.state.loading) {
-            form = <Spinner/>;
+            form = <Spinner />;
         }
 
         return (
