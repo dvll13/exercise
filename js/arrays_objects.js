@@ -21,6 +21,15 @@ for (var i in associative_array) { console.log(i) };
 // three
 // undefined
 
+
+// hacky
+{
+    let arr = [1, 2, 3];
+    arr.length = 2; // [1, 2]
+    arr.length = 4; // [1, 2, undefined, undefined]
+}
+
+
 var a = new Object();
 a.one = 'aaa';
 a.two = 'bbb';
