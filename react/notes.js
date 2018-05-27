@@ -353,3 +353,57 @@ import {AuthContext} from "../../../containers/App";
 }
 
 // VALIDATION: in ContactData.js and Input.js
+
+// REDUX
+{ 
+    // redux-basics.js - basic example
+
+    //npm install --save redux
+    
+    // /store/reducer.js
+    {
+        const initialState = {
+            counter: 0
+        }
+        
+        const reducer = (state = initialState, action) => {
+            // replace but NEVER MUTATE any data!
+            return state;
+        };
+    }
+
+    // index.js:
+    {
+        import { createStore } from 'redux';
+        import reducer from './store/reducer';
+
+        const store = createStore(reducer);
+
+        // connect the redux store to the react app
+        // npm install --save react-redux
+
+        import {Provider} from 'react-redux';
+
+        ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
+    }
+
+    // then in a container (e.g. Counter.js):
+    {
+        //1
+        import {connect} from 'react-redux'; // it's a function that returns a hoc fn
+
+        //4
+        <CounterOutput value={this.props.ctr} /> // this.props.ctr -> initialState.counter
+
+        //2
+        const mapStateToProps = state => {
+            // ctr (property) -> state.container (redux store state value)
+            return {
+                ctr: state.counter
+            }
+        }
+
+        //3
+        export default connect(mapStateToProps)(Counter);
+    }
+}
