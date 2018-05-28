@@ -367,7 +367,13 @@ import {AuthContext} from "../../../containers/App";
         }
         
         const reducer = (state = initialState, action) => {
-            // replace but NEVER MUTATE any data!
+            // replace but NEVER MUTATE state data!
+
+            //7
+            if (action.type === 'INCREMENT') {
+
+            }
+
             return state;
         };
     }
@@ -395,6 +401,9 @@ import {AuthContext} from "../../../containers/App";
         //4
         <CounterOutput value={this.props.ctr} /> // this.props.ctr -> initialState.counter
 
+        //6
+        <CounterControl label="Increment" clicked={this.props.onIncrementCounter} />
+
         //2
         const mapStateToProps = state => {
             // ctr (property) -> state.container (redux store state value)
@@ -403,7 +412,15 @@ import {AuthContext} from "../../../containers/App";
             }
         }
 
-        //3
-        export default connect(mapStateToProps)(Counter);
+        //5
+        const mapDispatchToProps = dispatch => {
+            return {
+                // property         // fn assinged to it
+                onIncrementCounter: () => dispatch({ type: 'INCREMENT' })
+            }
+        }
+
+        export default connect(mapStateToProps, mapDispatchToProps)(Counter)
+        // export default connect(null, mapDispatchToProps)(Counter)
     }
 }
