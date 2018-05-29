@@ -357,6 +357,7 @@ import {AuthContext} from "../../../containers/App";
 // REDUX
 { 
     // redux-basics.js - basic example
+    // more: Counter.js and reducer.js
 
     //npm install --save redux
     
@@ -370,10 +371,18 @@ import {AuthContext} from "../../../containers/App";
             // replace but NEVER MUTATE state data!
 
             //7
-            if (action.type === 'INCREMENT') {
-
+        switch (action.type) {
+                //convention is UPPERCASE
+            case 'STORE_RESULT':
+            return {
+                ...state,
+                // results: state.results.push(state.counter) // NO! modifies the state.results (MUTABLE)
+                results: state.results.concat({ // returns a new array (IMMUTABLE)
+                    id: new Date(),
+                    value: state.counter
+                }) 
             }
-
+        default:
             return state;
         };
     }

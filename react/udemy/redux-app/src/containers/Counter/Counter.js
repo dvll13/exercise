@@ -12,9 +12,16 @@ class Counter extends Component {
             <div>
                 <CounterOutput value={this.props.ctr} />
                 <CounterControl label="Increment" clicked={this.props.onIncrementCounter} />
-                <CounterControl label="Decrement" clicked={this.props.onDecrementCounter}  />
-                <CounterControl label="Add 5" clicked={this.props.onAddCounter}  />
-                <CounterControl label="Subtract 5" clicked={this.props.onSubtractCounter}  />
+                <CounterControl label="Decrement" clicked={this.props.onDecrementCounter} />
+                <CounterControl label="Add 20" clicked={this.props.onAddCounter} />
+                <CounterControl label="Subtract 10" clicked={this.props.onSubtractCounter} />
+                <hr/>
+                <button onClick={this.props.onStoreResult}>Store result</button>
+                <ul>
+                    {this.props.storedResults.map(storedResult => (
+                        <li key={storedResult.id} onClick={this.onDeleteResult}>{storedResult.value}</li>
+                    ))}
+                </ul>
             </div>
         );
     }
@@ -23,17 +30,20 @@ class Counter extends Component {
 const mapStateToProps = state => {
     // ctr property -> redux store state value
     return {
-        ctr: state.counter
+        ctr: state.counter,
+        storedResults: state.results
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        // property         // fn assinged to it
+        // property               // fn assinged to it
         onIncrementCounter: () => dispatch({ type: 'INCREMENT' }),
         onDecrementCounter: () => dispatch({ type: 'DECREMENT' }),
-        onAddCounter: () => dispatch({ type: 'ADD' }),
-        onSubtractCounter: () => dispatch({ type: 'SUBTRACT' })
+        onAddCounter: () => dispatch({ type: 'ADD', some_value: 20 }),
+        onSubtractCounter: () => dispatch({ type: 'SUBTRACT', some_value: 10 }),
+        onStoreResult: () => dispatch({ type: 'STORE_RESULT'}),
+        onDeleteResult: () => dispatch({ type: 'DELETE_RESULT' })
     }
 }
 
