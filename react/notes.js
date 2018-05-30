@@ -154,11 +154,11 @@ import {AuthContext} from "../../../containers/App";
     }
 
     // fires before dom is updated
-    getSnapshotBeforeUpdate() {}
+    getSnapshotBeforeUpdate(prevProps, prevState) {}
 
     // fires after dom is updated, good place to call after we receive a new prop
     // DON'T UPDATE THE STATE HERE since it will trigger a re-render and may cause infinite loop
-    componentDidUpdate() {}
+    componentDidUpdate(prevProps, prevState, snapshot) {}
 
     render () {} // everything within is executed on re-render
   }

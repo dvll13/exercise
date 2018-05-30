@@ -30,9 +30,9 @@ class ContactData extends Component {
                 value: '',
                 validationRules: {
                     required: true
-                },
-                valid: false,
-                touched: false
+            },
+            valid: false,
+            touched: false
             },
             zipCode: {
                 elementType: 'input',
