@@ -375,13 +375,29 @@ import {AuthContext} from "../../../containers/App";
                 //convention is UPPERCASE
             case 'STORE_RESULT':
             return {
+                // 1. copy the old state:
                 ...state,
-                // results: state.results.push(state.counter) // NO! modifies the state.results (MUTABLE)
+                //2. add/replace items:
                 results: state.results.concat({ // returns a new array (IMMUTABLE)
                     id: new Date(),
                     value: state.counter
-                }) 
-            }
+                })
+                // results: state.results.push(state.counter) // NO! modifies the state.results (MUTABLE)
+            };
+            case 'DELETE_RESULT':
+                // v1:
+                // const id = 2;
+                // const newArr = [...state.results];
+                // newArr.splice(id, 1);
+
+                //v2:
+                // delete elements immutably (returns a new array)
+                const updatedArr = state.results.filter(result => result.id !== action.resultElId);
+
+                return {
+                    ...state,
+                    results: updatedArr
+                };
         default:
             return state;
         };
@@ -413,6 +429,10 @@ import {AuthContext} from "../../../containers/App";
         //6
         <CounterControl label="Increment" clicked={this.props.onIncrementCounter} />
 
+        {this.props.storedResults.map(storedResult => (
+            <li key={storedResult.id} onClick={ () => this.props.onDeleteResult(storedResult.id) }>{storedResult.value}</li>
+        ))}
+
         //2
         const mapStateToProps = state => {
             // ctr (property) -> state.container (redux store state value)
@@ -425,7 +445,8 @@ import {AuthContext} from "../../../containers/App";
         const mapDispatchToProps = dispatch => {
             return {
                 // property         // fn assinged to it
-                onIncrementCounter: () => dispatch({ type: 'INCREMENT' })
+                onIncrementCounter: () => dispatch({ type: 'INCREMENT' }),
+                onDeleteResult: (id) => dispatch({ type: 'DELETE_RESULT', resultElId: id })
             }
         }
 
