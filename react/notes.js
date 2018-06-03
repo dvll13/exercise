@@ -361,43 +361,52 @@ import {AuthContext} from "../../../containers/App";
 
     //npm install --save redux
     
-    // /store/reducer.js
+
+    // /store/actions.js
     {
+        export const INCREMENT = 'INCREMENT';
+        export const DECREMENT = 'DECREMENT';
+        // ...
+    }
+
+    // /store/result.js
+    {
+        import * as actionTypes from '../actions';
+
         const initialState = {
-            counter: 0
-        }
+            results: []
+        };
         
         const reducer = (state = initialState, action) => {
             // replace but NEVER MUTATE state data!
 
             //7
         switch (action.type) {
-                //convention is UPPERCASE
-            case 'STORE_RESULT':
+            //convention is UPPERCASE
+            case actionTypes.STORE_RESULT:
             return {
-                // 1. copy the old state:
                 ...state,
-                //2. add/replace items:
-                results: state.results.concat({ // returns a new array (IMMUTABLE)
-                    id: new Date(),
-                    value: state.counter
-                })
                 // results: state.results.push(state.counter) // NO! modifies the state.results (MUTABLE)
+                results: state.results.concat({ // returns a new array (IMMUTABLE)
+                    id: new Date(), // not good practice
+                    // value: state.counter // to get value from the global state, it should be passed as action payload
+                    value: action.result
+                })
             };
-            case 'DELETE_RESULT':
-                // v1:
-                // const id = 2;
-                // const newArr = [...state.results];
-                // newArr.splice(id, 1);
+        case actionTypes.DELETE_RESULT:
+            // v1:
+            // const id = 2;
+            // const newArr = [...state.results];
+            // newArr.splice(id, 1);
 
-                //v2:
-                // delete elements immutably (returns a new array)
-                const updatedArr = state.results.filter(result => result.id !== action.resultElId);
+            //v2:
+            //reurns a new array
+            const updatedArr = state.results.filter(result => result.id !== action.resultElId);
 
-                return {
-                    ...state,
-                    results: updatedArr
-                };
+            return {
+                ...state,
+                results: updatedArr
+            };
         default:
             return state;
         };
@@ -405,10 +414,18 @@ import {AuthContext} from "../../../containers/App";
 
     // index.js:
     {
-        import { createStore } from 'redux';
-        import reducer from './store/reducer';
+        import { createStore, combineReducers } from 'redux';
+        import { Provider } from 'react-redux';
+        
+        import counterReducer from './store/reducers/counter';
+        import resultReducer from './store/reducers/result';
 
-        const store = createStore(reducer);
+        const rootReducer = combineReducers({
+            ctr: counterReducer,
+            res: resultReducer
+        });
+        
+        const store = createStore(rootReducer);
 
         // connect the redux store to the react app
         // npm install --save react-redux
@@ -420,37 +437,100 @@ import {AuthContext} from "../../../containers/App";
 
     // then in a container (e.g. Counter.js):
     {
-        //1
         import {connect} from 'react-redux'; // it's a function that returns a hoc fn
+        import * as actionTypes from '../../store/actions';
 
-        //4
-        <CounterOutput value={this.props.ctr} /> // this.props.ctr -> initialState.counter
-
-        //6
+        <CounterOutput value={this.props.counter} /> // this.props.counter -> initialState.counter
         <CounterControl label="Increment" clicked={this.props.onIncrementCounter} />
-
+        <button onClick={() => this.props.onStoreResult(this.props.counter)}>Store result</button>
         {this.props.storedResults.map(storedResult => (
             <li key={storedResult.id} onClick={ () => this.props.onDeleteResult(storedResult.id) }>{storedResult.value}</li>
         ))}
 
-        //2
         const mapStateToProps = state => {
-            // ctr (property) -> state.container (redux store state value)
+            // ctr property -> redux store state value
             return {
-                ctr: state.counter
+                counter: state.ctr.counter,
+                storedResults: state.res.results
             }
-        }
+        };
 
-        //5
         const mapDispatchToProps = dispatch => {
             return {
-                // property         // fn assinged to it
-                onIncrementCounter: () => dispatch({ type: 'INCREMENT' }),
-                onDeleteResult: (id) => dispatch({ type: 'DELETE_RESULT', resultElId: id })
+                // property               // fn assinged to it
+                onIncrementCounter: () => dispatch({ type: actionTypes.INCREMENT }),
+                onAddCounter: () => dispatch({ type: actionTypes.ADD, some_value: 20 }),
+                onStoreResult: (result) => dispatch({ type: actionTypes.STORE_RESULT, result: result}),
+                onDeleteResult: (id) => dispatch({ type: actionTypes.DELETE_RESULT, resultElId: id })
             }
         }
 
         export default connect(mapStateToProps, mapDispatchToProps)(Counter)
         // export default connect(null, mapDispatchToProps)(Counter)
+    }
+
+
+    // WRONG (MUTATION):
+    
+    // example 1
+    {
+        let nestedState = state.nestedState;
+        // ERROR: this directly modifies the existing object reference - don't do this!
+        nestedState.nestedField = action.data;
+    
+        return {
+            ...state,
+            nestedState
+        };
+    }
+
+    // example 2
+    {
+        // Problem: this only does a shallow copy!
+        let newState = {...state};
+
+        // ERROR: nestedState is still the same object!
+        newState.nestedState.nestedField = action.data;
+        return newState;
+    }
+
+    // RIGHT (try to nest less levels of data):
+    {
+        function updateVeryNestedField(state, action) {
+            return {
+                ...state,
+                first : {
+                    ...state.first,
+                    second : {
+                        ...state.first.second,
+                        [action.someId] : {
+                            ...state.first.second[action.someId],
+                            fourth : action.someValue
+                        }
+                    }
+                }
+            }
+    }
+
+    // INSERTING AND REMOVING ARRAY ITEMS IMMUTABLY
+    {
+        function insertItem(array, action) {
+            return [
+                ...array.slice(0, action.index),
+                action.item,
+                ...array.slice(action.index)
+            ]
+        }
+         
+        function removeItem(array, action) {
+            return [
+                ...array.slice(0, action.index),
+                ...array.slice(action.index + 1)
+            ];
+        }
+
+        function removeItemAlt(array, action) {
+            return array.filter( (item, index) => index !== action.index);
+        }
     }
 }
