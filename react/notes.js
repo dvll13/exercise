@@ -354,10 +354,11 @@ import {AuthContext} from "../../../containers/App";
 
 // VALIDATION: in ContactData.js and Input.js
 
+
 // REDUX
 { 
     // redux-basics.js - basic example
-    // more: Counter.js and reducer.js
+    // more: Counter.js and reducers/*
 
     //npm install --save redux
     
@@ -420,6 +421,10 @@ import {AuthContext} from "../../../containers/App";
         import counterReducer from './store/reducers/counter';
         import resultReducer from './store/reducers/result';
 
+        // connect the redux store to the react app
+        // npm install --save react-redux
+        import {Provider} from 'react-redux';
+
         const rootReducer = combineReducers({
             ctr: counterReducer,
             res: resultReducer
@@ -427,10 +432,7 @@ import {AuthContext} from "../../../containers/App";
         
         const store = createStore(rootReducer);
 
-        // connect the redux store to the react app
-        // npm install --save react-redux
 
-        import {Provider} from 'react-redux';
 
         ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
     }
