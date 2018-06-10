@@ -416,7 +416,6 @@ import {AuthContext} from "../../../containers/App";
     // index.js:
     {
         import { createStore, combineReducers } from 'redux';
-        import { Provider } from 'react-redux';
         
         import counterReducer from './store/reducers/counter';
         import resultReducer from './store/reducers/result';

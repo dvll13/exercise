@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 
 import Persons from './containers/Persons';
 
+import { createStore, combineReducers } from 'redux';
+import { Provider } from 'react-redux';
+
+
+
 class App extends Component {
   render() {
     return (
