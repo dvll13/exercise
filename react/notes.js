@@ -153,6 +153,8 @@ import {AuthContext} from "../../../containers/App";
       return prevState;
     }
 
+    shouldComponentUpdate(nextProps, nextState) {};
+
     // fires before dom is updated
     getSnapshotBeforeUpdate(prevProps, prevState) {}
 
@@ -361,7 +363,10 @@ import {AuthContext} from "../../../containers/App";
     // more: Counter.js and reducers/*
 
     //npm install --save redux
-    
+
+    // connect the redux store to the react app
+    // npm install --save react-redux
+
 
     // /store/actions.js
     {
@@ -420,8 +425,6 @@ import {AuthContext} from "../../../containers/App";
         import counterReducer from './store/reducers/counter';
         import resultReducer from './store/reducers/result';
 
-        // connect the redux store to the react app
-        // npm install --save react-redux
         import {Provider} from 'react-redux';
 
         const rootReducer = combineReducers({
@@ -430,8 +433,6 @@ import {AuthContext} from "../../../containers/App";
         });
         
         const store = createStore(rootReducer);
-
-
 
         ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
     }
@@ -467,7 +468,7 @@ import {AuthContext} from "../../../containers/App";
         }
 
         export default connect(mapStateToProps, mapDispatchToProps)(Counter)
-        // export default connect(null, mapDispatchToProps)(Counter)
+        //skipping state: export default connect(null, mapDispatchToProps)(Counter)
     }
 
 
@@ -522,16 +523,16 @@ import {AuthContext} from "../../../containers/App";
                 ...array.slice(action.index)
             ]
         }
-         
+
         function removeItem(array, action) {
+            return array.filter( (item, index) => index !== action.index);
+        }
+
+        function removeItemAlt(array, action) {
             return [
                 ...array.slice(0, action.index),
                 ...array.slice(action.index + 1)
             ];
-        }
-
-        function removeItemAlt(array, action) {
-            return array.filter( (item, index) => index !== action.index);
         }
     }
 }
