@@ -362,10 +362,13 @@ import {AuthContext} from "../../../containers/App";
     // redux-basics.js - basic example
     // more: Counter.js and reducers/*
 
-    //npm install --save redux
-
-    // connect the redux store to the react app
-    // npm install --save react-redux
+    // 1. install redux and connect the redux store to the react app:
+    //      npm install --save redux react-redux
+    // 2. store/actions.js, store/reducer.js
+    // 3. add the actions and initial reducer stuff
+    // 4. index.js: add { CreateStore }, <Provider>, reducer, store
+    // 5. add action methods to the reducer
+    // 6. use { connect }, mapStateToProps, mapDispatchToProps with components
 
 
     // /store/actions.js
@@ -434,7 +437,13 @@ import {AuthContext} from "../../../containers/App";
         
         const store = createStore(rootReducer);
 
-        ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
+        const app = (
+            <Provider store={store}> /* should wrap everything */
+                <BrowserRouter/* basename='burger'*/>
+                    <App/>
+                </BrowserRouter>
+            </Provider>
+        );
     }
 
     // then in a container (e.g. Counter.js):
