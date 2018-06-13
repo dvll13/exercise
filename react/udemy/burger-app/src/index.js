@@ -12,9 +12,10 @@ import reducer from './store/reducer';
 const store = createStore(reducer);
 
 // Provider should wrap everything
+// TODO: fix basename -> <BrowserRouter basename='burger'>
 const app = (
     <Provider store={store}>
-        <BrowserRouter basename='burger'>
+        <BrowserRouter>
             <App/>
         </BrowserRouter>
     </Provider>

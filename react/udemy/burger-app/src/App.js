@@ -10,7 +10,6 @@ class App extends Component {
         return (
             <Layout>
                 <Switch>
-                    {/* TODO: fix basename */}
                     <Route path='/' exact component={BurgerBuilder} />
                     <Route path='/checkout' component={Checkout} />
                     <Route path='/orders' component={Orders} />
