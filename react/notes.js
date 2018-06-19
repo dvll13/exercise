@@ -423,7 +423,7 @@ import {AuthContext} from "../../../containers/App";
 
     // index.js:
     {
-        import { createStore, combineReducers } from 'redux';
+        import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
         
         import counterReducer from './store/reducers/counter';
         import resultReducer from './store/reducers/result';
@@ -434,8 +434,23 @@ import {AuthContext} from "../../../containers/App";
             ctr: counterReducer,
             res: resultReducer
         });
+
+        //MIDDLEWARE
+        const logger = store => {
+            return next => {
+                return action => {
+                    console.log('[Middleware] Dispatching', action);
+                    const result = next(action); // pass the action to continue to to the reducer
+                    console.log('[Middleware] next state', store.getState());
+                    return result;
+                }
+            }
+        };
+
+        // for the redux devtools:
+        const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
         
-        const store = createStore(rootReducer);
+        const store = createStore(rootReducer, composeEnhancers(applyMiddleware(logger)));
 
         const app = (
             <Provider store={store}> /* should wrap everything */
