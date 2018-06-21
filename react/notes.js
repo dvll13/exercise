@@ -1,3 +1,5 @@
+import { DELETE_RESULT, SUBTRACT } from "./udemy/redux-app/src/store/actions/actions";
+
 { // state - for managing some component's internal data; re-renders where necessary on changes
   // use it with care, because manipulating it makes the app unpredictable and hard to manage
 
@@ -13,6 +15,7 @@
   persons.splice(index, 1);
   this.setState({ persons: persons });
 }
+
 
 {
     // updating a state value which is a few levels down
@@ -72,9 +75,13 @@
 //     throw new Error('Ops, something went wrong.');
 // }
 
+
+
 { // avoid html wrapping el
   <React.Fragment></React.Fragment>
 }
+
+
 
 { //common ops
   const textArray = this.state.userInput.split('');
@@ -115,6 +122,30 @@ for (let ingredientName in props.ingredients) {
         amount: props.ingredients[ingredientName]
     })
 }
+
+
+// INSERTING AND REMOVING ARRAY ITEMS IMMUTABLY
+{
+    function insertItem(array, action) {
+        return [
+            ...array.slice(0, action.index),
+            action.item,
+            ...array.slice(action.index)
+        ]
+    }
+
+    function removeItem(array, action) {
+        return array.filter( (item, index) => index !== action.index);
+    }
+
+    function removeItemAlt(array, action) {
+        return [
+            ...array.slice(0, action.index),
+            ...array.slice(action.index + 1)
+        ];
+    }
+}
+
 
 { // Context API - for global values across components
 export const AuthContext = React.createContext(false); // false - default auth value
@@ -363,12 +394,14 @@ import {AuthContext} from "../../../containers/App";
     // more: Counter.js and reducers/*
 
     // 1. install redux and connect the redux store to the react app:
-    //      npm install --save redux react-redux
+    //      npm install --save redux react-redux redux-thunk (middleware for dispatching async actions)
     // 2. store/actions.js, store/reducer.js
     // 3. add the actions and initial reducer stuff
     // 4. index.js: add { CreateStore }, <Provider>, reducer, store
     // 5. add action methods to the reducer
     // 6. use { connect }, mapStateToProps, mapDispatchToProps with components
+
+    // middleware runs between the dispatching of the action and the point of time the action reaches the reducer
 
 
     // /store/actions.js
@@ -376,6 +409,20 @@ import {AuthContext} from "../../../containers/App";
         export const INCREMENT = 'INCREMENT';
         export const DECREMENT = 'DECREMENT';
         // ...
+
+        // action creators (useful for async/synchronous code):
+        export const subtract = (value) => {
+            return {
+                type: SUBTRACT,
+                some_value: value
+            }
+        };
+        export const deleteResult = (resultElId) => {
+            return {
+                type: DELETE_RESULT,
+                resultElId: resultElId
+            }
+        };
     }
 
     // /store/result.js
@@ -418,8 +465,8 @@ import {AuthContext} from "../../../containers/App";
             };
         default:
             return state;
-        };
-    }
+        }
+    };
 
     // index.js:
     {
@@ -536,27 +583,5 @@ import {AuthContext} from "../../../containers/App";
                     }
                 }
             }
-    }
-
-    // INSERTING AND REMOVING ARRAY ITEMS IMMUTABLY
-    {
-        function insertItem(array, action) {
-            return [
-                ...array.slice(0, action.index),
-                action.item,
-                ...array.slice(action.index)
-            ]
-        }
-
-        function removeItem(array, action) {
-            return array.filter( (item, index) => index !== action.index);
-        }
-
-        function removeItemAlt(array, action) {
-            return [
-                ...array.slice(0, action.index),
-                ...array.slice(action.index + 1)
-            ];
-        }
     }
 }
