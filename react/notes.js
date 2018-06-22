@@ -1,4 +1,4 @@
-import { DELETE_RESULT, SUBTRACT } from "./udemy/redux-app/src/store/actions/actions";
+import { DELETE_RESULT, SUBTRACT } from "./udemy/redux-app/src/store/actions/actionTypes";
 
 { // state - for managing some component's internal data; re-renders where necessary on changes
   // use it with care, because manipulating it makes the app unpredictable and hard to manage
@@ -411,12 +411,37 @@ import {AuthContext} from "../../../containers/App";
         // ...
 
         // action creators (useful for async/synchronous code):
+        // useful because only synchronous actions can manage the store
         export const subtract = (value) => {
             return {
                 type: SUBTRACT,
                 some_value: value
             }
         };
+
+        export const saveResult = (res) => {
+            // a possible place to modify the data before storing it in the state
+            // but better separate the logic: async stuff here and possibly prepare and clean data, then pass it for the actual modifications to the reducer
+            // const updatedResult = res * 2;
+            const updatedResult = res * 2;
+            return {
+                type: actionTypes.STORE_RESULT,
+                result: updatedResult
+            }
+        }
+        export const storeResult = (res) => {
+            // simulating asynchrony (a delayed server response)
+            return (dispatch, getState) => {
+                // the best place to fetch data
+                setTimeout(() => {
+                    // const oldCounter = getState().ctr.counter;
+                    // console.log('oldCounter:', oldCounter);
+                    // don't overuse getState, you can instead pass what you need as a 'export const storeResult = (res, someStateProperty) => {'
+                    dispatch(saveResult(res));
+                }, 2000)
+            }
+        };
+
         export const deleteResult = (resultElId) => {
             return {
                 type: DELETE_RESULT,
@@ -440,31 +465,32 @@ import {AuthContext} from "../../../containers/App";
         switch (action.type) {
             //convention is UPPERCASE
             case actionTypes.STORE_RESULT:
-            return {
-                ...state,
-                // results: state.results.push(state.counter) // NO! modifies the state.results (MUTABLE)
-                results: state.results.concat({ // returns a new array (IMMUTABLE)
-                    id: new Date(), // not good practice
-                    // value: state.counter // to get value from the global state, it should be passed as action payload
-                    value: action.result
-                })
-            };
-        case actionTypes.DELETE_RESULT:
-            // v1:
-            // const id = 2;
-            // const newArr = [...state.results];
-            // newArr.splice(id, 1);
+                // put more logic here, a good place to modify the data before storing it in the state
+                return {
+                    ...state,
+                    // results: state.results.push(state.counter) // NO! modifies the state.results (MUTABLE)
+                    results: state.results.concat({ // returns a new array (IMMUTABLE)
+                        id: new Date(), // not good practice
+                        // value: state.counter // to get value from the global state, it should be passed as action payload
+                        value: action.result
+                    })
+                };
+            case actionTypes.DELETE_RESULT:
+                // v1:
+                // const id = 2;
+                // const newArr = [...state.results];
+                // newArr.splice(id, 1);
 
-            //v2:
-            //reurns a new array
-            const updatedArr = state.results.filter(result => result.id !== action.resultElId);
+                //v2:
+                //reurns a new array
+                const updatedArr = state.results.filter(result => result.id !== action.resultElId);
 
-            return {
-                ...state,
-                results: updatedArr
-            };
-        default:
-            return state;
+                return {
+                    ...state,
+                    results: updatedArr
+                };
+            default:
+                return state;
         }
     };
 
