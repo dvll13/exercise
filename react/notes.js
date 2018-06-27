@@ -463,6 +463,7 @@ import {AuthContext} from "../../../containers/App";
 
             //7
             switch (action.type) {
+                //convention is UPPERCASE
                 case actionTypes.STORE_RESULT:
                     // put more logic here, a good place to modify the data before storing it in the state
                     return updateObject(state, {
