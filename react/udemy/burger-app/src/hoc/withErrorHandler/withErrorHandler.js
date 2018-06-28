@@ -7,7 +7,7 @@ const withErrorHandler = (WrappedComponent, axios) => {
             error: null
         };
 
-        // componentDidMount() { instead this should be called before the child components are rendered:
+        // componentDidMount() { instead, this should be called before the child components are rendered:
         componentWillMount() {
             this.reqInterceptor = axios.interceptors.request.use(req => {
                 this.setState({error: null});
