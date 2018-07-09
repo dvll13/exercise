@@ -9,7 +9,7 @@ import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import Spinner from '../../components/UI/Spinner/Spinner';
-import * as BurgerBuilderActions from '../../store/actions/index';
+import * as actions from '../../store/actions/index';
 
 class BurgerBuilder extends Component {
     state = {
@@ -80,6 +80,7 @@ class BurgerBuilder extends Component {
         //     search: '?' + queryString
         // } );
 
+        this.props.onInitPurchase();
         this.props.history.push('/checkout');
     };
 
@@ -137,9 +138,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onIngredientAdded: ( ingName ) => dispatch(BurgerBuilderActions.addIngredient(ingName)),
-        onIngredientRemoved: ( ingName ) => dispatch(BurgerBuilderActions.removeIngredient(ingName)),
-        onInitIngrediets: () => dispatch(BurgerBuilderActions.initIngredients())
+        onIngredientAdded: ( ingName ) => dispatch(actions.addIngredient(ingName)),
+        onIngredientRemoved: ( ingName ) => dispatch(actions.removeIngredient(ingName)),
+        onInitIngrediets: () => dispatch(actions.initIngredients()),
+        onInitPurchase: () => dispatch(actions.purchaseInit())
     }
 };
 
