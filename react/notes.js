@@ -436,7 +436,8 @@ import {AuthContext} from "../../../containers/App";
                 setTimeout(() => {
                     // const oldCounter = getState().ctr.counter;
                     // console.log('oldCounter:', oldCounter);
-                    // don't overuse getState, you can instead pass what you need as a 'export const storeResult = (res, someStateProperty) => {'
+// NB!!!:
+                    //don't overuse getState, you can instead pass what you need as a 'export const storeResult = (res, someStateProperty) => {'
                     dispatch(saveResult(res));
                 }, 2000)
             }
