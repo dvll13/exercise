@@ -70,7 +70,7 @@ export const auth = (email, password, isSignup) => {
                         idToken: ... (can be decrypted to a js object)
                         kind: ...
                         localId: ...
-                        refreshToken: (used to generate a new token by you or the app)
+                        refreshToken: (used to generate a new token by you or the app; send it to a rest end point to get a new id token; for security reasons (xss) you can refresh it on every browser reload or signin)
                     }
                  */
 
@@ -104,12 +104,12 @@ export const authCheckState = () => {
             dispatch(logout());
         } else {
             const expirationDate = new Date( localStorage.getItem('expirationDate') ); // convert the string to Date
-            if (expirationDate > new Date()) {
+            if (expirationDate <= new Date()) {
                 dispatch( logout() );
             } else {
                 const userId = localStorage.getItem('userId');
                 dispatch( authSuccess( token, userId) );
-                dispatch( checkAuthTimeout( expirationDate.getSeconds - new Date().getSeconds()) );
+                dispatch( checkAuthTimeout( ( expirationDate.getTime() - new Date().getTime() ) / 1000 ) );
             }
         }
     }

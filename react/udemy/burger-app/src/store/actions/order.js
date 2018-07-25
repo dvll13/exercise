@@ -63,11 +63,14 @@ export const fetchOrdersFail = (error) => {
     }
 }
 
-export const fetchOrders = token => {
+export const fetchOrders = (token, userId) => {
     return (dispatch /*, getState */) => {
         dispatch(fetchOrdersStart());
         
-        axios.get('/orders.json?auth=' + token)
+        // get orders for a specific userId (firebase specific)
+        const queryParams = `?auth=${token}&orderBy="userId"&equalTo="${userId}"`;
+
+        axios.get('/orders.json' + queryParams)
             .then(res => {
                 console.log('res.data:', res.data);
                 
