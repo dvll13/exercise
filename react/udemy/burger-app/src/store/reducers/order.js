@@ -9,11 +9,11 @@ const initialState = {
 
 const purchaseInit = state => {
     return updateObject(state, { purchased: false });
-}
+};
 
 const purchaseBurgerStart = state => {
     return updateObject(state, { loading: false });
-}
+};
 
 const purchaseBurgerSuccess = (state, action) => {
     const newOrder = updateObject(action.orderData, { id: action.orderId });
@@ -22,26 +22,26 @@ const purchaseBurgerSuccess = (state, action) => {
         purchased: true,
         orders: state.orders.concat(newOrder)
     });
-}
+};
 
 const purchaseBurgerFail = state => {
     return updateObject(state, { loading: false });
-}
+};
 
 const fetchOrderStart = state => {
     return updateObject(state, { loading: true });
-}
+};
 
 const fetchOrderSuccess = (state, action) => {
     return updateObject(state, {
         orders: action.orders, //save them in case we may need them on another page (avoid another request)
         loading: false
     });
-}
+};
 
 const fetchOrderFail = state => {
     return updateObject(state, { loading: false });
-}
+};
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
