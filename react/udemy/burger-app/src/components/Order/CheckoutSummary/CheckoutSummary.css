@@ -7,10 +7,4 @@
 .BurgerCt {
     width: 100%;
     margin: auto
-}
-
-@media (min-width: 600px) {
-    .CheckoutSummary {
-        width: 500px;
-    }
-}
+}   
