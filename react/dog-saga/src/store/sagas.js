@@ -19,7 +19,7 @@ function fetchDog() {
 // worker saga: makes the api call when the watcher saga sees the action
 function* workerSaga() {
     try {
-        const response = yield call(fetchDog());
+        const response = yield call(fetchDog);
         const dog = response.data.message;
 
         // dispatch a success action to the store with the new dog
