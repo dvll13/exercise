@@ -657,3 +657,44 @@ import {AuthContext} from "../../../containers/App";
 
     // others: fork, select, race, spawn, join, cancel
 }
+
+{ //TESTING
+// we should not test external libs functionalities, but ours only
+// remove App.test.js if it fails due to using routing
+
+//1
+    // npm install --save enzyme react-test-renderer enzyme-adapter-react-16
+
+//2
+    // npm test
+
+//3
+    //testing components: NavigationItems.test.js
+    
+    // containers: changes in BurgerBuilder.js, plus BurgerBuilder.test.js
+// could use .setState() if they have state but aren't connected to a store
+    
+    // reducers: auth.test.js
+// here we just test a normal js functions, no need of enzyme, react
+
+
+    
+//JEST DOCS:
+    
+    //#expect
+    // https://jestjs.io/docs/en/expect
+
+    //#mock (replace) - useful for testing async code
+
+
+//ENZYME DOCS
+    // https://airbnb.io/enzyme/docs/api/
+
+//some questions to ask yourself when thinking about what tests to write
+    // mostly test what are the crucial things that change depending on external influences
+    // what could i easilly break
+    // what could break my apps behavior
+    // does the reducer work correctly
+    // do we update our components correctly if the input changes
+    // do we fire the correct prop if we click a certain button
+}

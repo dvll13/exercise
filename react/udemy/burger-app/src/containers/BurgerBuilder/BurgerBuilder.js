@@ -11,7 +11,8 @@ import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import * as actions from '../../store/actions/index';
 
-class BurgerBuilder extends Component {
+// added export in order to be able to test it
+export class BurgerBuilder extends Component {
     state = {
         purchasing: false
     };
@@ -25,7 +26,7 @@ class BurgerBuilder extends Component {
     //             this.setState({error: true});
     //         });
 
-        this.props.onInitIngrediets();
+        this.props.onInitIngredients();
     }
 
     updatePurchaseState( ingredients ) {
@@ -147,7 +148,7 @@ const mapDispatchToProps = dispatch => {
     return {
         onIngredientAdded: ( ingName ) => dispatch(actions.addIngredient(ingName)),
         onIngredientRemoved: ( ingName ) => dispatch(actions.removeIngredient(ingName)),
-        onInitIngrediets: () => dispatch(actions.initIngredients()),
+        onInitIngredients: () => dispatch(actions.initIngredients()),
         onInitPurchase: () => dispatch(actions.purchaseInit()),
         onSetAuthRedirectPath: (path) => dispatch(actions.setAuthRedirectPath(path))
     }
