@@ -698,3 +698,38 @@ import {AuthContext} from "../../../containers/App";
     // do we update our components correctly if the input changes
     // do we fire the correct prop if we click a certain button
 }
+
+{ // WORKING WITH WEBPACK
+/*
+    npm init
+
+// --save-dev: mark deps as dev only deps, doesn't make an impact, just for clarification which deps are for dev purposes and which are required for running the app (production)
+   
+    npm install --save-dev webpack@3 webpack-dev-server
+// @3 in order for the commands from the lectures to work
+
+...
+
+    //support draft features
+    npm install --save-dev babel-presets-stage-2 
+
+    .babelrc file:
+    {
+        "presets": [
+            ["env", {
+                "targets": {
+                    "browsers": [
+                        ">1%", //market share
+                        "last 2 versions"
+                    ]
+                }
+            }],
+            "stage-2"
+            "react"
+        ],
+        "plugins": [
+            "syntax-dynamic-import"
+        ]
+    }
+*/
+}
