@@ -24,14 +24,30 @@
 }*/
 
 .ModalOpen {
-    animation: openModal 400ms forwards;
+    animation: openModal 1000ms forwards;
     /* forwards - keep the final value when animation completes */
 }
 
-
 .ModalClosed {
-    animation: closeModal 200ms forwards;
+    animation: closeModal 400ms forwards;
 }
+
+/* <CSSTransition> state classes (if classNames='fade-slide' for example is used): 
+.fade-slide-enter { // added only for a frame, used mostly for initialization, like opacity: 0
+    
+}
+
+.fade-slide-enter-active {
+    animation: openModal 1000ms forwards;
+}
+
+.fade-slide-exit { // added only for a frame, used mostly for initialization 
+
+}
+
+.fade-slide-exit-active {
+    animation: closeModal 400ms forwards;
+}*/
 
 @keyframes openModal {
     0% {

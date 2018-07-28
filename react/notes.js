@@ -700,7 +700,7 @@ import {AuthContext} from "../../../containers/App";
 }
 
 { /* ANIMATIONS
-    display can't be animated
+    "display" can't be animated
     
     transition: all 300ms ease-out; ~ transition: all 0.3ms ease-out;
     
@@ -708,6 +708,18 @@ import {AuthContext} from "../../../containers/App";
 
     PURE CSS ANIMS LIMITATIONS:
     the html is always in the dom, not very reactish; but if we remove it, react doesn't wait for the anim to finish, to remove the el
+
+    npm install react-transition-group --save
+
+    <Transition>
+    <CSSTransition>
+    <TransitionGroup> - useful when using dynamic lists
+
+ALTERNATIVES:
+    react-motion (more css independent solution, emulates real-world physics)
+    react-move (more complex)
+    react router transition (creates transitions between routes)
+        <Switch> -> <AnimatedSwitch>
 */}
 
 { // WORKING WITH WEBPACK
