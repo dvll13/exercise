@@ -699,6 +699,17 @@ import {AuthContext} from "../../../containers/App";
     // do we fire the correct prop if we click a certain button
 }
 
+{ /* ANIMATIONS
+    display can't be animated
+    
+    transition: all 300ms ease-out; ~ transition: all 0.3ms ease-out;
+    
+    animation: openModal 400ms forwards; // forwards - keep the final value when animation completes
+
+    PURE CSS ANIMS LIMITATIONS:
+    the html is always in the dom, not very reactish; but if we remove it, react doesn't wait for the anim to finish, to remove the el
+*/}
+
 { // WORKING WITH WEBPACK
 /*
     npm init
