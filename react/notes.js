@@ -610,54 +610,6 @@ import {AuthContext} from "../../../containers/App";
     }
 }
 
-
-{ //SAGAs
-    // actionTypes.js
-    // reducer.js
-
-    // sagas.js
-    // watcher saga: watches for actions dispatched to the store, starts worker saga
-    export function* watcherSaga() {
-        yield takeLatest(actionTypes.API_CALL_REQUEST, workerSaga)
-    }
-
-    // worker saga: makes the api call when the watcher saga sees the action
-    function* workerSaga() {
-        try {
-            const response = yield call(axios({
-                method: 'get',
-                url: 'https://dog.ceo/api/breeds/image/random'
-            }));
-            const dog = response.data.message;
-
-            // dispatch a success action to the store with the new dog
-            yield put({
-                type: actionTypes.API_CALL_SUCCESS,
-                dog
-            });
-        } catch (error) {
-            // dispatch a failure action to the store with error
-            yield put({
-                type: actionTypes.API_CALL_FAILURE,
-                error
-            });
-        }
-    }
-
-    // takeEvery - takes every matching action and runs the instructed saga, can run concurrent tasks
-    // takeLatest - takes every matching action and runs the instructed saga but cancels any previous saga tasks if it is still running
-
-    // call - runs a function, if it returns a promise, pauses the saga until the promise is resolved
-    // put - dispatches an action
-
-    function* effects() {
-        let result = yield call(fnToRun, optionalArgsToPasstoFn);
-        yield put(actionToDispatch(result));
-    }
-
-    // others: fork, select, race, spawn, join, cancel
-}
-
 { //TESTING
 // we should not test external libs functionalities, but ours only
 // remove App.test.js if it fails due to using routing
@@ -755,4 +707,59 @@ ALTERNATIVES:
         ]
     }
 */
+}
+
+
+
+{ //SAGAs
+
+//DOG SAGA
+    // actionTypes.js
+    // reducer.js
+
+    // sagas.js
+    // watcher saga: watches for actions dispatched to the store, starts worker saga
+    export function* watcherSaga() {
+        yield takeLatest(actionTypes.API_CALL_REQUEST, workerSaga)
+    }
+
+    // worker saga: makes the api call when the watcher saga sees the action
+    function* workerSaga() {
+        try {
+            const response = yield call(axios({
+                method: 'get',
+                url: 'https://dog.ceo/api/breeds/image/random'
+            }));
+            const dog = response.data.message;
+
+            // dispatch a success action to the store with the new dog
+            yield put({
+                type: actionTypes.API_CALL_SUCCESS,
+                dog
+            });
+        } catch (error) {
+            // dispatch a failure action to the store with error
+            yield put({
+                type: actionTypes.API_CALL_FAILURE,
+                error
+            });
+        }
+    }
+
+    // takeEvery - takes every matching action and runs the instructed saga, can run concurrent tasks
+    // takeLatest - takes every matching action and runs the instructed saga but cancels any previous saga tasks if it is still running
+
+    // call - runs a function, if it returns a promise, pauses the saga until the promise is resolved
+    // put - dispatches an action
+
+    function* effects() {
+        let result = yield call(fnToRun, optionalArgsToPasstoFn);
+        yield put(actionToDispatch(result));
+    }
+
+    // others: fork, select, race, spawn, join, cancel
+
+
+//UDEMY
+
 }
