@@ -713,6 +713,37 @@ ALTERNATIVES:
 
 { //SAGAs
 
+//UDEMY
+    // all side effects are moved to the sagas, so we have only pure action creators
+    // yield - execute this and wait for it to finish
+    // put - dispatches an action
+    // takeEvery(actionToListenFor, sagaToExecute) - listen to certain actions and do smth when they occur
+
+    /* 
+        > cmp dispatch action (from actionTypes)
+        > action creator (w/wo payload) for saga
+        > watcher catches it by actionType and starts the corresponding saga
+        > saga dispatches action for reducer
+        > action creator (w/wo payload) for the reducer
+        > reducer is triggered
+
+        call makes generators testable, because you can really mock this, and don't execute this code
+        can be used for localStorage, axios
+        yield call([localStorage, 'removeItem'], 'token');
+
+        pass here all the actions you want to yield
+        yield all([
+            // they run concurrently
+            takeEvery( actionTypes.AUTH_INITIATE_LOGOUT, logoutSaga ),
+            takeEvery( actionTypes.AUTH_CHECK_TIMEOUT, checkAuthTimeoutSaga ),
+            ...
+        ]);
+        you can pass multiple calls, axios requests, to execute them simultaneously
+
+        takeLatest - cancel any previous ongoing executions of the saga, and execute only the latest one
+    */
+
+
 //DOG SAGA
     // actionTypes.js
     // reducer.js
@@ -759,14 +790,4 @@ ALTERNATIVES:
     }
 
     // others: fork, select, race, spawn, join, cancel
-
-
-
-//UDEMY
-    // all side effects are moved to the sagas
-    // yield - execute this and wait for it to finish
-    // put - dispatches an action
-    // takeEvery(actionToListenFor, sagaToExecute) - listen to certain actions and do smth when they occur
-
-    // cmp > dispatch actionType > watcher catches it > starts corresponding saga > dispatch action > reducer
 }

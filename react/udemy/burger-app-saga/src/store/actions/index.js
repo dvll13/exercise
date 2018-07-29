@@ -14,7 +14,10 @@ export {
     //saga:
     purchaseBurgerStart,
     purchaseBurgerSuccess,
-    purchaseBurgerFail
+    purchaseBurgerFail,
+    fetchOrdersStart,
+    fetchOrdersSuccess,
+    fetchOrdersFail
 } from './order';
 
 export {

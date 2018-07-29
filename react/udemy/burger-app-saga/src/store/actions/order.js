@@ -22,7 +22,11 @@ export const purchaseBurgerStart = () => {
 };
 
 export const purchaseBurger = (orderData, token) => {
-    return {}
+    return {
+        type: actionTypes.PURCHASE_BURGER,
+        orderData,
+        token
+    }
 }
 
 export const purchaseInit = () => {
@@ -52,30 +56,10 @@ export const fetchOrdersFail = (error) => {
 }
 
 export const fetchOrders = (token, userId) => {
-    return (dispatch /*, getState */) => {
-        dispatch(fetchOrdersStart());
-        
-        // get orders for a specific userId (firebase specific)
-        const queryParams = `?auth=${token}&orderBy="userId"&equalTo="${userId}"`;
-
-        axios.get('/orders.json' + queryParams)
-            .then(res => {
-                console.log('res.data:', res.data);
-                
-                const fetchedOrders = [];
-                for (let key in res.data) {
-                    fetchedOrders.push({
-                        id: key,
-                        ...res.data[key]
-                    })
-                }
-                console.log('fetchedOrders:', fetchedOrders);
-                
-                dispatch(fetchOrdersSuccess(fetchedOrders));
-            })
-            .catch(err => {
-                dispatch(fetchOrdersFail(err));
-            })
+    return {
+        type: actionTypes.FETCH_ORDERS,
+        token,
+        userId
     }
 }
 
@@ -95,3 +79,31 @@ export const fetchOrders = (token, userId) => {
 //             });
 //     }
 // };
+
+// export const fetchOrders = (token, userId) => {
+//     return (dispatch /*, getState */) => {
+//         dispatch(fetchOrdersStart());
+        
+//         // get orders for a specific userId (firebase specific)
+//         const queryParams = `?auth=${token}&orderBy="userId"&equalTo="${userId}"`;
+
+//         axios.get('/orders.json' + queryParams)
+//             .then(res => {
+//                 console.log('res.data:', res.data);
+                
+//                 const fetchedOrders = [];
+//                 for (let key in res.data) {
+//                     fetchedOrders.push({
+//                         id: key,
+//                         ...res.data[key]
+//                     })
+//                 }
+//                 console.log('fetchedOrders:', fetchedOrders);
+                
+//                 dispatch(fetchOrdersSuccess(fetchedOrders));
+//             })
+//             .catch(err => {
+//                 dispatch(fetchOrdersFail(err));
+//             })
+//     }
+// }

@@ -14,7 +14,7 @@ import BurgerBuilderReducer from './store/reducers/BurgerBuilder';
 import orderReducer from './store/reducers/order';
 import authReducer from './store/reducers/auth';
 //2. sagas
-import { watchAuth, watchBurgerBuilder } from './store/sagas';
+import { watchAuth, watchBurgerBuilder, watchOrder } from './store/sagas';
 
 // only use in dev mode
 const composeEnhancers = process.env.NODE_ENV === 'development'
@@ -35,9 +35,10 @@ const store = createStore(rootReducer, composeEnhancers(
     applyMiddleware(thunk, sagaMiddleware) // for async code
 ));
 
-//4
+//4 run watchers
 sagaMiddleware.run(watchAuth);
 sagaMiddleware.run(watchBurgerBuilder);
+sagaMiddleware.run(watchOrder);
 
 // Provider should wrap everything
 // TODO: fix basename -> <BrowserRouter basename='burger'>
