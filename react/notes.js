@@ -752,6 +752,7 @@ ALTERNATIVES:
     // call - runs a function, if it returns a promise, pauses the saga until the promise is resolved
     // put - dispatches an action
 
+    // base syntax:
     function* effects() {
         let result = yield call(fnToRun, optionalArgsToPasstoFn);
         yield put(actionToDispatch(result));
@@ -760,6 +761,7 @@ ALTERNATIVES:
     // others: fork, select, race, spawn, join, cancel
 
 
-//UDEMY
 
+//UDEMY
+    
 }
