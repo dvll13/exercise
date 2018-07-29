@@ -1,5 +1,4 @@
 import * as actionTypes from './actionTypes';
-import axios from '../../axios-orders';
 
 export const purchaseBurgerSuccess = (id, orderData) => {
     return {
@@ -23,19 +22,8 @@ export const purchaseBurgerStart = () => {
 };
 
 export const purchaseBurger = (orderData, token) => {
-    return dispatch => {
-        dispatch(purchaseBurgerStart()); // start loading
-
-        axios.post('/orders.json?auth=' + token, orderData)
-            .then(response => {
-                console.log(response.data);
-                dispatch(purchaseBurgerSuccess(response.data.name, orderData))
-            })
-            .catch(error => {
-                dispatch(purchaseBurgerFail(error))
-            });
-    }
-};
+    return {}
+}
 
 export const purchaseInit = () => {
     return {
@@ -90,3 +78,20 @@ export const fetchOrders = (token, userId) => {
             })
     }
 }
+
+
+
+// export const purchaseBurger = (orderData, token) => {
+//     return dispatch => {
+//         dispatch(purchaseBurgerStart()); // start loading
+
+//         axios.post('/orders.json?auth=' + token, orderData)
+//             .then(response => {
+//                 console.log(response.data);
+//                 dispatch(purchaseBurgerSuccess(response.data.name, orderData))
+//             })
+//             .catch(error => {
+//                 dispatch(purchaseBurgerFail(error))
+//             });
+//     }
+// };

@@ -1,0 +1,29 @@
+// takeEvery - listen to certain actions and do smth when they occur
+import { takeEvery } from 'redux-saga/effects';
+
+import * as actionTypes from '../actions/actionTypes';
+import {
+    logoutSaga,
+    checkAuthTimeoutSaga,
+    authUserSaga,
+    authCheckStateSaga
+} from './auth';
+import { initIngredientsSaga } from './burgerBuilder';
+import { purchaseBurgerSaga } from './order';
+
+// add listeners
+export function* watchAuth() {
+    // not executed in this order, the second one doesn't wait for the first one
+    yield takeEvery( actionTypes.AUTH_INITIATE_LOGOUT, logoutSaga );
+    yield takeEvery( actionTypes.AUTH_CHECK_TIMEOUT, checkAuthTimeoutSaga );
+    yield takeEvery( actionTypes.AUTH_USER, authUserSaga );
+    yield takeEvery( actionTypes.AUTH_CHECK_STATE, authCheckStateSaga );
+}
+
+export function* watchBurgerBuilder() {
+    yield takeEvery( actionTypes.INIT_INGREDIENTS, initIngredientsSaga );
+}
+
+export function* watchOrder() {
+    yield takeEvery(  )
+}

@@ -763,5 +763,10 @@ ALTERNATIVES:
 
 
 //UDEMY
-    
+    // all side effects are moved to the sagas
+    // yield - execute this and wait for it to finish
+    // put - dispatches an action
+    // takeEvery(actionToListenFor, sagaToExecute) - listen to certain actions and do smth when they occur
+
+    // cmp > dispatch actionType > watcher catches it > starts corresponding saga > dispatch action > reducer
 }

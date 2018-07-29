@@ -4,6 +4,8 @@ import { BrowserRouter } from "react-router-dom";
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
+//1. saga middleware
+import createSagaMiddleware from 'redux-saga';
 
 import registerServiceWorker from './registerServiceWorker';
 import './index.css';
@@ -11,6 +13,8 @@ import App from './App';
 import BurgerBuilderReducer from './store/reducers/BurgerBuilder';
 import orderReducer from './store/reducers/order';
 import authReducer from './store/reducers/auth';
+//2. sagas
+import { watchAuth, watchBurgerBuilder } from './store/sagas';
 
 // only use in dev mode
 const composeEnhancers = process.env.NODE_ENV === 'development'
@@ -24,9 +28,16 @@ const rootReducer = combineReducers({
     auth: authReducer
 });
 
+//3
+const sagaMiddleware = createSagaMiddleware();
+
 const store = createStore(rootReducer, composeEnhancers(
-    applyMiddleware(thunk) // for async code
+    applyMiddleware(thunk, sagaMiddleware) // for async code
 ));
+
+//4
+sagaMiddleware.run(watchAuth);
+sagaMiddleware.run(watchBurgerBuilder);
 
 // Provider should wrap everything
 // TODO: fix basename -> <BrowserRouter basename='burger'>
