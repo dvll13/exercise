@@ -793,3 +793,13 @@ ALTERNATIVES:
 }
 
 // Building the Burger Builder CSS code -> \exercise\html5 & css3\udemy\burger-builder-css\
+
+
+{ //USEFUL LINKS
+/*
+    https://react.rocks/ - real world working examples
+    gatsbyjs - static react projects
+    react native - js apps for ios/android (2 CHECK!!!!!)
+    preact - smaller react bundle/api, has leaner algorithm for updating the dom, tiny differences; react is a bit more preferred currently for larger project
+*/
+}
