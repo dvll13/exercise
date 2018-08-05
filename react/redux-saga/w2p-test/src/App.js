@@ -1,21 +1,59 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Route, Redirect, Switch, withRouter } from "react-router-dom";
+
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
+
+import { Overview, Templates, Instances } from './containers';
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
+    state = {
+        selectedTab: 0,
+        routes: [
+            '/overview',
+            '/templates',
+            '/instances'
+        ]
+    };
+
+    componentDidMount() {
+        const initialTabToSelect = this.state.routes.findIndex(
+            route => route === this.props.history.location.pathname
+        );
+        this.setState({ selectedTab: initialTabToSelect });
+    }
+
+    handleChange = (event, value) => {
+        this.setState({ selectedTab: value });
+        this.props.history.push(this.state.routes[value]);
+    };
+
+    render() {
+        const { selectedTab } = this.state;
+        
+        return (
+            <div className="App">
+                <AppBar position="static">
+                    <Tabs value={selectedTab} onChange={this.handleChange}>
+                        <Tab label="Overview" />
+                        <Tab label="Templates" />
+                        <Tab label="Documents" />
+                    </Tabs>
+                </AppBar>
+
+                <Typography component="div" style={{ padding: 8 * 3 }}>
+                    <Switch>
+                        <Route path='/overview' component={Overview} />
+                        <Route path='/templates' component={Templates} />
+                        <Route path='/instances' component={Instances} />
+                        <Redirect to='/overview' />
+                    </Switch>
+                </Typography>
+            </div>
+        );
+    }
 }
 
-export default App;
+export default withRouter(App);

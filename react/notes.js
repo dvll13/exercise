@@ -335,7 +335,7 @@ import {AuthContext} from "../../../containers/App";
         render={ (props) => (<ContactData ingredients={this.state.ingredients} {...props}/>) }/>
 
     // pass down router props to "non-routed" children
-    import {withRouter} from 'C:/Users/dvll/AppData/Local/Microsoft/TypeScript/2.9/node_modules/@types/react-router-dom';
+    import {withRouter} from 'react-router-dom';
     export default withRouter(Cmp);
 
     // PASSING MORE query params
