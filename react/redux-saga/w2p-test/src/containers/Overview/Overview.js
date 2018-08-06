@@ -11,7 +11,7 @@ class Overview extends Component {
     }
 
     render() {
-        console.log('RENDER overview');
+        console.log('[RENDER] overview');
         
         let templatesList = 'Loading...';
         if (this.props.templates.templates && this.props.templates.templates.length > 0) {

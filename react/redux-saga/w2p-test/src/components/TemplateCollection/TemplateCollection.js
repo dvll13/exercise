@@ -5,7 +5,9 @@ import Template from '../Template/Template';
 const TemplateCollection = props => (
     <div style={{display: 'flex'}}>
         {props.items.map((template, index) => {
-            return <Template key={`${template.id}_${index}`} {...template} style={{marginRight: 8}}/>
+            return <div key={`${template.id}_${index}`} style={{marginRight: 8}}>
+                <Template {...template}/>
+            </div>
         })}
     </div>
 );
