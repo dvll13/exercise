@@ -1,22 +1,33 @@
-import * as actionTypes from '../actions/actionTypes';
+import * as actionTypes from '../actions/types';
 
 const initialState = {
-    templates: [],
+    templatesByIds: {},
+    latestTemplatesIds: [],
     loading: false,
     error: null
+}
+
+const addTemplates = (state, action) => {
+    return {
+        ...state,
+        templatesByIds: action.templatesById,
+        loading: true,
+        error: null
+    }
 }
 
 const fetchTemplatesStart = state => {
     return {
         ...state,
-        loading: true
+        loading: true,
+        error: null
     }
 }
 
-const fetchTemplatesSuccess = (state, action) => {
+const fetchLatestTemplatesSuccess = (state, action) => {
     return {
         ...state,
-        templates: action.templates,
+        latestTemplatesIds: action.latestTemplatesIds,
         loading: false
     }
 }
@@ -31,9 +42,10 @@ const fetchTemplatesFail = (state, action) => {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.FETCH_TEMPLATES_START: return fetchTemplatesStart(state);
-        case actionTypes.FETCH_TEMPLATES_SUCCESS: return fetchTemplatesSuccess(state, action);
-        case actionTypes.FETCH_TEMPLATES_FAIL: return fetchTemplatesFail(state, action);
+        case actionTypes.ADD_TEMPLATES: return addTemplates(state, action);
+        case actionTypes.FETCH_LATEST_TEMPLATES_START: return fetchTemplatesStart(state);
+        case actionTypes.FETCH_LATEST_TEMPLATES_SUCCESS: return fetchLatestTemplatesSuccess(state, action);
+        case actionTypes.FETCH_LATEST_TEMPLATES_FAIL: return fetchTemplatesFail(state, action);
         default: return state;
     }
 }

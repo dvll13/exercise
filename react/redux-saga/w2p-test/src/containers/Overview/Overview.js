@@ -3,24 +3,26 @@ import { connect } from 'react-redux';
 
 import { TemplateCollection, InstanceCollection } from '../../components';
 import * as actions from '../../store/actions';
+import { getLatestTemplates } from '../../store/selectors/templates';
+import { getLatestInstances } from '../../store/selectors/instances';
 
 class Overview extends Component {
     componentDidMount() {
-        this.props.fetchTemplates();
-        this.props.fetchInstances();
+        this.props.fetchLatestTemplates();
+        this.props.fetchLatestInstances();
     }
 
     render() {
         console.log('RENDER overview');
         
         let templatesList = 'Loading...';
-        if (this.props.templates.templates && this.props.templates.templates.length > 0) {
-            templatesList = <TemplateCollection items={this.props.templates.templates}/>;
+        if (this.props.latestTemplates && this.props.latestTemplates.length > 0) {
+            templatesList = <TemplateCollection items={this.props.latestTemplates}/>;
         }
         
         let instancesList = 'Loading...';
-        if (this.props.instances.instances && this.props.instances.instances.length > 0) {
-            instancesList = <InstanceCollection items={this.props.instances.instances}/>;
+        if (this.props.latestInstances && this.props.latestInstances.length > 0) {
+            instancesList = <InstanceCollection items={this.props.latestInstances}/>;
         }
         
         return (
@@ -39,15 +41,15 @@ class Overview extends Component {
 
 const mapStateToProps = state => {
     return {
-        templates: state.t,
-        instances: state.i
+        latestTemplates: getLatestTemplates(state.templates),
+        latestInstances: getLatestInstances(state.instances)
     }
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchTemplates: () => dispatch( actions.fetchTemplates() ),
-        fetchInstances: () => dispatch( actions.fetchInstances() )
+        fetchLatestTemplates: () => dispatch( actions.fetchLatestTemplates() ),
+        fetchLatestInstances: () => dispatch( actions.fetchLatestInstances() )
     }
 };
 

@@ -790,6 +790,10 @@ ALTERNATIVES:
     }
 
     // others: fork, select, race, spawn, join, cancel
+
+
+    // IN A NORMALIZED STATE
+    // For example, an application that does a lot of editing of entities might want to keep two sets of "tables" in the state, one for the "current" item values and one for the "work-in-progress" item values. When an item is edited, its values could be copied into the "work-in-progress" section, and any actions that update it would be applied to the "work-in-progress" copy, allowing the editing form to be controlled by that set of data while another part of the UI still refers to the original version. "Resetting" the edit form would simply require removing the item from the "work-in-progress" section and re-copying the original data from "current" to "work-in-progress", while "applying" the edits would involve copying the values from the "work-in-progress" section to the "current" section.
 }
 
 // Building the Burger Builder CSS code -> \exercise\html5 & css3\udemy\burger-builder-css\

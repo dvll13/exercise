@@ -15,8 +15,8 @@ import instancesReducer from './store/reducers/instances';
 import { watchTemplates, watchInstances } from './store/sagas';
 
 const rootReducer = combineReducers({
-    t: templatesReducer,
-    i: instancesReducer
+    templates: templatesReducer,
+    instances: instancesReducer
 });
 
 const sagaMiddleware = createSagaMiddleware();

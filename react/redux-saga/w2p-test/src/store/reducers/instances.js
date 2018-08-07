@@ -1,27 +1,38 @@
-import * as actionTypes from '../actions/actionTypes';
+import * as actionTypes from '../actions/types';
 
 const initialState = {
-    instances: [],
+    instancesByIds: {},
+    latestInstancesIds: [],
     loading: false,
     error: null
 }
 
-const fetchInstancesStart = state => {
+const addInstances = (state, action) => {
     return {
         ...state,
-        loading: true
+        instancesByIds: action.instancesByIds,
+        loading: true,
+        error: null
     }
 }
 
-const fetchInstancesSuccess = (state, action) => {
+const fetchLatestInstancesStart = state => {
     return {
         ...state,
-        instances: action.instances,
+        loading: true,
+        error: null
+    }
+}
+
+const fetchLatestInstancesSuccess = (state, action) => {
+    return {
+        ...state,
+        latestInstancesIds: action.latestInstancesIds,
         loading: false
     }
 }
 
-const fetchInstancesFail = (state, action) => {
+const fetchLatestInstancesFail = (state, action) => {
     return {
         ...state,
         loading: false,
@@ -31,9 +42,10 @@ const fetchInstancesFail = (state, action) => {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.FETCH_INSTANCES_START: return fetchInstancesStart(state);
-        case actionTypes.FETCH_INSTANCES_SUCCESS: return fetchInstancesSuccess(state, action);
-        case actionTypes.FETCH_INSTANCES_FAIL: return fetchInstancesFail(state, action);
+        case actionTypes.ADD_INSTANCES: return addInstances(state, action);
+        case actionTypes.FETCH_LATEST_INSTANCES_START: return fetchLatestInstancesStart(state);
+        case actionTypes.FETCH_LATEST_INSTANCES_SUCCESS: return fetchLatestInstancesSuccess(state, action);
+        case actionTypes.FETCH_LATEST_INSTANCES_FAIL: return fetchLatestInstancesFail(state, action);
         default: return state;
     }
 }

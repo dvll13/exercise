@@ -1,13 +1,15 @@
 export {
-    fetchTemplates,
-    fetchTemplatesStart,
-    fetchTemplatesSuccess,
-    fetchTemplatesFail
+    addTemplates,
+    fetchLatestTemplates,
+    fetchLatestTemplatesStart,
+    fetchLatestTemplatesSuccess,
+    fetchLatestTemplatesFail
 } from './templates';
 
 export {
-    fetchInstances,
-    fetchInstancesStart,
-    fetchInstancesSuccess,
-    fetchInstancesFail
+    addInstances,
+    fetchLatestInstances,
+    fetchLatestInstancesStart,
+    fetchLatestInstancesSuccess,
+    fetchLatestInstancesFail
 } from './instances';

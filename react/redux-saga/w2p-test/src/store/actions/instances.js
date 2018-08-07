@@ -1,27 +1,34 @@
-import * as actionTypes from './actionTypes';
+import * as actionTypes from './types';
 
-export const fetchInstances = () => {
+export const addInstances = instancesByIds => {
     return {
-        type: actionTypes.FETCH_INSTANCES
+        type: actionTypes.ADD_INSTANCES,
+        instancesByIds
     }
 }
 
-export const fetchInstancesStart = () => {
+export const fetchLatestInstances = () => {
     return {
-        type: actionTypes.FETCH_INSTANCES_START
+        type: actionTypes.FETCH_LATEST_INSTANCES
     }
 }
 
-export const fetchInstancesSuccess = instances => {
+export const fetchLatestInstancesStart = () => {
     return {
-        type: actionTypes.FETCH_INSTANCES_SUCCESS,
-        instances
+        type: actionTypes.FETCH_LATEST_INSTANCES_START
     }
 }
 
-export const fetchInstancesFail = error => {
+export const fetchLatestInstancesSuccess = latestInstancesIds => {
     return {
-        type: actionTypes.FETCH_INSTANCES_FAIL,
+        type: actionTypes.FETCH_LATEST_INSTANCES_SUCCESS,
+        latestInstancesIds
+    }
+}
+
+export const fetchLatestInstancesFail = error => {
+    return {
+        type: actionTypes.FETCH_LATEST_INSTANCES_FAIL,
         error
     }
 }

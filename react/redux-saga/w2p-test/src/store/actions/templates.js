@@ -1,27 +1,34 @@
-import * as actionTypes from './actionTypes';
+import * as actionTypes from './types';
 
-export const fetchTemplates = () => {
+export const addTemplates = templatesById => {
     return {
-        type: actionTypes.FETCH_TEMPLATES
+        type: actionTypes.ADD_TEMPLATES,
+        templatesById
     }
 }
 
-export const fetchTemplatesStart = () => {
+export const fetchLatestTemplates = () => {
     return {
-        type: actionTypes.FETCH_TEMPLATES_START
+        type: actionTypes.FETCH_LATEST_TEMPLATES
     }
 }
 
-export const fetchTemplatesSuccess = templates => {
+export const fetchLatestTemplatesStart = () => {
     return {
-        type: actionTypes.FETCH_TEMPLATES_SUCCESS,
-        templates
+        type: actionTypes.FETCH_LATEST_TEMPLATES_START
     }
 }
 
-export const fetchTemplatesFail = error => {
+export const fetchLatestTemplatesSuccess = latestTemplatesIds => {
     return {
-        type: actionTypes.FETCH_TEMPLATES_FAIL,
+        type: actionTypes.FETCH_LATEST_TEMPLATES_SUCCESS,
+        latestTemplatesIds
+    }
+}
+
+export const fetchLatestTemplatesFail = error => {
+    return {
+        type: actionTypes.FETCH_LATEST_TEMPLATES_FAIL,
         error
     }
 }
