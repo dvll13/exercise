@@ -13,7 +13,7 @@ class Overview extends Component {
     }
 
     render() {
-        console.log('RENDER overview');
+        console.log('[RENDER] overview');
         
         let templatesList = 'Loading...';
         if (this.props.latestTemplates && this.props.latestTemplates.length > 0) {
