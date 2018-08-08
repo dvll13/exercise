@@ -720,10 +720,10 @@ ALTERNATIVES:
     // takeEvery(actionToListenFor, sagaToExecute) - listen to certain actions and do smth when they occur
 
     /* 
-        > cmp dispatch action (from actionTypes)
-        > action creator (w/wo payload) for saga
-        > watcher catches it by actionType and starts the corresponding saga
-        > saga dispatches action for reducer
+        > cmp dispatch action (actions/index.js)
+        > action creator (w/wo payload)
+        > watcher (sagas/index.js) intercepts it by actionType and starts the corresponding saga
+        > saga after async operations put(action) for reducer
         > action creator (w/wo payload) for the reducer
         > reducer is triggered
 
