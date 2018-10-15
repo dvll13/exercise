@@ -201,8 +201,8 @@ import {AuthContext} from "../../../containers/App";
 
 {
   inputRef = React.createRef(); // reference: 1. init (only in stateful cmps)
-  this.inputRef.current.focus(); //usage
   <input ref={this.inputRef}/> //reference: 2.point
+  this.inputRef.current.focus(); //usage
 
   // in order to be able to forward refs:
   const WithClass = class extends Component {
