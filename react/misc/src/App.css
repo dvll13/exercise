@@ -1,0 +1,36 @@
+.App {
+    display: flex;
+    justify-content: stretch;
+    height: 100vh;
+    max-width: 100%;
+}
+
+.App > nav {
+    width: 200px;
+    overflow: auto;
+    background: #333;
+}
+
+.App > nav > ul {
+    list-style: none;
+    padding: 20px;
+    margin: 0
+}
+
+.App > nav > ul a {
+    text-decoration: none;
+    font-size: 14px;
+    color: #aaa
+}
+
+.App > nav > ul a:hover {
+    color: #ccc
+}
+
+
+.App > main {
+    flex: 1;
+    overflow: auto;
+    padding: 20px;
+    background: #f4ebde
+}
