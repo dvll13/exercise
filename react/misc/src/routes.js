@@ -7,6 +7,11 @@ export default [
         component: funcAsChildren
     },
     {
+        title: 'memo',
+        path: '/memo',
+        component: Memo
+    },
+    {
         title: 'Static context type',
         path: '/static-context-type',
         component: StaticContextType
