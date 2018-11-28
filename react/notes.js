@@ -796,8 +796,83 @@ ALTERNATIVES:
     // For example, an application that does a lot of editing of entities might want to keep two sets of "tables" in the state, one for the "current" item values and one for the "work-in-progress" item values. When an item is edited, its values could be copied into the "work-in-progress" section, and any actions that update it would be applied to the "work-in-progress" copy, allowing the editing form to be controlled by that set of data while another part of the UI still refers to the original version. "Resetting" the edit form would simply require removing the item from the "work-in-progress" section and re-copying the original data from "current" to "work-in-progress", while "applying" the edits would involve copying the values from the "work-in-progress" section to the "current" section.
 }
 
-// Building the Burger Builder CSS code -> \exercise\html5 & css3\udemy\burger-builder-css\
+{ //static context type
+    // create auth-context.js
+    export default React.createContext({
+        isAuth: false,
+        toggleAuth: () => {}
+    })
 
+    //then in the main provider
+    import AuthContext from './auth-context'
+    class StaticContextType extends Component {
+    state = {
+        isAuth: false
+    }
+
+    toggleAuth = () => {
+        this.setState((prevState) => ({
+            isAuth: !prevState.isAuth
+        }))
+    }
+
+    render() {
+        return (
+            <AuthContext.Provider value={{isAuth: this.state.isAuth, toggleAuth: this.toggleAuth}}>
+                <Child/>
+            </AuthContext.Provider>
+        )
+    }
+
+    //in the child consumer
+    import AuthContext from '../auth-context'
+    class Child extends React.Component {
+        static contextType = AuthContext
+        
+        componentDidMount() {
+            console.log(this.context)
+            //{isAuth: false, toggleAuth: ƒ}
+        }
+    
+        render() {
+            return <button onClick={this.context.toggleAuth}>{this.context.isAuth ? 'Logout' : 'Login'}</button>
+        }
+    }
+}
+
+{ //React.memo()
+    export default React.memo(SomeFunctionalComponent)
+    //React.memo shallow-compares the old and new props and rerenders only when there is a change
+    //no objects deep checks - so you should use immutable approach when updating objects in your props
+    //use only if you want to filter re-renders (if there is a chance the new received props to be the same as the previous ones)
+}
+
+{ //React.lazy()
+    //useful when we have bigger chunks of code
+
+    const Posts = React.lazy(() => import('./containers/Posts'))
+
+    <Route
+        path="/posts"
+        render={() => (
+            <Suspense fallback={<div>Loading...</div>}>
+                <Posts />
+            </Suspense>
+        )}
+    />
+
+    //or
+
+    {this.state.showPosts ? (
+        <Suspense fallback={<div>Loading...</div>}>
+            <Posts />
+        </Suspense>
+    ) : (
+        <User />
+    )}
+}
+
+// Building the Burger Builder CSS code -> \exercise\html5 & css3\udemy\burger-builder-css\
 
 { //USEFUL LINKS
 /*

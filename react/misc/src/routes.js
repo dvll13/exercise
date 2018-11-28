@@ -1,4 +1,4 @@
-import {funcAsChildren, StaticContextType} from './examples/'
+import {funcAsChildren, Lazy, Memo, StaticContextType} from './examples/'
 
 export default [
     {
@@ -7,7 +7,12 @@ export default [
         component: funcAsChildren
     },
     {
-        title: 'memo',
+        title: 'React.lazy()',
+        path: '/lazy',
+        component: Lazy
+    },
+    {
+        title: 'React.memo()',
         path: '/memo',
         component: Memo
     },
