@@ -882,3 +882,36 @@ ALTERNATIVES:
     preact - smaller react bundle/api, has leaner algorithm for updating the dom, tiny differences; react is a bit more preferred currently for larger project
 */
 }
+
+
+{/* GIT
+
+//MERGE
+    //while in master:
+
+    //creates a merge commit in the current branch and merge all other commits from feature_branch
+    git merge feature_branch
+    
+    //summarizes all the commits in feature_branch in the latest commit and then merges it (creates only one commit)
+    git merge --squash feature_branch
+    git commit -m "feature_branch merged"
+
+//REBASE - it is recommended to use rebase only locally
+
+    ////git puts in the beginning of the feature_branch all the master commits that are not included in it (committed after the branching). Then they are followed by the first feature commit. In other words the base of the feature_branch moves from the branching common commit to the latest master commit which is now the latest common commit.
+    //while in the feature_branch:
+    git rebase master
+
+    //then to rebase the feature_branch to master
+    //while in master:
+    git rebase feature_branch
+
+//RECOMMENDED WAY:
+    git checkout feature
+    git fetch
+    git rebase (resolve conflicts; repeat afterwards from the previous step in case any commit is made in the master meanwhile)
+    git checkout master
+    git merge feature
+    git push origin master
+
+*/}
