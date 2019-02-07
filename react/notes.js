@@ -220,7 +220,23 @@ import {AuthContext} from "../../../containers/App";
 }
 
 { // onChange & value = two-way binding
-  <input type="text" onChange={props.changed} value={props.name}/>
+    <input name="numberOfGuests" type="number" value={this.state.numberOfGuests} onChange={this.handleInputChange} />
+
+    handleInputChange(event) {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+
+        this.setState({
+            [name]: value
+        });
+    }
+
+    state = {
+        numberOfGuests: 2
+    };
+
+    <input type="text" onChange={props.changed} value={props.name}/>
 }
 
 {
@@ -842,7 +858,7 @@ ALTERNATIVES:
 
 { //React.memo()
     export default React.memo(SomeFunctionalComponent)
-    //React.memo shallow-compares the old and new props and rerenders only when there is a change
+    //React.memo shallow-compares the old and new props and re-renders only when there is a change
     //no objects deep checks - so you should use immutable approach when updating objects in your props
     //use only if you want to filter re-renders (if there is a chance the new received props to be the same as the previous ones)
 }
