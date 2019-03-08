@@ -888,6 +888,235 @@ ALTERNATIVES:
     )}
 }
 
+
+{ // REACT HOOKS
+
+    //REUSING hooks in different components
+    //The state of these components is completely independent. Hooks are a way to reuse stateful logic, not state itself. In fact, each call to a Hook has a completely isolated state — so you can even use the same custom Hook twice in one component.
+    //You can write custom Hooks that cover a wide range of use cases like form handling, animation, declarative subscriptions, timers,
+    const useFriendStatus = (friendID) => {
+        const [isOnline, setIsOnline] = useState(null)
+
+        const handleStatusChange = (status) => {
+            setIsOnline(status.isOnline)
+        }
+
+        useEffect(() => {
+            ChatAPI.subscribeToFriendStatus(friendID, handleStatusChange)
+            return () => { //CLEANUP function - runs when the component unmounts
+                ChatAPI.unsubscribeFromFriendStatus(friendID, handleStatusChange)
+            }
+        })
+
+        return isOnline
+    }
+
+    const DemoComponent = (props) => {
+        // !NB:
+        // * Only call Hooks at the top level. Don’t call Hooks inside loops, conditions, or nested functions.
+        // * Only call Hooks from React function components. Don’t call Hooks from regular JavaScript functions. (There is just one other valid place to call Hooks — your own custom Hooks.)
+        // * unlike this.setState in a class, updating a state variable always replaces it instead of merging it
+
+        const [count, setCount] = useState(0)
+        const [fruit] = useState('banana')
+        // const [todos, setTodos] = useState([{ text: 'Learn Hooks' }]);
+
+        // you can think of useEffect Hook as componentDidMount, componentDidUpdate, and componentWillUnmount combined
+        // When you call useEffect, you’re telling React to run your “effect” function after flushing changes to the DOM.
+        // By default, React runs the effects after every render — including the first render.
+
+        //EFFECTS WITHOUT CLEANUP - Network requests, manual DOM mutations, and logging are common examples of effects that don’t require a cleanup
+        //EFFECTS WITH CLEANUP - similar to componentDidMount and then componentWillUnmount. If your effect returns a function, React will run it when it is time to clean up. React also cleans up effects from the previous render before running the effects next time
+
+        useEffect(() => {
+            // Update the document title using the browser API
+            document.title = `You clicked ${count} times`
+        })
+
+        //OR
+        useEffect(() => {
+            document.title = `You clicked ${count} times`;
+        }, [count]); // Only re-run the effect if count changes (~ shouldComponentUpdate). If there are multiple items in the array, React will re-run the effect even if just one of them is different.
+
+        //If you want to run an effect and clean it up only once (on mount and unmount), you can pass an empty array ([]) as a second argument. This tells React that your effect doesn’t depend on any values from props or state, so it never needs to re-run. While passing [] is closer to the familiar componentDidMount and componentWillUnmount mental model, we suggest not making it a habit because it often leads to bugs as mentioned above
+
+        const isOnline = useFriendStatus('props.friend.id')
+
+        return (
+            <div>
+                <p>You clicked {count} times</p>
+                <p>
+                    {fruit} - {count}
+                </p>
+                <p>{isOnline} - reuse hooks</p>
+                <button onClick={() => setCount(count + 1)}>Click me</button>
+            </div>
+        )
+    }
+
+    // class component converted to functional with hooks example:
+    class FriendStatusWithCounter extends React.Component {
+        constructor(props) {
+          super(props)
+          this.state = { count: 0, isOnline: null }
+          this.handleStatusChange = this.handleStatusChange.bind(this)
+        }
+      
+        componentDidMount() {
+          document.title = `You clicked ${this.state.count} times`
+          ChatAPI.subscribeToFriendStatus(
+            this.props.friend.id,
+            this.handleStatusChange
+          )
+        }
+      
+        componentDidUpdate() {
+          document.title = `You clicked ${this.state.count} times`
+        }
+      
+        componentWillUnmount() {
+          ChatAPI.unsubscribeFromFriendStatus(
+            this.props.friend.id,
+            this.handleStatusChange
+          )
+        }
+      
+        handleStatusChange(status) {
+          this.setState({
+            isOnline: status.isOnline
+          })
+        }
+        // ...
+    }
+
+    const FriendStatusWithCounter = (props) => {
+        const [count, setCount] = useState(0)
+        useEffect(() => {
+          document.title = `You clicked ${count} times`
+        })
+      
+        const [isOnline, setIsOnline] = useState(null)
+        useEffect(() => {
+          ChatAPI.subscribeToFriendStatus(props.friend.id, handleStatusChange)
+          return () => {
+            ChatAPI.unsubscribeFromFriendStatus(props.friend.id, handleStatusChange)
+          }
+        })
+      
+        const handleStatusChange = (status) => {
+          setIsOnline(status.isOnline)
+        }
+        // ...
+    }
+
+    //automatic effect with cleanup triggers when a prop is changed:
+    // Mount with { friend: { id: 100 } } props
+    ChatAPI.subscribeToFriendStatus(100, handleStatusChange);     // Run first effect
+
+    // Update with { friend: { id: 200 } } props
+    ChatAPI.unsubscribeFromFriendStatus(100, handleStatusChange); // Clean up previous effect
+    ChatAPI.subscribeToFriendStatus(200, handleStatusChange);     // Run next effect
+
+    // Update with { friend: { id: 300 } } props
+    ChatAPI.unsubscribeFromFriendStatus(200, handleStatusChange); // Clean up previous effect
+    ChatAPI.subscribeToFriendStatus(300, handleStatusChange);     // Run next effect
+
+    // Unmount
+    ChatAPI.unsubscribeFromFriendStatus(300, handleStatusChange); // Clean up last effect
+
+
+    //Don’t forget that React defers running useEffect until after the browser has painted, so doing extra work is less of a problem.
+    //Don’t call Hooks inside loops, conditions, or nested functions
+    //Don’t call Hooks from regular JavaScript functions. Instead, you can:
+    // *Call Hooks from React function components.
+    // *Call Hooks from custom Hooks (we’ll learn about them
+
+    function Form() {
+        // 1. Use the name state variable
+        const [name, setName] = useState('Mary');
+      
+        // 2. Use an effect for persisting the form
+        useEffect(function persistForm() {
+          localStorage.setItem('formData', name);
+        });
+      
+        // 3. Use the surname state variable
+        const [surname, setSurname] = useState('Poppins');
+      
+        // 4. Use an effect for updating the title
+        useEffect(function updateTitle() {
+          document.title = name + ' ' + surname;
+        });
+      }
+    //React relies on the order in which Hooks are called. Our example works because the order of the Hook calls is the same on every render:
+    // ------------
+    // First render
+    // ------------
+    useState('Mary')           // 1. Initialize the name state variable with 'Mary'
+    useEffect(persistForm)     // 2. Add an effect for persisting the form
+    useState('Poppins')        // 3. Initialize the surname state variable with 'Poppins'
+    useEffect(updateTitle)     // 4. Add an effect for updating the title
+
+    // -------------
+    // Second render
+    // -------------
+    useState('Mary')           // 1. Read the name state variable (argument is ignored)
+    useEffect(persistForm)     // 2. Replace the effect for persisting the form
+    useState('Poppins')        // 3. Read the surname state variable (argument is ignored)
+    useEffect(updateTitle)     // 4. Replace the effect for updating the title
+    // ...
+
+    useState('Mary')           // 1. Read the name state variable (argument is ignored)
+    // useEffect(persistForm)  // 🔴 This Hook was skipped!
+    useState('Poppins')        // 🔴 2 (but was 3). Fail to read the surname state variable
+    useEffect(updateTitle)     // 🔴 3 (but was 4). Fail to replace the effect
+    //React wouldn’t know what to return for the second useState Hook call. React expected that the second Hook call in this component corresponds to the persistForm effect, just like during the previous render, but it doesn’t anymore. From that point, every next Hook call after the one we skipped would also shift by one, leading to bugs.
+    //This is why Hooks must be called on the top level of our components. If we want to run an effect CONDITIONALLY, we can put that condition INSIDE our Hook:
+    //WRONG:
+    if (name !== '') {
+        useEffect(function persistForm() {
+          localStorage.setItem('formData', name);
+        });
+      }
+
+    //RIGHT:
+    useEffect(function persistForm() {
+        // 👍 We're not breaking the first rule anymore
+        if (name !== '') {
+          localStorage.setItem('formData', name);
+        }
+      });
+
+
+      // CUSTOM HOOKS names should start with "use" too
+      // Custom Hooks are a mechanism to reuse only stateful logic, not state data. Each call to a hook gets isolated state
+
+      //If the new state is computed using the previous state, you can pass a function to setState.
+      function Counter({initialCount}) {
+        const [count, setCount] = useState(initialCount);
+        return (
+          <>
+            Count: {count}
+            <button onClick={() => setCount(initialCount)}>Reset</button>
+            <button onClick={() => setCount(prevCount => prevCount + 1)}>+</button>
+            <button onClick={() => setCount(prevCount => prevCount - 1)}>-</button>
+          </>
+        );
+      }
+
+
+      //LAZY INITIAL STATE
+      //The initialState argument is the state used during the initial render. In subsequent renders, it is disregarded. If the initial state is the result of an expensive computation, you may provide a function instead, which will be executed only on the initial render:
+
+      const [state, setState] = useState(() => {
+        const initialState = someExpensiveComputation(props);
+        return initialState;
+      });
+
+      //If you update a State Hook to the SAME VALUE as the current state, React will bail out WITHOUT RENDERING the children or firing effects. (React uses the Object.is comparison algorithm.)
+}
+
+
 // Building the Burger Builder CSS code -> \exercise\html5 & css3\udemy\burger-builder-css\
 
 { //USEFUL LINKS
