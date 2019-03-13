@@ -1,3 +1,5 @@
+// jshint ignore: start
+/* eslint-disable */
 import { DELETE_RESULT, SUBTRACT } from "./udemy/redux-app/src/store/actions/actionTypes";
 import * as actionTypes from "./dog-saga/src/store/actionTypes";
 
@@ -929,7 +931,6 @@ ALTERNATIVES:
         //EFFECTS WITH CLEANUP - similar to componentDidMount and then componentWillUnmount. If your effect returns a function, React will run it when it is time to clean up. React also cleans up effects from the previous render before running the effects next time
 
         useEffect(() => {
-            // Update the document title using the browser API
             document.title = `You clicked ${count} times`
         })
 
