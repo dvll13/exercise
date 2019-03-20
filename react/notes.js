@@ -1109,12 +1109,23 @@ ALTERNATIVES:
       //LAZY INITIAL STATE
       //The initialState argument is the state used during the initial render. In subsequent renders, it is disregarded. If the initial state is the result of an expensive computation, you may provide a function instead, which will be executed only on the initial render:
 
-      const [state, setState] = useState(() => {
-        const initialState = someExpensiveComputation(props);
-        return initialState;
-      });
+      function Table(props) {
+        // ⚠️ createRows() is called on every render
+        const [rows, setRows] = useState(someExpensiveComputation(props.count));
+        // ...
+      }
+
+      function Table(props) {
+        // ✅ createRows() is only called once
+        const [rows, setRows] = useState(() => someExpensiveComputation(props.count));
+        // ...
+      }
 
       //If you update a State Hook to the SAME VALUE as the current state, React will bail out WITHOUT RENDERING the children or firing effects. (React uses the Object.is comparison algorithm.)
+
+      //we recommend to split state into multiple state variables based on which values tend to change together.
+      //   const [position, setPosition] = useState({ left: 0, top: 0 });
+      //   const [size, setSize] = useState({ width: 100, height: 100 });
 }
 
 
