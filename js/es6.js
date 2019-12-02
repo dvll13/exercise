@@ -1,107 +1,141 @@
-// you can use blocks like the ones below ( { ... } ) instead of immediately executed functions ( (function(){})() )
-
-const log = (...params /*to array*/) => console.log(...params /*split again*/),
-      info = (title) => console.info('### ', title, ' ###');
-
 {
-    info('OBJECT [KEY] SETTINGS SYNTAX');
+    //SCOPE
 
-    let key = 'varKey';
-    let obj = {
-        key1: 'one',
-        [key]: 'two'
-    };
-    log(obj); // {key1: "one", varKey: "two"}
+    console.log(a) // undefined
+    console.log(typeof a) // "undefined"
+    if (a) {
+    } // valid
+
+    console.log(b) // error: b is not defined
+    if (b) {
+    } // error: b is not defined
+
+    c() // works
+
+    var a = 5 // translates to "var a;" on top and "a = 5" on this line
+    function c() {}
+
+    //Scope chain: parser moves outer reference by outer reference to lexical environment for looking for vars. Starts from where the fn definition sits, not the fn invocation!
 }
 
 {
-    info('ARROW FUNCTIONS');
+    //var, let, const
+    let a = 1 //or const
+    var b = 2
 
-    let calcTotal = total => total * 1.2;
-    log(calcTotal(10)); // 12
+    console.log(a) //1
+    console.log(window.a) //undefined
 
-    let ct2 = (total, sum) => total * 1.2 + sum; // ~ function (total, sum) { return total * 1.2 + sum; }
-    log(ct2(100, 5)); // 123
+    console.log(b) //2
+    console.log(window.b) //2
+
+    // in a cycle for let & const every turn a new variable is created, while for the var just its value gets changed
+}
+
+// you can use blocks like the ones below ( { ... } ) instead of immediately executed functions ( (function(){})() )
+
+const log = (...params /*to array*/) => console.log(...params /*split again*/),
+    info = (title) => console.info('### ', title, ' ###')
+
+{
+    info('OBJECT [KEY] SETTINGS SYNTAX')
+
+    let key = 'varKey'
+    let obj = {
+        key1: 'one',
+        [key]: 'two'
+    }
+    log(obj) // {key1: "one", varKey: "two"}
+}
+
+{
+    info('ARROW FUNCTIONS')
+
+    let calcTotal = (total) => total * 1.2
+    log(calcTotal(10)) // 12
+
+    let ct2 = (total, sum) => total * 1.2 + sum // ~ function (total, sum) { return total * 1.2 + sum; }
+    log(ct2(100, 5)) // 123
 
     // const fn = (param1, param2) => { fn body }
 }
 
 {
-    info('QUICK INITIALIZATION OF OBJECTS FROM VARS');
-    let a = 1, b = 2, c = 3;
+    info('QUICK INITIALIZATION OF OBJECTS FROM VARS')
+    let a = 1,
+        b = 2,
+        c = 3
     let obj = {a, b, c}
-    log(obj); // {a: 1, b: 2, c: 3}
+    log(obj) // {a: 1, b: 2, c: 3}
 }
 
 {
-    info('find/findIndex');
+    info('find/findIndex')
 
-    let ages = [12, 19, 6, 4];
+    let ages = [12, 19, 6, 4]
 
-    let firstAdult = ages.find(age => age >= 18);
-    let firstAdultIndex = ages.findIndex(age => age >= 18);
-    log(firstAdult, firstAdultIndex); // 19, 1
+    let firstAdult = ages.find((age) => age >= 18)
+    let firstAdultIndex = ages.findIndex((age) => age >= 18)
+    log(firstAdult, firstAdultIndex) // 19, 1
 }
 
 {
-    info('TEMPLATE LITERALS');
+    info('TEMPLATE LITERALS')
 
     // Basic interpolation
-    let obj = { x: 1, y: 2 };
+    let obj = {x: 1, y: 2}
     log(`Your total sum
-        is: ${obj.x + obj.y}`);
+        is: ${obj.x + obj.y}`)
     /* Your total sum
                is: 3*/
 }
 
 {
-    info('DEFAULT ARGUMENT VALUES');
+    info('DEFAULT ARGUMENT VALUES')
 
-    function greet(name = 'Anon')
-    {
-        log(`Hello ${name}!`);
-    };
-    greet(); // Hello Anon!
-    greet('Mieeen'); // Hello Mieeen!
-
+    function greet(name = 'Anon') {
+        log(`Hello ${name}!`)
+    }
+    greet() // Hello Anon!
+    greet('Mieeen') // Hello Mieeen!
 
     // You can have a function too!
     function greet2(name = 'Anon', callback = () => {}) {
-      log(`Yo ${name}!`);
+        log(`Yo ${name}!`)
 
-      // No more "callback && callback()" (no conditional) -> if (callback) callback()
-      callback('greet2 callback', 1);
+        // No more "callback && callback()" (no conditional) -> if (callback) callback()
+        callback('greet2 callback', 1)
     }
 
     // Only set a default for one parameter
-    greet2(); // Yo Anon!
-    greet2(undefined, log); // Yo Anon! greet2 callback 1
+    greet2() // Yo Anon!
+    greet2(undefined, log) // Yo Anon! greet2 callback 1
 }
 
 {
-    info('METHOD PROPERTIES (NO NEED FOR "FUNCTION" KEYWORD IN DECLARATION)');
+    info('METHOD PROPERTIES (NO NEED FOR "FUNCTION" KEYWORD IN DECLARATION)')
 
     let obj = {
         a: 5,
         sayHello(name) {
-            log(`Hello, ${name}!`);
+            log(`Hello, ${name}!`)
         }
     }
-    log(obj);
-    obj.sayHello('bro');
+    log(obj)
+    obj.sayHello('bro')
 }
 
 {
-    info('startsWith, endsWith, and includes');
+    info('startsWith, endsWith, and includes')
 
-    "MooTools".startsWith("Moo"); // true;
-    "MooTools".startsWith("moo"); // false;
-    "MooTools".endsWith("Tools"); // true;
-    "MooTools".includes("oo"); // true;
+    'MooTools'.startsWith('Moo') // true;
+    'MooTools'.startsWith('moo') // false;
+    'MooTools'.endsWith('Tools') // true;
+    'MooTools'.includes('oo') // true;
 }
 
 {
-    info('Object.assign() (let merged = Object.assign({}, defaults, params))');
+    info('Object.assign() (let merged = Object.assign({}, defaults, params))')
     let defaults = {
             a: 1,
             b: 2,
@@ -112,12 +146,12 @@ const log = (...params /*to array*/) => console.log(...params /*split again*/),
             c: null,
             d: 5
         }
-    let merged = Object.assign({}, defaults, params);
-    log(merged); // {a: 1, b: 3, c: null, d: 5}
+    let merged = Object.assign({}, defaults, params)
+    log(merged) // {a: 1, b: 3, c: null, d: 5}
 }
 
 {
-    info('GENERATORS');
+    info('GENERATORS')
 
     // function *foo() {
     //     yield 1;
@@ -126,57 +160,62 @@ const log = (...params /*to array*/) => console.log(...params /*split again*/),
     // }
 
     // just calling foo() won't work, instead an iterator should be constructed to a var:
-    let iterator = foo();
-    log(iterator.next()); // {value: 1, done: false}
-    log(iterator.next()); // {value: 2, done: false}
-    log(iterator.next()); // {value: 3, done: false}
-    log(iterator.next()); // {value: undefined, done: true}
+    let iterator = foo()
+    log(iterator.next()) // {value: 1, done: false}
+    log(iterator.next()) // {value: 2, done: false}
+    log(iterator.next()) // {value: 3, done: false}
+    log(iterator.next()) // {value: undefined, done: true}
 
-
-    function *foo() {
-        yield 1;
-        yield 2;
-        yield 3;
-        return 4;
+    function* foo() {
+        yield 1
+        yield 2
+        yield 3
+        return 4
     }
 
     for (var v of foo()) {
-        log( v );
+        log(v)
     }
     // 1 2 3
 
-    log( v ); // still `3`, not `4` :(
+    log(v) // still `3`, not `4` :(
 }
 
 {
-    info('CLASSES');
+    info('CLASSES')
 
     class Tool {
         constructor() {
-            this.madeOf = 'iron';
+            this.madeOf = 'iron'
         }
     }
 
     class Cart extends Tool {
         constructor(total) {
-            super();
-            this._total = total;
+            super()
+            this._total = total
         }
 
-        get total() { return this._total; }
-        set total(v) { this._total = Number(v); }
-        get totalWithTax() { return this._total * 1.2 }
+        get total() {
+            return this._total
+        }
+        set total(v) {
+            this._total = Number(v)
+        }
+        get totalWithTax() {
+            return this._total * 1.2
+        }
     }
 
-    let cart = new Cart(100);
-    log(cart);
+    let cart = new Cart(100)
+    log(cart)
     // log(cart.madeOf);
     // log(cart.totalWithTax);
 }
 
 {
-    info('ES7 CLASSES (requires Babel currently)');
-/*
+    info('ES7 CLASSES (requires Babel currently)')
+    /*
     class Human {
         gender = 'female';
     
@@ -203,36 +242,37 @@ const log = (...params /*to array*/) => console.log(...params /*split again*/),
 }
 
 {
-    info('THE SPREAD & REST OPERATORS (...)');
+    info('THE SPREAD & REST OPERATORS (...)')
 
     // Spread: extracts the values from an array/object
-    let a1 = [1, 2, 3];
-    let a2 = [0, ...a1, 4];
-    log(a2); // [0, 1, 2, 3, 4]
+    let a1 = [1, 2, 3]
+    let a2 = [0, ...a1, 4]
+    log(a2) // [0, 1, 2, 3, 4]
 
-    let o1 = {a: 1, b: 2, c: 3};
-    let o2 = {...o1, c: 33, d: 4};
-    log(o2); // {a: 1, b: 2, c: 33, d: 4}
+    let o1 = {a: 1, b: 2, c: 3}
+    let o2 = {...o1, c: 33, d: 4}
+    log(o2) // {a: 1, b: 2, c: 33, d: 4}
 
     // Rest: merge a list of fn arguments into an array
-    const filter = (...args) => args.filter(el => el === 1);
-    log('rest filter', filter(1, 2)); // [1]
+    const filter = (...args) => args.filter((el) => el === 1)
+    log('rest filter', filter(1, 2)) // [1]
 }
 
 {
-    info('ARRAY AND OBJECT DESTRUCTURING (pulling values from)');
-    
-    const numbers = [1, 2, 3];
-    [num1, num2] = numbers;
-    [n1, , n3] = numbers;
-    log(num1, num2); // 1 2
-    log(n1, n3); // 1 3
+    info('ARRAY AND OBJECT DESTRUCTURING (pulling values from)')
+
+    const numbers = [1, 2, 3]
+    ;[num1, num2] = numbers
+    ;[n1, , n3] = numbers
+    log(num1, num2) // 1 2
+    log(n1, n3) // 1 3
 
     {
-        info('so we can swap two vars without using a third one: [a, b] = [b, a]');
-        let a = 1, b = 2;
-        [a, b] = [b, a];
-        log(a, b); // 2, 1
+        info('so we can swap two vars without using a third one: [a, b] = [b, a]')
+        let a = 1,
+            b = 2
+        ;[a, b] = [b, a]
+        log(a, b) // 2, 1
     }
 
     // not yet supported:
@@ -242,32 +282,64 @@ const log = (...params /*to array*/) => console.log(...params /*split again*/),
 }
 
 {
-    info('PRIMITIVE AND REFERENCE TYPES');
-    log('primitive vars (numbers, strings, booleans) store values which get copied to other vars');
-    log('reference vars (arrays/objects) store pointers to a place in memory which pointers get copied to other vars');
-    log('to workaround that and get a real copy of a reference var, we use the spread operator');
-    log('const pointing to a reference type - can change the reference values');
+    info('PRIMITIVE AND REFERENCE TYPES')
+    log('primitive vars (numbers, strings, booleans) store values which get copied to other vars')
+    log('reference vars (arrays/objects) store pointers to a place in memory which pointers get copied to other vars')
+    log('to workaround that and get a real copy of a reference var, we use the spread operator')
+    log('const pointing to a reference type - can change the reference values')
 
-    const person = {name: 'Yo1'};
-    
+    const person = {name: 'Yo1'}
+
     // const secondPerson = person;
     // person.name = 'Yo2';
     // log(secondPerson.name); // Yo2
-    
-    const secondPerson = {...person};
-    person.name = 'Yo2';
-    log(secondPerson.name); // Yo1
+
+    const secondPerson = {...person}
+    person.name = 'Yo2'
+    log(secondPerson.name) // Yo1
 }
 
 {
-    log('# Array.from() method creates a new Array instance from an array-like or iterable object.');
-    log('# Array.map() method creates a new array with the results of calling a provided function on every element in the calling array.');
-    log('# for (let key of array/string/map) { array[key] }');
-    log('# for (var prop in object) { object[prop] }');
-    log('# if (prop in obj) {}');
+    log('# Array.from() method creates a new Array instance from an array-like or iterable object.')
+    log(
+        '# Array.map() method creates a new array with the results of calling a provided function on every element in the calling array.'
+    )
+    log('# for (let key of array/string/map) { array[key] }')
+    log('# for (var prop in object) { object[prop] }')
+    log('# if (prop in obj) {}')
     log(`
     cfg = Object.assign(
 		{a: 11, b: 22, c: 33, d: 44, e: 55}, //defaults
 		cfg //new
-	)`);
+	)`)
+}
+
+{
+    //Tagged templates
+    var person = 'Mike'
+    var age = 28
+
+    function myTag(strings, personExp, ageExp) {
+        var str0 = strings[0] // "That "
+        var str1 = strings[1] // " is a "
+
+        // There is technically a string after
+        // the final expression (in our example),
+        // but it is empty (""), so disregard.
+        // var str2 = strings[2];
+
+        var ageStr
+        if (ageExp > 99) {
+            ageStr = 'centenarian'
+        } else {
+            ageStr = 'youngster'
+        }
+
+        // We can even return a string built using a template literal
+        return `${str0}${personExp}${str1}${ageStr}`
+    }
+
+    var output = myTag`That ${person} is a ${age}`
+
+    console.log(output)
 }

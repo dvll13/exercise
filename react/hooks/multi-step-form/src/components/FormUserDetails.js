@@ -1,5 +1,6 @@
 import React from 'react'
 import {AppBar, TextField, Button} from '@material-ui/core'
+import Test from 'testFolder'
 
 const FormUserDetails = ({nextStep, values, setters}) => {
     const proceed = (e) => {
@@ -10,7 +11,7 @@ const FormUserDetails = ({nextStep, values, setters}) => {
     return (
         <>
             <AppBar position="static">Enter user details</AppBar>
-
+            <Test />
             <TextField
                 label="First name"
                 placeholder="Enter your first name"
