@@ -1030,7 +1030,7 @@ ALTERNATIVES:
     //Don’t call Hooks inside loops, conditions, or nested functions
     //Don’t call Hooks from regular JavaScript functions. Instead, you can:
     // *Call Hooks from React function components.
-    // *Call Hooks from custom Hooks (we’ll learn about them
+    // *Call Hooks from custom Hooks
 
     function Form() {
         // 1. Use the name state variable

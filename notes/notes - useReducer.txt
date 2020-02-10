@@ -1,0 +1,103 @@
+types.js
+--------
+
+export const SEARCH_USERS = 'SEARCH_USERS'
+export const GET_USER = 'GET_USER'
+
+
+
+
+githubContext.js
+----------------
+
+import {createContext} from 'react'
+
+const githubContext = createContext()
+
+export default githubContext
+
+
+
+
+githubReducer.js
+----------------
+
+import {SEARCH_USERS, SET_LOADING, CLEAR_USERS, GET_USER, GET_REPOS} from '../types'
+
+export default (state, action) => {
+    switch (action.type) {
+        case SEARCH_USERS:
+            return {
+                ...state,
+                users: action.payload,
+                loading: false
+            }
+
+        default:
+            return state
+    }
+}
+
+
+
+
+
+githubState.js
+--------------
+
+import React, {useReducer} from 'react'
+import GithubContext from './githubContext'
+import GithubReducer from './githubReducer'
+import {SEARCH_USERS, SET_LOADING, CLEAR_USERS, GET_USER, GET_REPOS} from '../types'
+
+initialState = {users: [], ...}
+const [state, dispatch] = useReducer(GithubReducer, initialState)
+
+const searchUsers = async (text) => {
+    setLoading()
+
+    const res = await req(`search/users?q=${text}&`)
+
+    dispatch({
+        type: SEARCH_USERS,
+        payload: res.data.items
+    })
+}
+
+const setLoading = () => dispatch({type: SET_LOADING})
+
+return (
+    <GithubContext.Provider
+        value={{
+            users: state.users,
+            ...
+            searchUsers
+        }}
+    >
+        {props.children}
+    </GithubContext.Provider>
+)
+
+
+
+
+App.js
+------
+
+import GithubState from './context/github/GithubState'
+
+<GithubState>
+    ...
+</GithubState>
+
+
+
+
+Search.js
+---------
+
+import GithubContext from '../../context/github/githubContext'
+const githubContext = useContext(GithubContext)
+
+githubContext.searchUsers(text)
+githubContext.users
