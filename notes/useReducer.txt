@@ -101,3 +101,8 @@ const githubContext = useContext(GithubContext)
 
 githubContext.searchUsers(text)
 githubContext.users
+
+
+
+you can use a HOOK for a fn that REQUESTS something which can be reused by components
+to make it don't repeat you can use a REF for it
