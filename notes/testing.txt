@@ -84,3 +84,5 @@ shallowWrapper.[update(), find()]
 expect().[toBe(), .toContain()]
 .text(), .exists(), .length
 .simulate(event)
+checkPropTypes
+setupTests.js in root folder - runs this before any test file
