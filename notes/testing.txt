@@ -81,8 +81,9 @@ ENZYME DOCS
 test()
 shallow()
 shallowWrapper.[update(), find()]
-expect().[toBe(), .toContain()]
+expect().[toBe(), .not.toBe(), .toContain()]
 .text(), .exists(), .length
 .simulate(event)
 checkPropTypes
 setupTests.js in root folder - runs this before any test file
+describe('', () => {}) - a way of grouping tests
