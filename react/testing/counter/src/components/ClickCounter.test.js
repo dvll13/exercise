@@ -19,11 +19,11 @@ const setup = (props = {} /* , state = null */) => {
 /**
  * Returns ShallowWrapper containing node(s) with the da value.
  * @param {ShallowWrapper} wrapper - Enzyme shallow wrapper to search within.
- * @param {string} val - Valu of data-test-id attribute for search.
+ * @param {string} val - Valu of data-test attribute for search.
  * @return {ShallowWrapper}
  */
 const findByTestAttr = (wrapper, val) => {
-    return wrapper.find(`[data-test-id="${val}"]`)
+    return wrapper.find(`[data-test="${val}"]`)
 }
 
 test('renders without error', () => {

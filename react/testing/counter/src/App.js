@@ -4,7 +4,7 @@ import ClickCounter from './components/ClickCounter'
 
 function App() {
     return (
-        <div className="App" data-test-id="component-app">
+        <div className="App" data-test="component-app">
             <h1>learn testing</h1>
 
             <ClickCounter />

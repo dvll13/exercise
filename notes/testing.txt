@@ -82,7 +82,8 @@ test()
 shallow()
 shallowWrapper.[update(), find()]
 expect().[toBe(), .not.toBe(), .toContain()]
-.text(), .exists(), .length
+expect(action).toEqual({}) //it's deep equal - should be used instead of .toBe() for objects 
+component.[text(), .exists(), .length]
 .simulate(event)
 checkPropTypes
 setupTests.js in root folder - runs this before any test file

@@ -19,17 +19,17 @@ const ClickCounter = ({count = 0}) => {
     }
 
     return (
-        <div data-test-id="component-click-counter">
-            <button onClick={increaseHandler} data-test-id="increment-button">
+        <div data-test="component-click-counter">
+            <button onClick={increaseHandler} data-test="increment-button">
                 Increase
             </button>
 
-            <button onClick={decreaseHandler} data-test-id="decrement-button">
+            <button onClick={decreaseHandler} data-test="decrement-button">
                 Decrease
             </button>
 
-            <h1 data-test-id="counter-display">Counter: {counter}</h1>
-            {showError && <p data-test-id="error-message">Sorry, the counter can't go below zero.</p>}
+            <h1 data-test="counter-display">Counter: {counter}</h1>
+            {showError && <p data-test="error-message">Sorry, the counter can't go below zero.</p>}
         </div>
     )
 }
