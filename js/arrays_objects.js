@@ -76,6 +76,7 @@ a.one = 'aaa'
 a.two = 'bbb'
 a.three = 'ccc'
 for (var i in a) {
+	if (!a.hasOwnProperty(i)) continue
     //should not be used to iterate over an Array where the index order is important.
     console.log(i, a[i])
 }

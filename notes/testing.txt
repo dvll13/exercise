@@ -77,14 +77,17 @@ ENZYME DOCS
     https://airbnb.io/enzyme/docs/api/
 
 
-
+jotto app (redux tests)
+-----------------------
 test()
 shallow()
 shallowWrapper.[update(), find()]
 expect().[toBe(), .not.toBe(), .toContain()]
-expect(action).toEqual({}) //it's deep equal - should be used instead of .toBe() for objects 
+expect(action).toEqual({}) /kl/it's deep equal - should be used instead of .toBe() for objects 
 component.[text(), .exists(), .length]
-.simulate(event)
+    .dive() -> returns the (non-DOM) React child component of the shallow wrapper
+    .simulate(event)
 checkPropTypes
 setupTests.js in root folder - runs this before any test file
 describe('', () => {}) - a way of grouping tests
+createStore

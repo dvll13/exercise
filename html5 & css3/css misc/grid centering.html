@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Grid centering</title>
+	<link rel="stylesheet" href="../../base.css">
+	<style>
+		.container {border: 1px solid #aaa; margin: 5px; height: 150px; width: 150px;}
+		.item1 {background-color: blue; height: 90px; width: 90px}
+
+		.item21 {background-color: blue; height: 80px; width: 80px}
+		.item22 {background-color: red}
+		.item23 {background-color: yellow; height: 40px; width: 40px; position: absolute;}
+
+		/* one item centering */
+		.container {
+			display: grid;
+			place-items: center;
+			resize: both;
+			overflow: auto;
+		}
+	</style>
+</head>
+<body>
+	<div class="container container-1">
+		<div class="item1"></div>
+	</div>
+	<div class="container container-2">
+		<div class="item21"></div>
+		test
+		<div class="item22">text</div>
+		<div class="item23"></div>
+	</div>
+</body>
+</html>

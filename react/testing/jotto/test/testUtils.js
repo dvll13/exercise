@@ -1,4 +1,12 @@
 import CheckPropTypes from 'check-prop-types'
+import {createStore} from 'redux'
+
+import rootReducer from '../src/store/reducers'
+
+export const storeFactory = (initialState) => {
+    return createStore(rootReducer, initialState)
+}
+
 /**
  * Returns ShallowWrapper containing node(s) with the da value.
  * @param {ShallowWrapper} wrapper - Enzyme shallow wrapper to search within.
