@@ -329,22 +329,22 @@ import {AuthContext} from "../../../containers/App";
         hash: '#submit',
         search: '?quick-submit=true'
     }}>New Post</Link>
-    <NavLink 
-        to='/' 
+    <NavLink
+        to='/'
         exact
         activeClassName='my-active'
         activeStyle={{textDecoration: 'underline'}}>Home</NavLink>
 
-    // change page PROGRAMATICALLY:
+    // change page PROGRAMMATICALLY:
     // we have props.history, match (nearest matched route), location only if the component is loaded by a Route object
-    // if not then we can use withRouther to pass them to the current component
+    // if not then we can use withRouter to pass them to the current component
     // this.props.history.push({ pathname: '/' + id }); or:
     this.props.history.push('/' + id); //set
     <Route path='/:my_id' exact component={FullPost}/>
-    this.props.history.goBack();
-    this.props.history.replace('/');
-    this.props.match.params.my_id //get
-    this.props.match.url // current url
+    props.history.goBack();
+    props.history.replace('/');
+    props.match.params.my_id //get
+    props.match.url // current url
 
     // adding to current url and passing props to routed component ({...props} should pass the router data then)
     <Route
@@ -371,7 +371,7 @@ import {AuthContext} from "../../../containers/App";
     componentDidMount() {
         const query = new URLSearchParams(this.props.location.search);
         const ingredients = {};
-        
+
         for (let param of query.entries()) {
             // param = ['salad', '1']
             ingredients[param[0]] = +param[1];
@@ -381,7 +381,7 @@ import {AuthContext} from "../../../containers/App";
     }
 
     // fragment:
-    <Link to="/my-path#start-position">Go to Start</Link> 
+    <Link to="/my-path#start-position">Go to Start</Link>
     // -> props.location.hash
 
     // guard examples
@@ -409,7 +409,7 @@ import {AuthContext} from "../../../containers/App";
 
 
 // REDUX
-{ 
+{
     // redux-basics.js - basic example
     // more: Counter.js and reducers/*
 
@@ -478,7 +478,7 @@ import {AuthContext} from "../../../containers/App";
         const initialState = {
             results: []
         };
-        
+
         const reducer = (state = initialState, action) => {
             // replace but NEVER MUTATE state data!
 
@@ -500,7 +500,7 @@ import {AuthContext} from "../../../containers/App";
                     // const id = 2;
                     // const newArr = [...state.results];
                     // newArr.splice(id, 1);
-        
+
                     //v2:
                     //reurns a new array
                     const updatedArr = state.results.filter(result => result.id !== action.resultElId);
@@ -513,7 +513,7 @@ import {AuthContext} from "../../../containers/App";
     // index.js:
     {
         import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
-        
+
         import counterReducer from './store/reducers/counter';
         import resultReducer from './store/reducers/result';
 
@@ -538,7 +538,7 @@ import {AuthContext} from "../../../containers/App";
 
         // for the redux devtools:
         const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-        
+
         const store = createStore(rootReducer, composeEnhancers(applyMiddleware(logger)));
 
         const app = (
@@ -586,13 +586,13 @@ import {AuthContext} from "../../../containers/App";
 
 
     // WRONG (MUTATION):
-    
+
     // example 1
     {
         let nestedState = state.nestedState;
         // ERROR: this directly modifies the existing object reference - don't do this!
         nestedState.nestedField = action.data;
-    
+
         return {
             ...state,
             nestedState
@@ -630,9 +630,9 @@ import {AuthContext} from "../../../containers/App";
 
 { /* ANIMATIONS
     "display" can't be animated
-    
+
     transition: all 300ms ease-out; ~ transition: all 0.3ms ease-out;
-    
+
     animation: openModal 400ms forwards; // forwards - keep the final value when animation completes
 
     PURE CSS ANIMS LIMITATIONS:
@@ -656,14 +656,14 @@ ALTERNATIVES:
     npm init
 
 // --save-dev: mark deps as dev only deps, doesn't make an impact, just for clarification which deps are for dev purposes and which are required for running the app (production)
-   
+
     npm install --save-dev webpack@3 webpack-dev-server
 // @3 in order for the commands from the lectures to work
 
 ...
 
     //support draft features
-    npm install --save-dev babel-presets-stage-2 
+    npm install --save-dev babel-presets-stage-2
 
     .babelrc file:
     {
@@ -696,7 +696,7 @@ ALTERNATIVES:
     // put - dispatches an action
     // takeEvery(actionToListenFor, sagaToExecute) - listen to certain actions and do smth when they occur
 
-    /* 
+    /*
         > cmp dispatch action (actions/index.js)
         > action creator (w/wo payload)
         > watcher (sagas/index.js) intercepts it by actionType and starts the corresponding saga
@@ -805,12 +805,12 @@ ALTERNATIVES:
     import AuthContext from '../auth-context'
     class Child extends React.Component {
         static contextType = AuthContext
-        
+
         componentDidMount() {
             console.log(this.context)
             //{isAuth: false, toggleAuth: ƒ}
         }
-    
+
         render() {
             return <button onClick={this.context.toggleAuth}>{this.context.isAuth ? 'Logout' : 'Login'}</button>
         }
@@ -921,7 +921,7 @@ ALTERNATIVES:
           this.state = { count: 0, isOnline: null }
           this.handleStatusChange = this.handleStatusChange.bind(this)
         }
-      
+
         componentDidMount() {
           document.title = `You clicked ${this.state.count} times`
           ChatAPI.subscribeToFriendStatus(
@@ -929,18 +929,18 @@ ALTERNATIVES:
             this.handleStatusChange
           )
         }
-      
+
         componentDidUpdate() {
           document.title = `You clicked ${this.state.count} times`
         }
-      
+
         componentWillUnmount() {
           ChatAPI.unsubscribeFromFriendStatus(
             this.props.friend.id,
             this.handleStatusChange
           )
         }
-      
+
         handleStatusChange(status) {
           this.setState({
             isOnline: status.isOnline
@@ -954,7 +954,7 @@ ALTERNATIVES:
         useEffect(() => {
           document.title = `You clicked ${count} times`
         })
-      
+
         const [isOnline, setIsOnline] = useState(null)
         useEffect(() => {
           ChatAPI.subscribeToFriendStatus(props.friend.id, handleStatusChange)
@@ -962,7 +962,7 @@ ALTERNATIVES:
             ChatAPI.unsubscribeFromFriendStatus(props.friend.id, handleStatusChange)
           }
         })
-      
+
         const handleStatusChange = (status) => {
           setIsOnline(status.isOnline)
         }
@@ -994,15 +994,15 @@ ALTERNATIVES:
     function Form() {
         // 1. Use the name state variable
         const [name, setName] = useState('Mary');
-      
+
         // 2. Use an effect for persisting the form
         useEffect(function persistForm() {
           localStorage.setItem('formData', name);
         });
-      
+
         // 3. Use the surname state variable
         const [surname, setSurname] = useState('Poppins');
-      
+
         // 4. Use an effect for updating the title
         useEffect(function updateTitle() {
           document.title = name + ' ' + surname;
