@@ -1,0 +1,5 @@
+ENTER NODE CONSOLE
+------------------
+type `node` in the normal console
+
+you have top level `global` and `process` objects
