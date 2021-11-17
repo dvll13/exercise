@@ -1,7 +1,6 @@
 // const sum = (a, b) => a + b
 exports.sum = (a, b) => a + b
 
-
 // module.exports = {
 //     sum
 // }

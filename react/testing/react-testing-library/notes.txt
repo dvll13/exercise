@@ -1,0 +1,55 @@
+QUERIES (Header.js) - getFindQuery.jpg, query_priorities.jpg
+--------------------------------------------------------------------------------
+screen.
+    findBy - for async getBy
+    queryBy - when we are testing the lack of existance of an element (retuns null instead of an error if it doesn't find the el)
+const buttonElement = screen.getByRole(`button`, {name: /add/i})
+
+
+
+ASSERTIONS
+--------------------------------------------------------------------------------
+reccommended is one assertion per test
+if there's any router component inside the tested component then the latter should be mocked by wrapping it in <BrowserRouter> (ToDoFooter.js)
+
+expect(element)
+    .toBeInTheDocument()
+    .not.toBeInTheDocument() (Header.js)
+    .toBeTruthy()
+    .toBeVisible()
+    .toContainHTML() - to contain html tag (not recommended)
+    .toHaveTextContent('tasks')
+    .toHaveLength(3)
+    .not.toHaveClass(`todo-item-active`)
+
+expect(divElements.length).toBe(4)
+expect(paragraphElement.textContent).toBe('5 tasks left')
+expect(*).not.* - this way we can get the opposite of anything
+
+screen.debug()
+
+
+
+EVENTS
+----------------------------------------------------------------
+fireEvent.change(inputElement, {target: {value: newValue}}) (Todo.test.js - integration tests)
+fireEvent.click(buttonElement)
+
+
+
+MOCKING REQUESTS
+----------------------------------------------------------------
+src/__mocks__/axios.js - names are important!
+
+NOTE:
+According to the official document(Manual Mocks),  the mock should be placed in the _mocks_ directory adjacent to node_modules (unless you configured roots to point to a folder other than the project root). Then the mock test will not fail. Another way is  inserting this directly. 
+ex)
+jest.mock("axios");
+axios.get.mockResolvedValue(mockResponse);
+
+
+
+HOOKS (beforeEach, beforeAll, afterEach, afterAll)
+----------------------------------------------------------------
+beforeAll - running once before all tests
+afterAll - runs once all the tests have been successfully executed

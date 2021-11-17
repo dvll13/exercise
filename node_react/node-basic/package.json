@@ -4,8 +4,15 @@
   "description": "node server test",
   "main": "http_server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon http_server.js"
   },
   "author": "Marin Stefanov",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.13"
+  },
+  "devDependencies": {
+    "prettier": "^2.4.1"
+  }
 }

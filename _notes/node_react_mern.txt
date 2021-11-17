@@ -1,0 +1,12 @@
+ENTER NODE CONSOLE
+------------------
+type `node` in the normal console
+you have top level `global` and `process` objects
+entire app is running in the `process` module, so what's added to the process.exports object (private) will be visible throughout the whole app
+
+ARROW FUNCTIONS don't have their own context (`this` points to the upper context)
+
+npm init - initialize a project and auto create a package.json
+`nodemon` package - reloading the server on file changes
+
+NODE EVENT LOOP - single threaded non blocking model, callbacks, FIFO
