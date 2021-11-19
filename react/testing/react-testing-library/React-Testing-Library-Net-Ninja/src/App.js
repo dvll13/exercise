@@ -3,6 +3,7 @@ import './App.css'
 import Banner from './components/Banner/Banner'
 import FollowersPage from './pages/FollowersPage/FollowersPage'
 import TodoPage from './pages/TodoPage/TodoPage'
+import AsyncTestPage from './pages/AsyncTestPage'
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Switch>
         <Route strict exact path="/" component={TodoPage} />
         <Route strict exact path="/followers" component={FollowersPage} />
+        <Route strict exact path="/async-test" component={AsyncTestPage} />
       </Switch>
     </div>
   )
