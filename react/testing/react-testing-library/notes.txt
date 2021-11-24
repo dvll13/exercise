@@ -13,6 +13,9 @@ expect(screen.getByText('Search')).toBeInTheDocument(); // fails
 expect(screen.getByText('Search:')).toBeInTheDocument(); // succeeds
 expect(screen.getByText(/Search/)).toBeInTheDocument(); // succeeds
 
+const {rerender} = render(<Example prop="1" />)
+rerender(<Example prop="2" />)
+
 
 
 ASSERTIONS
@@ -60,6 +63,18 @@ expect(getByTestId('button-down')).toBeDisabled()
 
 screen.debug()
 
+expect(button.disabled).toBe(true) // ❌
+// error message:
+//  expect(received).toBe(expected) // Object.is equality
+//
+//  Expected: true
+//  Received: false
+
+expect(button).toBeDisabled() // ✅
+// error message:
+//   Received element is not disabled:
+//     <button />
+
 
 
 EVENTS
@@ -75,6 +90,36 @@ expect(onChange).toHaveBeenCalledTimes(1)
 
 await userEvent.type(screen.getByRole('textbox'), 'JavaScript');
 expect(onChange).toHaveBeenCalledTimes(10)
+
+
+// ❌
+await waitFor(() => {})
+expect(window.fetch).toHaveBeenCalledWith('foo')
+expect(window.fetch).toHaveBeenCalledTimes(1)
+
+// ❌
+await waitFor(() => {
+  expect(window.fetch).toHaveBeenCalledWith('foo')
+  expect(window.fetch).toHaveBeenCalledTimes(1)
+})
+
+// ✅
+await waitFor(() => expect(window.fetch).toHaveBeenCalledWith('foo'))
+expect(window.fetch).toHaveBeenCalledTimes(1)
+
+
+Advice: put side-effects outside waitFor callbacks and reserve the callback for assertions only.
+// ❌
+await waitFor(() => {
+  fireEvent.keyDown(input, {key: 'ArrowDown'})
+  expect(screen.getAllByRole('listitem')).toHaveLength(3)
+})
+
+// ✅
+fireEvent.keyDown(input, {key: 'ArrowDown'})
+await waitFor(() => {
+  expect(screen.getAllByRole('listitem')).toHaveLength(3)
+})
 
 
 
