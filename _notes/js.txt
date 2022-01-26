@@ -31,3 +31,7 @@ allows an inner function to to have access to the outer function's variables and
 	console.log(add()) // 4
 	
 	
+
+ARROW FUNCTIONS
+---------------
+don't have their own context (`this` points to the upper context)

@@ -1,12 +1,22 @@
+NODE - a platform that allows running javascript on a computer
+REPL - read evaluate print loop (node console)
+
+
 ENTER NODE CONSOLE
 ------------------
 type `node` in the normal console
 you have top level `global` and `process` objects
-entire app is running in the `process` module, so what's added to the process.exports object (private) will be visible throughout the whole app
+entire app is running in the `process` module, so what's added to the process.exports object (private - can be checked by console.log(process) from the app) will be visible throughout the whole app
 
-ARROW FUNCTIONS don't have their own context (`this` points to the upper context)
 
 npm init - initialize a project and auto create a package.json
 `nodemon` package - reloading the server on file changes
+express - server
 
-NODE EVENT LOOP - single threaded non blocking model, callbacks, FIFO
+
+NODE EVENT LOOP (asynchronous programming) single threaded non blocking model, callbacks, FIFO; the called callbacks get in the stack and executed from there
+
+
+fs.watch(fileName, onFileChange)
+fs.readFile(fileName, (error, data) => {}) - asynchronous
+const data = fs.readFileSync(fileName) - synchronous, no callback
