@@ -1,0 +1,33 @@
+CLOSURE
+-------
+allows an inner function to to have access to the outer function's variables and use them as "private" ones
+
+	const getAdd = () => {
+		let foo = 1
+		
+		return () => {
+			foo = foo + 1
+			return foo
+		}
+	}
+
+	const add = getAdd()
+	
+	OR:
+	
+	const add = (const getAdd = () => {
+		let foo = 1
+		
+		return () => {
+			foo = foo + 1
+			return foo
+		}
+	})() // Immediately Invoked Function Expression (IIFE)
+
+	===
+
+	console.log(add()) // 2
+	console.log(add()) // 3
+	console.log(add()) // 4
+	
+	
