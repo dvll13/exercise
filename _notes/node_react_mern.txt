@@ -6,17 +6,38 @@ ENTER NODE CONSOLE
 ------------------
 type `node` in the normal console
 you have top level `global` and `process` objects
-entire app is running in the `process` module, so what's added to the process.exports object (private - can be checked by console.log(process) from the app) will be visible throughout the whole app
+entire app is running in the `process` module, so what's added to the process.exports object (private - can be checked by console.log(process) FROM the app) will be visible throughout the whole app
 
 
 npm init - initialize a project and auto create a package.json
 `nodemon` package - reloading the server on file changes
-express - server
+`express` - server
 
 
-NODE EVENT LOOP (asynchronous programming) single threaded non blocking model, callbacks, FIFO; the called callbacks get in the stack and executed from there
+NODE EVENT LOOP (asynchronous programming) single threaded non blocking model, callbacks, FIFO; the called callbacks get in the stack and get executed from there
 
 
 fs.watch(fileName, onFileChange)
 fs.readFile(fileName, (error, data) => {}) - asynchronous
 const data = fs.readFileSync(fileName) - synchronous, no callback
+
+
+//MIDDLEWARE - something that's executed between the start and the end of a process
+//middleware > routes > controllers
+app.use(morgan('dev')) - HTTP request logger middleware for node.js
+app.use(bodyParser.json()) - to be able to parse and see the request body
+app.use(expressValidator()) - better validation error handling
+app.use('/', postRoutes) > const postRoutes = express.Router() > controllers
+
+//MODEL -> communication with the database
+
+
+//POSTMAN (request > route > controller (uses model))
+  POST request
+    post url > body > raw > json
+    headers > content-type > application/json
+
+// CONTROLLER
+  create post (postModel.save((error, result) => ...)
+    if error -> return HTTP status code 400 with the error message
+      else return 200 with eg. the created post
