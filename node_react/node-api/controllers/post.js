@@ -1,18 +1,13 @@
-const PostModel = require('../models/post');
+const PostModel = require('../models/post')
 
 exports.getPosts = (request, response) => {
-  response.json(
-    {
-      posts: [
-        {
-          title: 'First post'
-        },
-        {
-          title: 'Second post'
-        },
-      ],
-    }
-  )
+  // response.json({ posts: [{ title: 'First post' }, { title: 'Second post' }] })
+  const posts = PostModel.find()
+    .select('_id title body')
+    .then((posts) => {
+      response.json({ posts })
+    })
+    .catch((error) => console.log(error))
 }
 
 exports.createPost = (request, response) => {
@@ -21,10 +16,10 @@ exports.createPost = (request, response) => {
 
   const postModel = new PostModel(request.body)
 
-  postModel.save().then(result => {
-    response.status(200).json({post: result})
+  postModel.save().then((result) => {
+    response.status(200).json({ post: result })
   })
-  
+
   // postModel.save((error, result) => {
   //   if (error) {
   //     return response.status(400).json({  // return the correct HTTP STATUS CODE with an error message

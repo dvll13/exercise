@@ -18,5 +18,5 @@ const postSchema = new mongoose.Schema({
   }
 })
 
-// create and export a model 
+// create and export a model
 module.exports = mongoose.model('Post', postSchema)

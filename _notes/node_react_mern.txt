@@ -12,7 +12,12 @@ entire app is running in the `process` module, so what's added to the process.ex
 npm init - initialize a project and auto create a package.json
 `nodemon` package - reloading the server on file changes
 `express` - server
-
+`body-parser` - helps us parse the request body
+`uuid` - create timestamps, unique ids etc.
+const crypto = require('crypto') // nodejs cryptographic functionality
+`jsonwebtoken` - - create a web token and store it in the user's localStorage to keep him logged in
+`cookie-parser` - help us parse the request cookie
+`express-jwt` - helps protect routes
 
 NODE EVENT LOOP (asynchronous programming) single threaded non blocking model, callbacks, FIFO; the called callbacks get in the stack and get executed from there
 
@@ -32,12 +37,54 @@ app.use('/', postRoutes) > const postRoutes = express.Router() > controllers
 //MODEL -> communication with the database
 
 
+
 //POSTMAN (request > route > controller (uses model))
-  POST request
-    post url > body > raw > json
-    headers > content-type > application/json
+  post url > body > raw > json
+  POST request:
+    Headers > content-type > application/json
+  GET request:
+    Headers > Authorization > Bearer <token> - test routes protected with token (with express-jwt)
 
 // CONTROLLER
   create post (postModel.save((error, result) => ...)
     if error -> return HTTP status code 400 with the error message
       else return 200 with eg. the created post
+  
+  HTTP status 200 is by DEFAULT returned by the Express frameworks so it can be omitted: response.status(200).json({posts}) -> response.json({posts})
+
+  PostModel.find() - returns all records
+  PostModel.find().select('_id title body') - select the fields to return
+
+  VIRTUAL FIELDS - additional fields for a given model. Their values can be set manually or automatically with a defined functionality. Virtual properties (password) don't persist in the database (hashed_password will be instead). They only exist locally and are not written to the document's collection. (models/user.js)
+
+  const userExists = await UserModel.findOne({
+    email: request.body.email
+  })
+  const user = await new UserModel(request.body)
+  await user.save()
+  response.json({ message: `The signup for user ${user.name} is successful! Please login.` })
+
+  // TOKEN IN A COOKIE
+  const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET) // generate a cookie based on the user id and .env secret
+  response.cookie('t', token, { expire: new Date() + 9999 }) // + seconds
+
+
+AUTHENTICATION - is the user logged in with his credentials
+
+AUTHORIZATION
+------------- 
+
+  FIRST STEP
+    A request is sent to profile update
+      this is what the url looks like: http://localhost:8080/profile/userid4328512
+
+    when there is a userId in the incoming request (url)
+      based on the that userId our backend will make a query to the database and load that user information (name, email etc)
+          then we'll add that info to the request object like so: req.profile = userInfo
+
+  SECOND STEP
+    add a property called auth in requireSignIn() so that we know the user is authenticated
+
+  THIRD STEP
+    create hasAuthorization()
+      to make sure the req object has req.profile && req.auth && req.profile._id === req.auth._id
