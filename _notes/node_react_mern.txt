@@ -18,6 +18,7 @@ const crypto = require('crypto') // nodejs cryptographic functionality
 `jsonwebtoken` - - create a web token and store it in the user's localStorage to keep him logged in
 `cookie-parser` - help us parse the request cookie
 `express-jwt` - helps protect routes
+`formidable` - for parsing form data, especially file uploads
 
 NODE EVENT LOOP (asynchronous programming) single threaded non blocking model, callbacks, FIFO; the called callbacks get in the stack and get executed from there
 
@@ -35,6 +36,11 @@ app.use(expressValidator()) - better validation error handling
 app.use('/', postRoutes) > const postRoutes = express.Router() > controllers
 
 //MODEL -> communication with the database
+  // reference to another model
+  postedBy: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'UserModel'
+  },
 
 
 
@@ -44,6 +50,17 @@ app.use('/', postRoutes) > const postRoutes = express.Router() > controllers
     Headers > content-type > application/json
   GET request:
     Headers > Authorization > Bearer <token> - test routes protected with token (with express-jwt)
+
+  router.get('/users', allUsers)
+  router.get('/user/:userId', requireSignIn, getUser)
+  router.put('/user/:userId', requireSignIn, updateUser)
+  router.post('/post', requireSignIn, createPostValidator, createPost) // post from FE to BE
+  router.delete('/user/:userId', requireSignIn, deleteUser)
+
+  FOR `FORMIDABLE` FORMS:
+  post url > body > x-www-form-urlencoded
+
+
 
 // CONTROLLER
   create post (postModel.save((error, result) => ...)

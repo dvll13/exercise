@@ -19,6 +19,7 @@ mongoose.connection.on('error', (error) => {
 // ROUTES
 const postRoutes = require('./routes/post')
 const authRoutes = require('./routes/auth')
+const userRoutes = require('./routes/user')
 
 // MIDDLEWARE
 const myTestMiddleware = (request, response, next) => {
@@ -33,6 +34,7 @@ app.use(cookieParser())
 app.use(expressValidator())
 app.use('/', postRoutes) //any request will be forwarded to the postRoutes and then to the controller
 app.use('/', authRoutes)
+app.use('/', userRoutes)
 app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
     res.status(401).json({ error: 'Unauthorized!' }) // invalid token

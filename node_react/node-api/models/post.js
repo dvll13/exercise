@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 // requirements
+const { ObjectId } = mongoose.Schema // reference
 const postSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -15,6 +16,18 @@ const postSchema = new mongoose.Schema({
     // required: "The title is required!",
     // minlength: 4,
     // maxlength: 2000
+  },
+  photo: {
+    data: Buffer, // allocated space from nodejs core for binary data to be later stored in the db
+    contentType: String
+  },
+  postedBy: {
+    type: ObjectId,
+    ref: 'User'
+  },
+  created: {
+    type: Date,
+    default: Date.now
   }
 })
 
