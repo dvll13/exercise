@@ -2,6 +2,19 @@ const PostModel = require('../models/post')
 const formidable = require('formidable')
 const fs = require('fs')
 
+exports.postById = (request, response, next, id) => {
+  PostModel.findById(id)
+    .populate('postedBy', '_id name')
+    .exec((error, post) => {
+      if (error || !post) {
+        request.status(400).json({ error })
+      }
+
+      request.post = post
+      next()
+    })
+}
+
 exports.getPosts = (request, response) => {
   // response.json({ posts: [{ title: 'First post' }, { title: 'Second post' }] })
   const posts = PostModel.find()
@@ -75,4 +88,24 @@ exports.postsByUser = (request, response) => {
 
       response.json(posts)
     }) //execute a callback
+}
+
+exports.isPoster = (request, response, next) => {
+  const isPoster = request.post && request.auth && request.post.postedBy._id === request.auth._id
+
+  if (!isPoster) {
+    request.status(403).json({ error: `The user is not authorized!` })
+  }
+  next() // proceed to the next middleware
+}
+
+exports.deletePost = (request, response) => {
+  const post = request.post
+  post.remove((error, post) => {
+    if (error) {
+      return response.status(400).json({ error })
+    }
+
+    response.json({ message: `The post was successfully deleted!` })
+  })
 }
