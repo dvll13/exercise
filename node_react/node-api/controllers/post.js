@@ -1,13 +1,14 @@
-const PostModel = require('../models/post')
+const Post = require('../models/post')
 const formidable = require('formidable')
 const fs = require('fs')
+const _ = require('lodash')
 
 exports.postById = (request, response, next, id) => {
-  PostModel.findById(id)
+  Post.findById(id)
     .populate('postedBy', '_id name')
     .exec((error, post) => {
       if (error || !post) {
-        request.status(400).json({ error })
+        response.status(400).json({ error })
       }
 
       request.post = post
@@ -17,7 +18,7 @@ exports.postById = (request, response, next, id) => {
 
 exports.getPosts = (request, response) => {
   // response.json({ posts: [{ title: 'First post' }, { title: 'Second post' }] })
-  const posts = PostModel.find()
+  Post.find()
     .populate('postedBy', '_id name') // populate the field with the related properties from a DIFFERENT MODEL
     .select('_id title body created')
     .then((posts) => {
@@ -35,7 +36,7 @@ exports.createPost = (request, response, next) => {
       return response.status(400).json({ error: `The image can't be uploaded!` })
     }
 
-    let post = new PostModel(fields)
+    let post = new Post(fields)
 
     request.profile.salt = undefined
     request.profile.hashed_password = undefined
@@ -58,13 +59,13 @@ exports.createPost = (request, response, next) => {
   //console.log('CREATING POST:', post) //CREATING POST: { _id: new ObjectId("61f70b5d2d051ba91a2d107a") } (without body-parser)
   // console.log('CREATING POST:', request.body) // CREATING POST: { title: 'This is new post title', body: 'This is new post body text' }
 
-  // const postModel = new PostModel(request.body)
+  // const Post = new Post(request.body)
 
-  // postModel.save().then((result) => {
+  // Post.save().then((result) => {
   //   response.status(200).json({ post: result })
   // })
 
-  // postModel.save((error, result) => {
+  // Post.save((error, result) => {
   //   if (error) {
   //     return response.status(400).json({  // return the correct HTTP STATUS CODE with an error message
   //       error
@@ -78,7 +79,7 @@ exports.createPost = (request, response, next) => {
 }
 
 exports.postsByUser = (request, response) => {
-  PostModel.find({ postedBy: request.profile._id })
+  Post.find({ postedBy: request.profile._id })
     .populate('postedBy', '_id name')
     .sort('_created') //sort by a field
     .exec((error, posts) => {
@@ -91,12 +92,30 @@ exports.postsByUser = (request, response) => {
 }
 
 exports.isPoster = (request, response, next) => {
-  const isPoster = request.post && request.auth && request.post.postedBy._id === request.auth._id
+  const isPoster = request.post && request.auth && request.post.postedBy._id.valueOf() === request.auth._id
+
+  // console.log('p', request.post)
+  // console.log('a', request.auth)
+  // console.log('pid', request.post.postedBy._id.valueOf())
+  // console.log('aid', request.auth._id)
+  // console.log('is', isPoster)
 
   if (!isPoster) {
-    request.status(403).json({ error: `The user is not authorized!` })
+    return response.status(403).json({ error: `The user is not authorized!` })
   }
   next() // proceed to the next middleware
+}
+
+exports.updatePost = (request, response, next) => {
+  let post = request.post
+  post = _.extend(post, request.body)
+  post.updated = Date.now()
+  post.save((error) => {
+    if (error) {
+      response.status(400).json({ error })
+    }
+    response.json(post)
+  })
 }
 
 exports.deletePost = (request, response) => {

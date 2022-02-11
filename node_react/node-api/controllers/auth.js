@@ -2,10 +2,10 @@ const jwt = require('jsonwebtoken')
 const user = require('../models/user')
 require('dotenv').config()
 const expressJwt = require('express-jwt')
-const UserModel = require('../models/user')
+const User = require('../models/user')
 
 exports.signUp = async (request, response) => {
-  const userExists = await UserModel.findOne({
+  const userExists = await User.findOne({
     email: request.body.email
   })
 
@@ -15,7 +15,7 @@ exports.signUp = async (request, response) => {
       error: 'A user with this email already exists!'
     })
 
-  const user = await new UserModel(request.body)
+  const user = await new User(request.body)
   await user.save()
   response.json({ message: `The signup for user ${user.name} is successful! Please login.` })
 }
@@ -28,13 +28,13 @@ exports.signIn = (request, response) => {
   // find the user based on email
   const { email, password } = request.body
 
-  UserModel.findOne({ email }, (error, user) => {
+  User.findOne({ email }, (error, user) => {
     if (error || !user) {
       return response.status(401).json({ error: `User with such email doesn't exist!` }) // 401: unauthorized
     }
 
     if (!user.authenticate(password)) {
-      // authenticate method from the UserModel
+      // authenticate method from the User
       return response.status(401).json({ error: `Email and password do not match!` })
     }
 

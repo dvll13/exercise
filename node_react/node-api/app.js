@@ -5,6 +5,8 @@ const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const expressValidator = require('express-validator')
+const fs = require('fs')
+const cors = require('cors')
 // const dotenv = require('dotenv')
 // dotenv.config() //load .env contents into process.env
 require('dotenv').config()
@@ -21,6 +23,18 @@ const postRoutes = require('./routes/post')
 const authRoutes = require('./routes/auth')
 const userRoutes = require('./routes/user')
 
+//apiDocs
+app.get('/', (request, response) => {
+  fs.readFile('docs/api.json', (error, data) => {
+    if (error) {
+      response.status(400).json({ error })
+    }
+
+    const docs = JSON.parse(data)
+    response.json(docs)
+  })
+})
+
 // MIDDLEWARE
 const myTestMiddleware = (request, response, next) => {
   console.log('My test middleware is called!')
@@ -32,6 +46,7 @@ app.use(morgan('dev'))
 app.use(bodyParser.json())
 app.use(cookieParser())
 app.use(expressValidator())
+app.use(cors())
 app.use('/', postRoutes) //any request will be forwarded to the postRoutes and then to the controller
 app.use('/', authRoutes)
 app.use('/', userRoutes)

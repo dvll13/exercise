@@ -1,5 +1,5 @@
 const _ = require('lodash')
-const UserModel = require('../models/user')
+const User = require('../models/user')
 
 exports.hasAuthorization = (request, response, next) => {
   const authorized = request.profile && request.auth && request.profile._id === request.auth._id
@@ -9,7 +9,7 @@ exports.hasAuthorization = (request, response, next) => {
 }
 
 exports.userById = (request, response, next, id) => {
-  UserModel.findById(id).exec((error, user) => {
+  User.findById(id).exec((error, user) => {
     if (error || !user) {
       return response.status(404).json({ error: `User not found!` })
     }
@@ -20,7 +20,7 @@ exports.userById = (request, response, next, id) => {
 }
 
 exports.allUsers = (request, response) => {
-  UserModel.find((error, users) => {
+  User.find((error, users) => {
     if (error) {
       return response.status(400).json({ error })
     }

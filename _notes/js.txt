@@ -30,8 +30,101 @@ allows an inner function to to have access to the outer function's variables and
 	console.log(add()) // 3
 	console.log(add()) // 4
 	
-	
+
+
+VARS
+----
+  let, const -> scoped in the current context, unlike var
+
+
 
 ARROW FUNCTIONS
 ---------------
-don't have their own context (`this` points to the upper context)
+  anonymous function assigned to a variable
+
+  they don't have their own context (`this` points to the upper enclosing context)
+  a function becomes a part of the global window context, so with an arrow function `this` points to it
+
+  const obj = {
+    props: ['prop1', 'prop2'], 
+    
+    printProps: function() {
+      console.log(this) // this -> obj (since the function is part of the object)
+      
+      setTimeout(function() { 
+        console.log(this) // this -> window
+      }, 2000)
+
+      setTimeout(() => console.log(this), 2000) // this -> obj
+    }
+  }
+
+
+
+DESTRUCTURING
+-------------
+const [, secondElement] = [1, 2, 3] // 2
+
+
+
+RESTRUCTURING
+-------------
+const adventureClimbing = {
+  name: 'Everest',
+  height: 8848,
+  output() {
+    console.log(`Mt. ${this.name} is now ${this.height} meter tall.`)
+  }
+  // short for:
+  output: function() {
+    console.log(`Mt. ${this.name} is now ${this.height} meter tall.`)
+  }
+}
+
+
+
+CLASSES
+-------
+  FN analogue:
+  ============
+    function Holiday(destination, days) {
+      this.destination = destination
+      this.days = days
+    }
+
+    Holiday.prototype.info = function() { console.log(this.destination + ' | ' + this.days) }
+
+    const nepal = Holiday('Nepal', 30)
+    nepal.info() // 'Nepal | 30'
+
+  CLASS:
+  ======
+    // SUPER CLASS
+    class Holiday {  // has a function with a constructor underneath
+      constructor(destination, days) { // sets the arguments as properties to the class
+        this.destination = destination
+        this.days = days
+      }
+
+      info() { console.log(this.destination + ' | ' + this.days)}
+    }
+
+    const trip = new Holiday('Nepal', 30)
+    trip.info() // 'Nepal | 30'
+
+
+    // SUB CLASS
+    class Expedition extends Holiday {
+      constructor(destination, days, gear) {
+        super(destination, days) // calling the parent class and passing the arguments to it
+        this.gear = gear
+      }
+
+      info() {
+        super.info() // calling the parent info() method
+        console.log('Gear:', this.gear.join(' and '))
+      }
+    }
+
+    const tripWithGear = new Expedition('Everest', 30, ['sunglasses', 'flags'])
+    tripWithGear.info() // '... Gear: sunglasses and flags'

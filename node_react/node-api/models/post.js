@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
 
 // requirements
-const { ObjectId } = mongoose.Schema // reference
-const postSchema = new mongoose.Schema({
+const { Schema } = mongoose
+const postSchema = new Schema({
   title: {
     type: String,
     required: true
@@ -22,7 +22,7 @@ const postSchema = new mongoose.Schema({
     contentType: String
   },
   postedBy: {
-    type: ObjectId,
+    type: Schema.Types.ObjectId, // reference
     ref: 'User'
   },
   created: {

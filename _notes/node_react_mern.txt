@@ -19,6 +19,7 @@ const crypto = require('crypto') // nodejs cryptographic functionality
 `cookie-parser` - help us parse the request cookie
 `express-jwt` - helps protect routes
 `formidable` - for parsing form data, especially file uploads
+`cors` - when you have api and frontend on separate domains browsers will block the requests to another domain for security reasons. to fix this we'll use the cors npm package
 
 NODE EVENT LOOP (asynchronous programming) single threaded non blocking model, callbacks, FIFO; the called callbacks get in the stack and get executed from there
 
@@ -84,6 +85,13 @@ app.use('/', postRoutes) > const postRoutes = express.Router() > controllers
   // TOKEN IN A COOKIE
   const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET) // generate a cookie based on the user id and .env secret
   response.cookie('t', token, { expire: new Date() + 9999 }) // + seconds
+
+
+  DELETE POST
+    whenever there is a postId in the url
+      execute postById() to get that post from the db
+        also populate the user who created the post 
+          and make the post available in the request
 
 
 AUTHENTICATION - is the user logged in with his credentials
