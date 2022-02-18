@@ -124,4 +124,15 @@ FRONTEND
 
 Material Design for Bootstrap
 
-fetch()
+fetch('http://localhost:8080/signup', {
+  method: 'POST',
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(userData)
+})
+  .then((response) => response.json())
+  .catch((error) => {
+    console.log(error)
+  })
