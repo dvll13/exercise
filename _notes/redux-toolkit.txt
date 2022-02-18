@@ -1,0 +1,30 @@
+//postSlice.js
+import { createSlice } from '@reduxjs/toolkit'
+
+const postsSlice = createSlice({
+  name: 'posts',
+  initialState,
+  reducers: {
+    addPost: (state, action) => {
+      state.push(action.payload)
+    }
+  }
+})
+
+export const selectPosts = (state) => state.posts
+export const { addPost } = postsSlice.actions
+
+//ADD
+import { useDispatch } from 'react-redux'
+import { nanoid } from '@reduxjs/toolkit'
+import { addPost } from './postsSlice'
+
+const dispatch = useDispatch()
+const onSave = () => dispatch(addPost({ id: nanoid(), title, content }))
+
+
+//LIST
+import { useSelector } from 'react-redux'
+import { selectPosts } from './postsSlice'
+
+const posts = useSelector(selectPosts)

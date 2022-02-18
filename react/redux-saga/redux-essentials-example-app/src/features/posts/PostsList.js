@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { selectPosts } from './postsSlice'
 
-const PostsList = (props) => {
+const PostsList = () => {
   // const posts = useSelector((state) => state.posts)
   const posts = useSelector(selectPosts)
 
