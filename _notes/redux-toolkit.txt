@@ -5,11 +5,33 @@ const postsSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {
-    addPost: (state, action) => {
-      state.push(action.payload)
+    postAdded: {
+      reducer(state, action) {
+        state.push(action.payload)
+      },
+      prepare(title, content) {
+        return {
+          payload: {
+            id: nanoid(),
+            title,
+            content
+          }
+        }
+      }
     }
   }
 })
+
+/*
+  console.log({ action }) ->
+    {
+      "type": "posts/addPost",
+      "payload": {
+        "title": "test",
+        "content": "test text"
+      }
+    }
+*/
 
 export const selectPosts = (state) => state.posts
 export const { addPost } = postsSlice.actions
@@ -28,3 +50,9 @@ import { useSelector } from 'react-redux'
 import { selectPosts } from './postsSlice'
 
 const posts = useSelector(selectPosts)
+
+
+------------
+If an action needs to contain a unique ID or some other random value, always generate that first and put it in the action object. REDUCERS SHOULD NEVER CALCULATE RANDOM VALUES, because that makes the results unpredictable.
+Fortunately, createSlice lets us define a "prepare callback" function when we write a reducer. The "prepare callback" function can take multiple arguments, generate random values like unique IDs, and run whatever other synchronous logic is needed to decide what values go into the action object. It should then return an object with the payload field inside. (The return object may also contain a meta field, which can be used to add extra descriptive values to the action, and an error field, which should be a boolean indicating whether this action represents some kind of error.)
+
