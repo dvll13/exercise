@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { selectPost } from './postsSlice'
 import PostAuthor from './PostAuthor'
+import ReactionButtons from './ReactionButtons'
 
 const SinglePostPage = () => {
   const params = useParams()
@@ -20,9 +21,13 @@ const SinglePostPage = () => {
   return (
     <section>
       <article className="post">
-        <h2>{post.title}</h2>
-        <PostAuthor userId={post.userId} />
+        <div>
+          <h2>{post.title}</h2>
+          <PostAuthor userId={post.userId} />
+        </div>
         <p className="post-content">{post.content}</p>
+
+        <ReactionButtons post={post} />
         <Link to={`/editPost/${post.id}`} className="button">
           Edit post
         </Link>

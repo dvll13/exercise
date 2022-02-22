@@ -1,6 +1,7 @@
 //postSlice.js
 import { createSlice } from '@reduxjs/toolkit'
 
+// createSlice (using the Immer library) lets us write "mutating" logic in our reducers
 const postsSlice = createSlice({
   name: 'posts',
   initialState,
@@ -52,7 +53,19 @@ import { selectPosts } from './postsSlice'
 const posts = useSelector(selectPosts)
 
 
+const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date)) // make a copy & order it by date DESC
+
+
+
+
 ------------
 If an action needs to contain a unique ID or some other random value, always generate that first and put it in the action object. REDUCERS SHOULD NEVER CALCULATE RANDOM VALUES, because that makes the results unpredictable.
 Fortunately, createSlice lets us define a "prepare callback" function when we write a reducer. The "prepare callback" function can take multiple arguments, generate random values like unique IDs, and run whatever other synchronous logic is needed to decide what values go into the action object. It should then return an object with the payload field inside. (The return object may also contain a meta field, which can be used to add extra descriptive values to the action, and an error field, which should be a boolean indicating whether this action represents some kind of error.)
+
+createSlice and createAction can accept a "prepare callback" that returns the action payload
+Reducers can contain whatever logic is needed to calculate the next state
+Action objects should contain just enough info to describe what happened
+
+it's always better to KEEP THE ACTION OBJECTS AS SMALL AS POSSIBLE, AND DO THE STATE UPDATE CALCULATIONS IN THE REDUCER. This also means that reducers can contain as much logic as necessary to calculate the new state.
+
 
