@@ -34,8 +34,18 @@ const postsSlice = createSlice({
     }
 */
 
-export const selectPosts = (state) => state.posts
-export const { addPost } = postsSlice.actions
+//                                        (action type prefix, payload creation callback)
+export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
+  const response = await client.get('/fakeApi/posts')
+  return response.data
+})
+// => 'posts/fetchPosts/pending', 'posts/fetchPosts/fulfilled'
+
+export const selectAllPosts = (state) => state.posts.posts
+export const selectPostById = (id) => (state) => state.posts.posts.find((post) => post.id === id)
+
+export const { postAdded, postUpdated, reactionAdded } = postsSlice.actions
+
 
 //ADD
 import { useDispatch } from 'react-redux'
@@ -55,7 +65,13 @@ const posts = useSelector(selectPosts)
 
 const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date)) // make a copy & order it by date DESC
 
+await dispatch(addNewPost({ title, content, userId })).unwrap()
+//Redux Toolkit adds a .unwrap() function to the returned Promise, which will return a new Promise that either has the actual action.payload value from a fulfilled action, or throws an error if it's the rejected action. This lets us handle success and failure in the component using normal try/catch logic.
 
+const postsForUser = useSelector((state) => {
+  const allPosts = selectAllPosts()
+  return allPosts.filter((post) => post.user === userId)
+})
 
 
 ------------
@@ -68,4 +84,9 @@ Action objects should contain just enough info to describe what happened
 
 it's always better to KEEP THE ACTION OBJECTS AS SMALL AS POSSIBLE, AND DO THE STATE UPDATE CALCULATIONS IN THE REDUCER. This also means that reducers can contain as much logic as necessary to calculate the new state.
 
+
+It's often a good idea to encapsulate data lookups by writing REUSABLE SELECTORS. You can also create "memoized" selectors that can help improve performance.
+Don't feel like you need to write selectors for every single field of your state. Try starting without any selectors, and add some later when you find yourself looking up the same values in many parts of your application code.
+
+Alternately, extraReducers can also be an object. This is a legacy syntax - it's still supported, but we recommend the "BUILDER CALLBACK" syntax as it works better with TypeScript.
 

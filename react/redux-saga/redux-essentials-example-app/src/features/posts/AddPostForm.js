@@ -1,26 +1,41 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { postAdded } from './postsSlice'
-import { selectUsers } from '../users/usersSlice'
+import { addNewPost } from './postsSlice'
+import { selectAllUsers } from '../users/usersSlice'
 
 const AddPostForm = () => {
   const dispatch = useDispatch()
-  const users = useSelector(selectUsers)
+  const users = useSelector(selectAllUsers)
 
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [userId, setUserId] = useState('')
+  const [addRequestStatus, setAddRequestStatus] = useState('idle')
 
   const onTitleChanged = (e) => setTitle(e.target.value)
   const onContentChanged = (e) => setContent(e.target.value)
   const onAuthorChanged = (e) => setUserId(e.target.value)
 
-  const onSave = () => {
-    if (!title || !content) return
-    dispatch(postAdded(title, content, userId))
-    setTitle('')
-    setUserId('')
-    setContent('')
+  const onSavePostClicked = async () => {
+    if (!canSave) return
+
+    try {
+      setAddRequestStatus('pending')
+      await dispatch(addNewPost({ title, content, user: userId })).unwrap()
+      setTitle('')
+      setUserId('')
+      setContent('')
+    } catch (error) {
+      console.log('Failed to save the post:', error)
+    } finally {
+      setAddRequestStatus('idle')
+    }
+
+    // if (!title || !content) return
+    // dispatch(addNewPost(title, content, userId))
+    // setTitle('')
+    // setUserId('')
+    // setContent('')
   }
 
   const usersOptions = users.map((user) => (
@@ -29,7 +44,7 @@ const AddPostForm = () => {
     </option>
   ))
 
-  const canSave = Boolean(title) && Boolean(content) && Boolean(userId)
+  const canSave = [title, content, userId].every(Boolean) && addRequestStatus === 'idle'
 
   return (
     <section>
@@ -47,7 +62,7 @@ const AddPostForm = () => {
         <label htmlFor="postContent">Post Content:</label>
         <input type="text" id="postContent" name="postContent" value={content} onChange={onContentChanged} multiple />
 
-        <button type="button" onClick={onSave} disabled={!canSave}>
+        <button type="button" onClick={onSavePostClicked} disabled={!canSave}>
           Save post
         </button>
       </form>
