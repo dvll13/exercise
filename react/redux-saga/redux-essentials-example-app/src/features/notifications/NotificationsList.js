@@ -17,7 +17,7 @@ const NotificationsList = () => {
   const renderedNotifications = notifications.map((notification) => {
     const date = parseISO(notification.date)
     const timeAgo = formatDistanceToNow(date)
-    const user = users.find((user) => user.id === notifications.user) || { name: 'Unknown user' }
+    const user = users.find((user) => user.id === notification.user) || { name: 'Unknown user' }
 
     const notificationClassname = classnames('notification', {
       new: notification.isNew

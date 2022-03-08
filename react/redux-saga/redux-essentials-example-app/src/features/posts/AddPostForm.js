@@ -22,6 +22,7 @@ const AddPostForm = () => {
     try {
       setAddRequestStatus('pending')
       await dispatch(addNewPost({ title, content, user: userId })).unwrap()
+      //Redux Toolkit adds a .unwrap() function to the returned Promise, which will return a new Promise that either has the actual action.payload value from a fulfilled action, or throws an error if it's the rejected action. This lets us handle success and failure in the component using normal try/catch logic.
       setTitle('')
       setUserId('')
       setContent('')

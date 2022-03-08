@@ -7,7 +7,7 @@ const EditPostForm = () => {
   const navigate = useNavigate()
   const params = useParams()
   const postId = params.postId
-  const post = useSelector(selectPostById(postId))
+  const post = useSelector((state) => selectPostById(state, postId))
   const dispatch = useDispatch()
 
   const [title, setTitle] = useState(post.title || '')

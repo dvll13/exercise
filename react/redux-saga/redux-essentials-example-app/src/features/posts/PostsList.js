@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectAllPosts, fetchPosts, selectPostStatus, selectPostError } from './postsSlice'
+import { selectPostIds, selectPostById, fetchPosts, selectPostStatus, selectPostError } from './postsSlice'
 import PostAuthor from './PostAuthor'
 import TimeAgo from './TimeAgo'
 import ReactionButtons from './ReactionButtons'
 import { Spinner } from '../../components/Spinner'
 
-const PostExcerpt = ({ post }) => {
+const PostExcerpt = ({ postId }) => {
+  const post = useSelector((state) => selectPostById(state, postId))
   return (
     <article className="post-excerpt">
       <h3>{post.title}</h3>
@@ -17,7 +18,7 @@ const PostExcerpt = ({ post }) => {
       </div>
       <p className="post-content">{post.content.substring(0, 100)}</p>
       <ReactionButtons post={post} />
-      <Link to={`/post/${post.id}`} className="button muted-button">
+      <Link to={`/posts/${postId}`} className="button muted-button">
         View post
       </Link>
     </article>
@@ -27,7 +28,8 @@ const PostExcerpt = ({ post }) => {
 const PostsList = () => {
   const dispatch = useDispatch()
   // const posts = useSelector((state) => state.posts)
-  const posts = useSelector(selectAllPosts)
+  // const posts = useSelector(selectAllPosts)
+  const orderedPostIds = useSelector(selectPostIds)
   const postStatus = useSelector(selectPostStatus)
   const postError = useSelector(selectPostError)
 
@@ -41,8 +43,9 @@ const PostsList = () => {
   if (postStatus === 'loading') {
     content = <Spinner text="Loading..." />
   } else if (postStatus === 'succeeded') {
-    const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date)) // make a copy & order it by datetime string DESC
-    content = orderedPosts.map((post) => <PostExcerpt post={post} key={post.id} />)
+    // const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date)) // make a copy & order it by datetime string DESC
+    // content = orderedPosts.map((post) => <PostExcerpt post={post} key={post.id} />)
+    content = orderedPostIds.map((postId) => <PostExcerpt postId={postId} key={postId} />)
   } else if (postStatus === 'failed') {
     content = <div>{postError}</div>
   }
