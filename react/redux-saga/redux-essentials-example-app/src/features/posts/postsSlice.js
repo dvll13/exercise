@@ -132,17 +132,13 @@ export const {
   selectAll: selectAllPosts,
   selectById: selectPostById,
   selectIds: selectPostIds
-  // Pass in a selector that returns the posts slice of state
 } = postsAdapter.getSelectors((state) => state.posts)
 
-// export const selectPostsByUser = createSelector([selectAllPosts, (state, userId) => userId], (posts, userId) =>
-//   posts.filter((post) => post.user === userId)
-// ) not memoized
+// createSelector API - exported from the 'reselect' lib. It generates memoized selector functions and takes one or more "input selector" functions as argument, plus an "output selector" function. When we call selectPostsByUser(state, userId), createSelector will pass all the arguments into each of our input selectors. Whatever those input selectors return becomes the arguments for the output selector.`
+//If we try calling selectPostsByUser multiple times, it will only re-run the output selector if either posts or userId has changed
 export const selectPostsByUser = createSelector([selectAllPosts, (state, userId) => userId], (posts, userId) =>
   posts.filter((post) => post.user === userId)
-) // memoized (If we try calling selectPostsByUser multiple times, it will only re-run the output selector if either posts or userId has changed)
-//createSelector takes one or more "input selector" functions as argument, plus an "output selector" function. When we call selectPostsByUser(state, userId), createSelector will pass all the arguments into each of our input selectors. Whatever those input selectors return becomes the arguments for the output selector.
-//If we try calling selectPostsByUser multiple times, it will only re-run the output selector if either posts or userId has changed
+)
 
 export const { postUpdated, reactionAdded } = postsSlice.actions
 
