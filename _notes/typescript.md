@@ -41,5 +41,10 @@ const logToDo = (id: number, title: string, completed: boolean)
   - when a function returns the 'any' type and we want to clarify the value
 
 **type inference** -  *TS* tries to figure out what type of value a variable refers to (*when the variable is initialized with a value/expression on the same line*). We should rely on it:
-  - whenever we can
+  - whenever we can  
+<br/><br/>
 
+**the 'any' type** - TS doesn't know what type the value is, we should **avoid** leaving 'any'. TS **can't** do any error checking around that value  
+
+
+**functions** - TS tries to infer the *return* value type, but the *arguments* types **must** be specified by us

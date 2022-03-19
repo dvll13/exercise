@@ -1,0 +1,2 @@
+eval $(ssh-agent)
+ssh-add "/c/Users/Marin Stefanov/.ssh/id_rsa_bitbucket"
