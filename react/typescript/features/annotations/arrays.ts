@@ -10,7 +10,7 @@ const car1 = carMakers[0] // const car1: string
 const car2 = carMakers.pop() // const car2: string
 
 // prevents incompatible values
-carMakers.push(100) // Argument of type 'number' is not assignable to parameter of type 'string'
+//carMakers.push(100) // Argument of type 'number' is not assignable to parameter of type 'string'
 
 carMakers.map((car) => {
   return car.toUpperCase() // TS helps IDE know it's string so the latter adds string autocomplete fns to `car`
