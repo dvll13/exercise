@@ -48,3 +48,12 @@ const logToDo = (id: number, title: string, completed: boolean)
 
 
 **functions** - TS tries to infer the *return* value type, but the *arguments* types **must** be specified by us
+<br/><br/>
+
+
+## CLASSES  
+
+modifiers (keywords):
+  * **public** (default) - can be called anywhere
+  * **private** - can only be called by *other methods* in *this* class
+  * **protected** - can be called by other methods in *this* class, or by other methods in *child* classes

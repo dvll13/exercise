@@ -39,7 +39,7 @@ const throwError2 = (message: string): string => {
   }
 
   return message
-}
+}s
 // we are never returning anything and there's just a change of not reaching the end of the function:
 const throwError3 = (message: string): void => {
   if (!message) {
