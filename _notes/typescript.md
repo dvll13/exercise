@@ -12,6 +12,9 @@
 
 `tsc index.ts` - ts compile and create `index.js`  
 `ts-node index.ts` - compile `ts` to `js` and run it *(index.ts => index.js; node index.js)*  
+`npm i -g parcel-bundler` - helps run TS in the browser
+  * `parcel index.html` - starts the server and when it sees a ts file, it auto converts it to js  
+<br/> <br/> 
 
 **interface** - used to define the structure of an object; some of the props in an interface can be ignored  
 
@@ -50,8 +53,17 @@ const logToDo = (id: number, title: string, completed: boolean)
 **functions** - TS tries to infer the *return* value type, but the *arguments* types **must** be specified by us
 <br/><br/>
 
+# Type definition file (*.d.ts)  
+*describes the different types of values, functions, classes that exist in a js library*  
 
-## CLASSES  
+### TS -> Type definition file -> JS Library  
+if a TDF is missing in a JS Lib (for which there's a warning), then it could be found and used from "Definitely Typed" (`@types/[js-lib-name]`)
+
+`npm i @types/faker`
+<br/><br/>
+
+
+# CLASSES  
 
 modifiers (keywords):
   * **public** (default) - can be called anywhere
