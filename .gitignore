@@ -5,5 +5,7 @@
 **/.vscode
 
 .history/
+.cache/
+dist/
 
 **/node_modules
