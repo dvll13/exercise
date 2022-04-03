@@ -8,7 +8,7 @@ const add = (a: number, b: number) => {
   return a + b
 }
 
-//better to add the return annotation because, in the following the TS won't throw an error:
+//better to add the return annotation, because in the following the TS won't throw an error:
 const subtract_wrong = (a: number, b: number) => {
   a - b
 }
@@ -39,7 +39,7 @@ const throwError2 = (message: string): string => {
   }
 
   return message
-}s
+}
 // we are never returning anything and there's just a change of not reaching the end of the function:
 const throwError3 = (message: string): void => {
   if (!message) {

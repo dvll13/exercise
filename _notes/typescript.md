@@ -24,12 +24,23 @@ interface Todo {  // this is a type
   title: string
   completed: string
 }
+
+export interface Mappable {
+  location: {
+    lat: number
+    lng: number
+  }
+  markerContent(): string
+}
   ...
 
 const todo = response.data as Todo
+export class User implements Mappable {} // implements - optional, helps TS show better placed errors
 
 const logToDo = (id: number, title: string, completed: boolean)
-```
+
+arg?: string //optional argument
+```  
 <br/><br/>  
 
 
@@ -66,6 +77,9 @@ if a TDF is missing in a JS Lib (for which there's a warning), then it could be 
 # CLASSES  
 
 modifiers (keywords):
-  * **public** (default) - can be called anywhere
   * **private** - can only be called by *other methods* in *this* class
   * **protected** - can be called by other methods in *this* class, or by other methods in *child* classes
+  * **public** *(default)* - can be called anywhere
+<br/><br/>
+
+

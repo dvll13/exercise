@@ -45,6 +45,8 @@ ARROW FUNCTIONS
   they don't have their own context (`this` points to the upper enclosing context)
   a function becomes a part of the global window context, so with an arrow function `this` points to it
 
+Arrow functions handle this in a different way from regular functions. In regular functions this keyword represented the object that called the function (the executer), which could be the window, the document, or whatever. While in the Arrow function this represents the object that defined the arrow function.
+
   const obj = {
     props: ['prop1', 'prop2'], 
     
