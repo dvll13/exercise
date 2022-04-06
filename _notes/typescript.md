@@ -14,6 +14,8 @@
 `ts-node index.ts` - compile `ts` to `js` and run it *(index.ts => index.js; node index.js)*  
 `npm i -g parcel-bundler` - helps run TS in the browser
   * `parcel index.html` - starts the server and when it sees a ts file, it auto converts it to js  
+
+`npx create-react-app <app_name> --template typescript` - create react ts app
 <br/> <br/> 
 
 **interface** - used to define the structure of an object; some of the props in an interface can be ignored  
@@ -62,7 +64,7 @@ arg?: string //optional argument
 
 
 **functions** - TS tries to infer the *return* value type, but the *arguments* types **must** be specified by us
-<br/><br/>
+<br/><br/><br/>
 
 # Type definition file (*.d.ts)  
 *describes the different types of values, functions, classes that exist in a js library*  
@@ -71,7 +73,7 @@ arg?: string //optional argument
 if a TDF is missing in a JS Lib (for which there's a warning), then it could be found and used from "Definitely Typed" (`@types/[js-lib-name]`)
 
 `npm i @types/faker`
-<br/><br/>
+<br/><br/><br/><br/>
 
 
 # CLASSES  
@@ -80,6 +82,63 @@ modifiers (keywords):
   * **private** - can only be called by *other methods* in *this* class
   * **protected** - can be called by other methods in *this* class, or by other methods in *child* classes
   * **public** *(default)* - can be called anywhere
+<br/><br/><br/><br/>
+
+
+# REACT + TS  
+
+`React.FC` ~ `React.FunctionComponent`  
+<br/>
+
+## PROPS 
+
+`Child.tsx, Parent.tsx`:
+```
+interface ChildProps {
+  color: string
+  onClick: () => void
+}
+
+export const Child = (props: ChildProps) => {...}
+export const Child = ({ color, onClick }: ChildProps) => {...}
+
+//BETTER: 
+export const ChildAsRFC: React.FC<ChildProps> = ({ color, onClick }) => {...}
+```
+
+Using the _second_ approach TS recognizes this as a _React Function Component_, so that:
+- might have props like `propTypes`, `contextTypes`, `displayName`, etc.
+- `<SomePropsInterface>` - tells what props types will be received
+- expects a `children` prop by default
 <br/><br/>
 
+## STATE  
 
+`GuestList.tsx`:
+```
+  const [guests, setGuests] = useState([]) // TS assumes that the array will be forever empty -> guests: never[]
+  const [guests, setGuests] = useState<string[]>([]) // now all is good
+
+  const [user, setUser] = useState<{ name: string; age: number } | undefined>()
+```  
+<br/><br/>
+
+## EVENTS
+`EventComponent.tsx`:
+```
+// TS knows what `e` is because it's an onChange callback
+<input type="text" onChange={(e) => console.log(e)} />
+
+==============
+
+
+// TS know doesn't know what `e` is -> e: any, so it must be specified
+const onChange = (e) => {...}
+
+<input type="text" onChange={onChange} />
+
+--------------------------------
+
+// the type can be copied from the onChange tooltip:
+const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {...}
+```
