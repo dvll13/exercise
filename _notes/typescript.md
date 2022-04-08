@@ -18,7 +18,7 @@
 `npx create-react-app <app_name> --template typescript` - create react ts app
 <br/> <br/> 
 
-**interface** - used to define the structure of an object; some of the props in an interface can be ignored  
+**interface** - used to define the _structure of an object_; some of the props in an interface can be ignored. Can be _included_ in other interfaces.  
 
 ```
 interface Todo {  // this is a type
@@ -141,4 +141,58 @@ const onChange = (e) => {...}
 
 // the type can be copied from the onChange tooltip:
 const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {...}
+
+--------------------------------
+
+const onDragStart = (event: React.DragEvent<HTMLDivElement>) => {...}
+
+<div draggable onDragStart={onDragStart}>Drag me!</div>
+```
+<br/><br/>
+
+## CLASS COMPONENTS
+`classes\UserSearch.tsx`:
+```
+interface User {
+  name: string
+  age: number
+}
+
+interface UserSearchProps {
+  users: User[]
+}
+
+interface UserSearchState {
+  name: string
+  user: User | undefined
+}
+
+class UserSearch extends Component<UserSearchProps> {
+  state: UserSearchState = {
+    name: '',
+    user: undefined
+  }
+
+  ...
+}
+```
+<br/><br/>
+
+## REFS
+`refs\UserSearch.tsx`:
+```
+const inputRef = useRef<HTMLInputElement | null>(null)
+// we tell TS that we start with a `null` value and at some point in time we could change it to HTML element 
+// the other HTML element interfaces can be seen by Ctrl+click on HTMLInputElement
+
+// CAN BE USED JUST TO AVOID THE REF ERRORS:
+const inputRef = useRef<any>(null)
+
+useEffect(() => {
+  if (!inputRef.current) {
+    return
+  }
+  
+  inputRef.current.focus()
+}, [])
 ```
