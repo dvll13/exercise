@@ -196,3 +196,203 @@ useEffect(() => {
   inputRef.current.focus()
 }, [])
 ```
+<br/><br/><br/><br/>  
+
+
+
+# REDUX
+`src\state\*`:
+```
+interface RepositoriesState {
+  loading: boolean
+  error: string | null
+  data: string[]
+}
+
+interface SearchRepositoriesAction {
+  type: ActionType.SEARCH_REPOSITORY
+}
+
+interface SearchRepositoriesSuccessAction {
+  type: ActionType.SEARCH_REPOSITORY_SUCCESS
+  payload: string[]
+}
+
+interface SearchRepositoriesErrorAction {
+  type: ActionType.SEARCH_REPOSITORY_ERROR
+  payload: string
+}
+
+type Action = SearchRepositoriesAction | SearchRepositoriesSuccessAction | SearchRepositoriesErrorAction
+
+enum ActionType {
+  SEARCH_REPOSITORY = 'search_repositories',
+  SEARCH_REPOSITORY_SUCCESS = 'search_repositories_success',
+  SEARCH_REPOSITORY_ERROR = 'search_repositories_error'
+}
+
+const reducer = (state: RepositoriesState, action: Action): RepositoriesState => {
+  //switch cases act also as type guards
+  switch (action.type) {
+    case ActionType.SEARCH_REPOSITORY:
+      return { ...state, loading: true, error: null, data: [] }
+
+    case ActionType.SEARCH_REPOSITORY_SUCCESS:
+      return { ...state, loading: false, error: null, data: action.payload }
+
+    case ActionType.SEARCH_REPOSITORY_ERROR:
+      return { ...state, loading: false, error: action.payload, data: [] }
+
+    default:
+      return state
+  }
+}
+```  
+<br/>
+
+_specific parts_:
+```
+const container = document.getElementById('root')!
+
+
+// ONE INDEX.TS FILE TO EXPORT EVERYTHING FROM state/*:
+export * from './store'
+export * as actionCreators from './action-creators'
+export * from './reducers'
+```
+
+`state\action-creators\index.ts`
+```
+import { Dispatch } from 'redux'
+import { Action } from '../actions'
+
+...
+
+export const searchRepositories = (term: string) => {
+  return async (dispatch: Dispatch<Action>) => {
+    // a fn that can only be called with an argument, matching Action; now TS knows what the type and payload below can be in each case
+
+    dispatch({ type: ActionType.SEARCH_REPOSITORY })
+    ...
+
+  }
+}
+```
+<br/>  
+
+`state\actions\index.ts`
+```
+import { ActionType } from '../action-types'
+
+interface SearchRepositoriesAction {
+  type: ActionType.SEARCH_REPOSITORY
+}
+
+interface SearchRepositoriesSuccessAction {
+  type: ActionType.SEARCH_REPOSITORY_SUCCESS
+  payload: string[]
+}
+
+interface SearchRepositoriesErrorAction {
+  type: ActionType.SEARCH_REPOSITORY_ERROR
+  payload: string
+}
+
+export type Action = SearchRepositoriesAction | SearchRepositoriesSuccessAction | SearchRepositoriesErrorAction
+```
+<br/>
+
+`state\reducers\repositoriesReducer.ts`
+```
+import { ActionType } from '../action-types'
+import { Action } from '../actions'
+
+export interface RepositoriesState {
+  loading: boolean
+  error: string | null
+  data: string[]
+}
+
+const initialState = {
+  loading: false,
+  error: null,
+  data: []
+}
+
+const reducer = (state: RepositoriesState = initialState, action: Action): RepositoriesState => {
+  //switch cases act also as type guards
+  switch (action.type) {
+    case ActionType.SEARCH_REPOSITORY:
+      return { ...state, loading: true, error: null, data: [] }
+    ...
+  }
+}
+```
+<br/>
+
+`state\reducers\index.ts`
+```
+import { combineReducers } from 'redux'
+import repositoriesReducer from './repositoriesReducer'
+
+const reducers = combineReducers({ repositories: repositoriesReducer })
+
+export default reducers
+
+export type RootState = ReturnType<typeof reducers>
+
+// ReturnType: TS builtin helper, that receives a function and returns the type that the function returns:
+/*
+  type RootState = {
+      readonly [$CombinedState]?: undefined;
+  } & {
+      repositories: RepositoriesState;
+  }
+*/
+```
+<br/>  
+
+
+`hooks\useActions.ts`
+```
+import { bindActionCreators } from 'redux'
+import { actionCreators } from '../state'
+
+export const useActions = () => {
+  const dispatch = useDispatch()
+
+  return bindActionCreators(actionCreators, dispatch)
+  // => { searchRepositories: dispatch(searchRepositories(), ... }
+}
+```
+<br/>  
+
+`hooks\useTypedSelector.ts`
+```
+import { useSelector, TypedUseSelectorHook } from 'react-redux'
+import { RootState } from '../state'
+
+export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector
+```
+<br/>
+
+`components\RepositoriesList.tsx`
+```
+import { useActions } from '../hooks/useActions'
+import { useTypedSelector } from './../hooks/useTypedSelector'
+
+const RepositoriesList: React.FC = () => {
+  const [term, setTerm] = useState('')
+  // const dispatch = useDispatch()
+  const { searchRepositories } = useActions()
+  const { data, error, loading } = useTypedSelector((state) => state.repositories)
+
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    // dispatch(actionCreators.searchRepositories(term))
+    searchRepositories(term)
+  }
+  ...
+}
+```
