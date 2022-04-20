@@ -1,0 +1,277 @@
+QUERIES (Header.js) - getFindQuery.jpg, query_priorities.jpg
+--------------------------------------------------------------------------------
+screen.
+    getBy - normal get with failed test if missing
+    queryBy - when we are testing the lack of existance of an element (retuns null instead of an error if it doesn't find the el)
+    findBy - for async getBy
+
+    getAllBy...
+
+const buttonElement = screen.getByRole(`button`, {name: /add/i})
+
+expect(screen.getByText('Search')).toBeInTheDocument(); // fails
+expect(screen.getByText('Search:')).toBeInTheDocument(); // succeeds
+expect(screen.getByText(/Search/)).toBeInTheDocument(); // succeeds
+
+const {rerender} = render(<Example prop="1" />)
+rerender(<Example prop="2" />)
+
+
+
+ASSERTIONS
+--------------------------------------------------------------------------------
+reccommended is one assertion per test
+if there's any router component inside the tested component then the latter should be mocked by wrapping it in <BrowserRouter> (ToDoFooter.js)
+
+expect(element).
+    not.toBeInTheDocument() (Header.js)
+    not.toHaveClass(`todo-item-active`)
+    toBeChecked
+    toBeDisabled
+    toBeEmpty
+    toBeEmptyDOMElement
+    toBeEnabled
+    toBeInTheDocument
+    toBeInvalid
+    toBeNull
+    toBePartiallyChecked
+    toBeRequired
+    toBeTruthy
+    toBeValid
+    toBeVisible
+    toContainElement(link)
+    toContainHTML() - to contain html tag (not recommended)
+    toHaveAttribute
+expect(onChange).toHaveBeenCalledTimes(1)
+    toHaveClass
+    toHaveDescription
+    toHaveDisplayValue
+    toHaveFocus
+    toHaveFormValues
+    toHaveLength(3)
+    toHaveStyle
+    toHaveTextContent('tasks')
+    toHaveValue
+    toMatch('Home page')
+
+expect(divElements.length).toBe(4)
+expect(paragraphElement.textContent).toBe('5 tasks left')
+
+const {getByTestId} = render(<TestElements />);
+expect(getByTestId('button-up')).not.toHaveAttribute('disabled')
+expect(getByTestId('button-down')).toBeDisabled()
+
+screen.debug()
+
+expect(button.disabled).toBe(true) // ❌
+// error message:
+//  expect(received).toBe(expected) // Object.is equality
+//
+//  Expected: true
+//  Received: false
+
+expect(button).toBeDisabled() // ✅
+// error message:
+//   Received element is not disabled:
+//     <button />
+
+
+
+EVENTS
+----------------------------------------------------------------
+fireEvent.change(inputElement, {target: {value: newValue}}) (Todo.test.js - integration tests)
+fireEvent.click(buttonElement)
+
+import userEvent from '@testing-library/user-event'
+Whenever possible, use userEvent over fireEvent when using React Testing Library. At the time of writing this, userEvent doesn't include all the features of fireEvent, however, this may change in the future.
+
+fireEvent.change(screen.getByRole('textbox'), {target: { value: 'JavaScript' }})
+expect(onChange).toHaveBeenCalledTimes(1)
+
+await userEvent.type(screen.getByRole('textbox'), 'JavaScript');
+expect(onChange).toHaveBeenCalledTimes(10)
+
+
+// ❌
+await waitFor(() => {})
+expect(window.fetch).toHaveBeenCalledWith('foo')
+expect(window.fetch).toHaveBeenCalledTimes(1)
+
+// ❌
+await waitFor(() => {
+  expect(window.fetch).toHaveBeenCalledWith('foo')
+  expect(window.fetch).toHaveBeenCalledTimes(1)
+})
+
+// ✅
+await waitFor(() => expect(window.fetch).toHaveBeenCalledWith('foo'))
+expect(window.fetch).toHaveBeenCalledTimes(1)
+
+
+Advice: put side-effects outside waitFor callbacks and reserve the callback for assertions only.
+// ❌
+await waitFor(() => {
+  fireEvent.keyDown(input, {key: 'ArrowDown'})
+  expect(screen.getAllByRole('listitem')).toHaveLength(3)
+})
+
+// ✅
+fireEvent.keyDown(input, {key: 'ArrowDown'})
+await waitFor(() => {
+  expect(screen.getAllByRole('listitem')).toHaveLength(3)
+})
+
+
+
+
+MOCKING REQUESTS
+----------------------------------------------------------------
+src/__mocks__/axios.js - names are important!
+
+NOTE:
+According to the official document(Manual Mocks),  the mock should be placed in the _mocks_ directory adjacent to node_modules (unless you configured roots to point to a folder other than the project root). Then the mock test will not fail. Another way is  inserting this directly. 
+ex)
+jest.mock("axios");
+axios.get.mockResolvedValue(mockResponse);
+
+
+MOCK EXAMPLE
+----------------------------------------------------------------
+import React from 'react'
+import { render, waitForElement, fireEvent } from '@testing-library/react'
+import axiosMock from 'axios'
+import TestAxios from './TestAxios'
+
+jest.mock('axios')
+
+it('should display a loading text', () => {
+  const { getByTestId } = render(<TestAxios />)
+  expect(getByTestId('loading')).toHaveTextContent('Loading...')
+})
+
+it('should load and display the data', async () => {
+  const url = '/greeting'
+  const { getByTestId } = render(<TestAxios url={url} />)
+
+  axiosMock.get.mockResolvedValueOnce({
+    data: { greeting: 'hello there' },
+  })
+
+  fireEvent.click(getByTestId('fetch-data'))
+
+  const greetingData = await waitForElement(() => getByTestId('show-data'))
+
+  expect(axiosMock.get).toHaveBeenCalledTimes(1)
+  expect(axiosMock.get).toHaveBeenCalledWith(url)
+  expect(greetingData).toHaveTextContent('hello there')
+})
+
+
+axios.get.mockImplementationOnce(() => Promise.resolve({data: {hits: stories}})) (AsyncTestPage.test.js)
+axios.get.mockImplementationOnce(() => Promise.reject(new Error()))
+
+
+
+HOOKS (beforeEach, beforeAll, afterEach, afterAll)
+----------------------------------------------------------------
+beforeAll - running once before all tests
+afterAll - runs once all the tests have been successfully executed
+afterAll(cleanup)
+
+
+
+SNAPSHOT
+----------------------------------------------------------------
+A snapshot allows us to save the snapshot of a given component. It helps a lot when you update or do some refactoring, and want to get or compare the changes.
+
+
+
+
+RENDER
+----------------------------------------------------------------
+render(<FollowersList />, {wrapper: BrowserRouter}):
+    {
+      container: HTMLDivElement,
+      baseElement: HTMLBodyElement {},
+      debug: [Function: debug],
+      unmount: [Function: unmount],
+      rerender: [Function: rerender],
+      asFragment: [Function: asFragment],
+      findAllByLabelText: [Function: bound ],
+      findByLabelText: [Function: bound ],
+      getAllByLabelText: [Function: bound ],
+      getByLabelText: [Function: bound ],
+      queryAllByLabelText: [Function: bound ],
+      queryByLabelText: [Function: bound ],
+      findAllByPlaceholderText: [Function: bound ],
+      findByPlaceholderText: [Function: bound ],
+      getAllByPlaceholderText: [Function: bound ],
+      getByPlaceholderText: [Function: bound ],
+      queryAllByPlaceholderText: [Function: bound ],
+      queryByPlaceholderText: [Function: bound ],
+      findAllByText: [Function: bound ],
+      findByText: [Function: bound ],
+      getAllByText: [Function: bound ],
+      getByText: [Function: bound ],
+      queryAllByText: [Function: bound ],
+      queryByText: [Function: bound ],
+      findAllByDisplayValue: [Function: bound ],
+      findByDisplayValue: [Function: bound ],
+      getAllByDisplayValue: [Function: bound ],
+      getByDisplayValue: [Function: bound ],
+      queryAllByDisplayValue: [Function: bound ],
+      queryByDisplayValue: [Function: bound ],
+      findAllByAltText: [Function: bound ],
+      findByAltText: [Function: bound ],
+      getAllByAltText: [Function: bound ],
+      getByAltText: [Function: bound ],
+      queryAllByAltText: [Function: bound ],
+      queryByAltText: [Function: bound ],
+      findAllByTitle: [Function: bound ],
+      findByTitle: [Function: bound ],
+      getAllByTitle: [Function: bound ],
+      getByTitle: [Function: bound ],
+      queryAllByTitle: [Function: bound ],
+      queryByTitle: [Function: bound ],
+      findAllByRole: [Function: bound ],
+      findByRole: [Function: bound ],
+      getAllByRole: [Function: bound ],
+      getByRole: [Function: bound ],
+      queryAllByRole: [Function: bound ],
+      queryByRole: [Function: bound ],
+      findAllByTestId: [Function: bound ],
+      findByTestId: [Function: bound ],
+      getAllByTestId: [Function: bound ],
+      getByTestId: [Function: bound ],
+      queryAllByTestId: [Function: bound ],
+      queryByTestId: [Function: bound ]
+    }
+
+const { container, getByTestId } = renderWithRouter(<TestRouter />) 
+expect(container.innerHTML).toMatch('John Doe')
+
+
+
+
+REACT ROUTER
+-------------------------------
+import { createMemoryHistory } from 'history'
+import TestRouter from './TestRouter'
+
+
+const renderWithRouter = (component) => {
+    const history = createMemoryHistory()
+    return { 
+    ...render (
+    <Router history={history}>
+        {component}
+    </Router>
+    )
+  }
+}
+
+TEST:
+const link = getByTestId('home-link')
+
+expect(container.innerHTML).toMatch('Home page')
+expect(navbar).toContainElement(link)
