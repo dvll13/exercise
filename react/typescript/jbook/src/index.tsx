@@ -45,6 +45,12 @@ const App = () => {
     console.log(result)
 
     setCode(result.outputFiles[0].text)
+
+    try {
+      eval(result.outputFiles[0].text)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -60,6 +66,7 @@ const App = () => {
         </button>
       </div>
       <pre>{code}</pre>
+      <iframe src="/test.html" title="test title" sandbox="" />
     </div>
   )
 }

@@ -191,7 +191,7 @@ console.log(last);   // { value: 3, done: true }
 
 
 # Promises
-_JavaScript is a single-threaded language supporting synchronous and asynchronous operations. And promises are just a more elegant way to deal with these asynchronous tasks than callbacks. And a very handy way to avoid callback hell._
+_JavaScript is a **single-threaded** language supporting synchronous and asynchronous operations. And promises are just a more elegant way to deal with these asynchronous tasks than callbacks. And a very handy way to avoid callback hell._
 
 _A promise is an object representing the result of asynchronous tasks which are tasks that don’t block the execution until it is finished. This approach is great for time consuming tasks._  
 
@@ -206,6 +206,7 @@ promise.then(
   error => alert(error) // doesn't run
 );
 ```
+<br/><br/>
 
 
 # Exponential operator (ES7)
@@ -215,3 +216,33 @@ let b = 3 ** 3
 console.log(a === Math.pow(2, 3)) // true
 console.log(b === Math.pow(3, 3)) // true
 ```
+<br/><br/>
+
+
+# Asynchronicity in a try-catch block
+```
+try {
+  setTimeout(() => {
+    console.bla()
+  }, 100)
+} catch (e) {
+  ...
+}
+```
+
+_The try-catch block watches for an error in the block within only in the instant that it's executed. As soon as that code is executed, we exit the try-catch block and everything continues as usual. So when the ***asynchronously*** executed function runs, we are already outside of the try-catch block, which leads to an **Uncaught Error**_
+<br/><br/>
+
+
+# IFRAMES
+
+**Direct access between frames is allowed when:**  
+ * the iframe element does not have a `sandbox` property or has a `'sandbox="allow-same-origin"` property  
+
+**AND**
+
+ * we fetch the _parent html doc_ and the _frame html doc_ from the **exact same**:
+   * domain
+   * port
+   * protocol  
+
