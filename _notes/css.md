@@ -1,0 +1,11 @@
+```
+.editor-wrapper .button-format {
+  ...
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.editor-wrapper:hover .button-format {
+  opacity: 1;
+}
+```

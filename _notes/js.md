@@ -245,4 +245,28 @@ _The try-catch block watches for an error in the block within only in the instan
    * domain
    * port
    * protocol  
+<br/>
 
+`srcDoc` attribute - specifies the HTML content of the page to show in the inline frame. _Caution: its length could be limited/not allowed in some browsers._
+
+```
+<iframe src="data:...untrusted content" sandbox /> <- Secure in modern browsers, insecure in legacy browsers with no sandbox support
+
+<iframe srcDoc="...untrusted content" sandbox /> <- Secure in modern browsers, secure (though non-functional) in legacy browsers
+```
+
+`window.postMessage(message, domainsToReceiveIt)` - safely enables **cross-origin communication** between Window objects; e.g., between a page and a pop-up that it spawned, or between a page and an iframe embedded within it.
+
+```
+// in the parent:
+window.addEventListener('message', event => console.log(event), false)
+
+// in the child iframe:
+parent.postMessage('hello!', '*')
+
+// log from the parent's listener:
+MessageEvent {
+  ...
+  data: 'hello!'
+}
+```

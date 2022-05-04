@@ -64,6 +64,9 @@ arg?: string //optional argument
 
 
 **functions** - TS tries to infer the *return* value type, but the *arguments* types **must** be specified by us
+
+
+`// @ts-ignore` - ignore TS errors on the next line
 <br/><br/><br/>
 
 # Type definition file (*.d.ts)  
@@ -110,6 +113,14 @@ Using the _second_ approach TS recognizes this as a _React Function Component_, 
 - might have props like `propTypes`, `contextTypes`, `displayName`, etc.
 - `<SomePropsInterface>` - tells what props types will be received
 - expects a `children` prop by default
+
+**Important note:** after _react 18.0.0_ they make you include children in each FC interface.
+```
+interface ResizableProps {
+  direction: 'horizontal' | 'vertical'
+  children?: React.ReactNode
+}
+```
 <br/><br/>
 
 ## STATE  
