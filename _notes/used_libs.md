@@ -1,24 +1,28 @@
 # CSS
 
-* `bulmaswatch` (`exercise\react\typescript\jbook`) - _Bulma_ is a free, open source framework that provides ready-to-use frontend components that you can easily combine to build responsive web interfaces. _bulmaswatch = bulma + additional themes_ 
+* `bulmaswatch` ([react/typescript/jbook](..%5Creact%5Ctypescript%5Cjbook%5Csrc%5Cindex.tsx)) - _Bulma_ is a free, open source framework that provides ready-to-use frontend components that you can easily combine to build responsive web interfaces. _bulmaswatch = bulma + additional themes_ 
 <br/><br/><br/>
 
 
 
 # REACT
 
-* `@monaco-editor/react` (`exercise\react\typescript\jbook`) - The Monaco Editor is the code editor that powers VS Code. This editor can be used in any React application without needing to use webpack (or rollup/parcel/etc) configuration files / plugins
+* `@monaco-editor/react` ([react/typescript/jbook](..%5Creact%5Ctypescript%5Cjbook%5Csrc%5Ccomponents%5Ccode-editor.tsx)) - The Monaco Editor is the code editor that powers VS Code. This editor can be used in any React application without needing to use webpack (or rollup/parcel/etc) configuration files / plugins
   
-* `localforage` (`exercise\react\typescript\jbook`) - localForage is a fast and simple storage library for JavaScript. localForage improves the offline experience of your web app by using asynchronous storage (`IndexedDB` or `WebSQL`) with a simple, localStorage-like API
+* `localforage` ([react/typescript/jbook](..%5Creact%5Ctypescript%5Cjbook%5Csrc%5Cbundler%5Cplugins%5Cfetch-plugin.ts)) - localForage is a fast and simple storage library for JavaScript. localForage improves the offline experience of your web app by using asynchronous storage (`IndexedDB` or `WebSQL`) with a simple, localStorage-like API
 
-* `react-resizable` (`exercise\react\typescript\jbook`) - a simple widget that can be resizable by one or more handles  
+* `react-resizable` ([react/typescript/jbook](..%5Creact%5Ctypescript%5Cjbook%5Csrc%5Ccomponents%5Cresizable.tsx)) - a simple widget that can be resizable by one or more handles  
+
+* `immer` ([react/typescript/jbook](..%5Creact%5Ctypescript%5Cjbook%5Csrc%5Cstate%5Creducers%5CcellsReducer.ts)) - Immer (German for: always) is a tiny package that allows you to work with immutable state in a more convenient way.
+
+
 <br/><br/><br/>
 
 
 
 # BUNDLERS
 
-* `esbuild-wasm` (`exercise\react\typescript\jbook`) - This is the cross-platform WebAssembly binary for `esbuild`, a JavaScript bundler and minifier.
+* `esbuild-wasm` ([react/typescript/jbook](..%5Creact%5Ctypescript%5Cjbook%5Csrc)) - This is the cross-platform WebAssembly binary for `esbuild`, a JavaScript bundler and minifier.
 
 
 # NPM

@@ -10,8 +10,8 @@ const bundle = async (rawCode: string) => {
   //   target: 'es2015'
   // })
 
-  console.log('bundling started...')
-  console.time('bundling')
+  console.log('Bundling started...')
+  console.time('Bundling time')
   if (!service) {
     service = await esbuild.startService({
       worker: true,
@@ -19,20 +19,31 @@ const bundle = async (rawCode: string) => {
     })
   }
 
-  const result = await service.build({
-    entryPoints: ['index.js'],
-    bundle: true,
-    write: false,
-    plugins: [unpkgPathPlugin(), fetchPlugin(rawCode)],
-    define: {
-      'process.env.NODE_ENV': '"production"', // fixes some warnings and now some dev code gets excluded from the bundle
-      global: 'window'
-    }
-  })
-  console.timeEnd('bundling')
-  console.log('bundling result:', result)
+  try {
+    const result = await service.build({
+      entryPoints: ['index.js'],
+      bundle: true,
+      write: false,
+      plugins: [unpkgPathPlugin(), fetchPlugin(rawCode)],
+      define: {
+        'process.env.NODE_ENV': '"production"', // fixes some warnings and now some dev code gets excluded from the bundle
+        global: 'window'
+      }
+    })
+    console.log('Bundling result:', result)
 
-  return result.outputFiles[0].text
+    return {
+      code: result.outputFiles[0].text,
+      error: ''
+    }
+  } catch (error: any) {
+    return {
+      code: '',
+      error: error.message
+    }
+  } finally {
+    console.timeEnd('Bundling time')
+  }
 }
 
 export default bundle

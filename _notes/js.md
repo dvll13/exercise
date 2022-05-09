@@ -270,3 +270,47 @@ MessageEvent {
   data: 'hello!'
 }
 ```
+<br/><br/>
+
+
+# DOM
+
+`container.current.contains(event.target)` - check if an element is inside another element
+<br/><br/>
+
+
+# USEFUL
+
+## Debounce by useEffect
+```
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      const output = await bundle(input)
+      setCode(output)
+    }, 1000)
+
+    // the cleanup fn will be called the next time the useEffect is called and will clear the previous timer
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [input])
+```
+<br/>
+
+
+## Catching uncaught errors:
+```
+// e.g. missed ASYNC errors
+window.addEventListener('error', (event) => {
+  event.preventDefault() // so the browser doesn't print the error
+  console.log('[ERROR]', event.error.message)
+})
+```
+<br/>
+
+
+
+## Random ID generation
+```
+const randomId = () => Math.random().toString(36).substring(2, 7)
+```

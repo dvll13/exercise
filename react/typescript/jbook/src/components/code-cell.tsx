@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import bundle from '../bundler'
 import CodeEditor from './code-editor'
 import Preview from './preview'
@@ -6,12 +6,21 @@ import Resizable from './resizable'
 
 const CodeCell = () => {
   const [code, setCode] = useState('')
+  const [error, setError] = useState('')
   const [input, setInput] = useState('')
 
-  const onSubmitClick = async () => {
-    const output = await bundle(input)
-    setCode(output)
-  }
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      const output = await bundle(input)
+      setCode(output.code)
+      setError(output.error)
+    }, 1000)
+
+    // the cleanup fn will be called the next time the useEffect is called and will clear the previous timer
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [input])
 
   return (
     <Resizable direction="vertical">
@@ -24,7 +33,7 @@ const CodeCell = () => {
             }}
           />
         </Resizable>
-        <Preview code={code} />
+        <Preview code={code} bundlingError={error} />
       </div>
     </Resizable>
   )

@@ -8,13 +8,29 @@ interface ResizableProps {
 }
 
 const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
+  const getMaxWidth = () => window.innerWidth * 0.75
   const [innerWidth, setInnerWidth] = useState(window.innerWidth)
   const [innerHeight, setInnerHeight] = useState(window.innerHeight)
+  const [width, setWidth] = useState(getMaxWidth())
 
   useEffect(() => {
+    let timer: any
+
     const listener = () => {
-      setInnerWidth(window.innerWidth)
-      setInnerHeight(window.innerHeight)
+      // debounce technique
+      if (timer) {
+        clearTimeout(timer)
+      }
+
+      timer = setTimeout(() => {
+        setInnerWidth(window.innerWidth)
+        setInnerHeight(window.innerHeight)
+        // workaround for a ResizableBox bug where maxConstraints don't get respected
+        const maxWidth = getMaxWidth()
+        if (maxWidth < width) {
+          setWidth(maxWidth)
+        }
+      }, 100)
     }
 
     window.addEventListener('resize', listener)
@@ -22,6 +38,7 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
     return () => {
       window.removeEventListener('resize', listener)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const resizableProps: ResizableBoxProps =
@@ -29,10 +46,13 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
       ? {
           className: 'resize-horizontal',
           height: Infinity,
-          width: window.innerWidth * 0.75,
+          width,
           resizeHandles: ['e'],
-          maxConstraints: [innerWidth * 0.75, Infinity],
-          minConstraints: [innerWidth * 0.2, Infinity]
+          maxConstraints: [getMaxWidth(), Infinity],
+          minConstraints: [innerWidth * 0.2, Infinity],
+          onResizeStop: (event, data) => {
+            setWidth(data.size.width) // so the width doesn't get reset after window resize
+          }
         }
       : {
           height: 300,

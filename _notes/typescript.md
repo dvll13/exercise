@@ -67,6 +67,16 @@ arg?: string //optional argument
 
 
 `// @ts-ignore` - ignore TS errors on the next line
+
+
+> element `as` type
+```
+editingContainer.current.contains(event.target)
+// => TS error: Argument of type 'EventTarget' is not assignable to parameter of type 'Node'.
+
+// WORKAROUND (when we are sure that elements are compatible):
+editingContainer.current.contains(event.target as Node)
+```
 <br/><br/><br/>
 
 # Type definition file (*.d.ts)  
@@ -112,9 +122,7 @@ export const ChildAsRFC: React.FC<ChildProps> = ({ color, onClick }) => {...}
 Using the _second_ approach TS recognizes this as a _React Function Component_, so that:
 - might have props like `propTypes`, `contextTypes`, `displayName`, etc.
 - `<SomePropsInterface>` - tells what props types will be received
-- expects a `children` prop by default
-
-**Important note:** after _react 18.0.0_ they make you include children in each FC interface.
+- _expects a `children` prop by default - after **react 18** they make you include children in each FC interface:_
 ```
 interface ResizableProps {
   direction: 'horizontal' | 'vertical'
