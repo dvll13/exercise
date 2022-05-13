@@ -27,6 +27,14 @@ interface Todo {  // this is a type
   completed: string
 }
 
+interface BundlesState {
+  [key: string]: {
+    loading: boolean
+    code: string
+    error: string
+  }
+}
+
 export interface Mappable {
   location: {
     lat: number
@@ -56,8 +64,7 @@ arg?: string //optional argument
   - when we want the var to have a type that can be inferred
   - when a function returns the 'any' type and we want to clarify the value
 
-**type inference** -  *TS* tries to figure out what type of value a variable refers to (*when the variable is initialized with a value/expression on the same line*). We should rely on it:
-  - whenever we can  
+**type inference** -  *TS* tries to figure out what type of value a variable refers to (*when the variable is initialized with a value/expression on the same line*). **We should rely on it whenever we can**  
 <br/><br/>
 
 **the 'any' type** - TS doesn't know what type the value is, we should **avoid** leaving 'any'. TS **can't** do any error checking around that value  
@@ -69,7 +76,7 @@ arg?: string //optional argument
 `// @ts-ignore` - ignore TS errors on the next line
 
 
-> element `as` type
+> element `as` type:
 ```
 editingContainer.current.contains(event.target)
 // => TS error: Argument of type 'EventTarget' is not assignable to parameter of type 'Node'.
@@ -92,9 +99,9 @@ if a TDF is missing in a JS Lib (for which there's a warning), then it could be 
 # CLASSES  
 
 modifiers (keywords):
-  * **private** - can only be called by *other methods* in *this* class
-  * **protected** - can be called by other methods in *this* class, or by other methods in *child* classes
-  * **public** *(default)* - can be called anywhere
+  * **private** - can only be called by other methods in _this class_
+  * **protected** - can be called by other methods in _this class_, or by other methods in _child classes_
+  * **public** *(default)* - can be called _anywhere_
 <br/><br/><br/><br/>
 
 
@@ -105,7 +112,7 @@ modifiers (keywords):
 
 ## PROPS 
 
-`Child.tsx, Parent.tsx`:
+[react\typescript\2_react-ts\src\state](..%5Creact%5Ctypescript%5C2_react-ts%5Csrc%5Cprops):
 ```
 interface ChildProps {
   color: string
@@ -133,7 +140,7 @@ interface ResizableProps {
 
 ## STATE  
 
-`GuestList.tsx`:
+[react\typescript\2_react-ts\src\state\GuestList.tsx](..%5Creact%5Ctypescript%5C2_react-ts%5Csrc%5Cstate%5CGuestList.tsx):
 ```
   const [guests, setGuests] = useState([]) // TS assumes that the array will be forever empty -> guests: never[]
   const [guests, setGuests] = useState<string[]>([]) // now all is good
@@ -143,7 +150,7 @@ interface ResizableProps {
 <br/><br/>
 
 ## EVENTS
-`EventComponent.tsx`:
+[react\typescript\2_react-ts\src\events\EventComponent.tsx](..%5Creact%5Ctypescript%5C2_react-ts%5Csrc%5Cevents%5CEventComponent.tsx):
 ```
 // TS knows what `e` is because it's an onChange callback
 <input type="text" onChange={(e) => console.log(e)} />
@@ -170,7 +177,7 @@ const onDragStart = (event: React.DragEvent<HTMLDivElement>) => {...}
 <br/><br/>
 
 ## CLASS COMPONENTS
-`classes\UserSearch.tsx`:
+[react\typescript\2_react-ts\src\classes\UserSearch.tsx](..%5Creact%5Ctypescript%5C2_react-ts%5Csrc%5Cclasses%5CUserSearch.tsx):
 ```
 interface User {
   name: string
@@ -198,7 +205,7 @@ class UserSearch extends Component<UserSearchProps> {
 <br/><br/>
 
 ## REFS
-`refs\UserSearch.tsx`:
+[react\typescript\2_react-ts\src\refs\UserSearch.tsx](..%5Creact%5Ctypescript%5C2_react-ts%5Csrc%5Crefs%5CUserSearch.tsx):
 ```
 const inputRef = useRef<HTMLInputElement | null>(null)
 // we tell TS that we start with a `null` value and at some point in time we could change it to HTML element 
@@ -220,7 +227,7 @@ useEffect(() => {
 
 
 # REDUX
-`src\state\*`:
+[react\typescript\3_redux-ts\src\state](..%5Creact%5Ctypescript%5C3_redux-ts%5Csrc%5Cstate):
 ```
 interface RepositoriesState {
   loading: boolean
@@ -269,18 +276,18 @@ const reducer = (state: RepositoriesState, action: Action): RepositoriesState =>
 ```  
 <br/>
 
-_specific parts_:
+## specific parts:
 ```
 const container = document.getElementById('root')!
 
 
-// ONE INDEX.TS FILE TO EXPORT EVERYTHING FROM state/*:
+// !!! ONE INDEX.TS FILE TO EXPORT EVERYTHING FROM state/*:
 export * from './store'
 export * as actionCreators from './action-creators'
 export * from './reducers'
 ```
 
-`state\action-creators\index.ts`
+[react\typescript\3_redux-ts\src\state\action-creators\index.ts](..%5Creact%5Ctypescript%5C3_redux-ts%5Csrc%5Cstate%5Caction-creators%5Cindex.ts)
 ```
 import { Dispatch } from 'redux'
 import { Action } from '../actions'
@@ -299,7 +306,7 @@ export const searchRepositories = (term: string) => {
 ```
 <br/>  
 
-`state\actions\index.ts`
+[react\typescript\3_redux-ts\src\state\actions\index.ts](..%5Creact%5Ctypescript%5C3_redux-ts%5Csrc%5Cstate%5Cactions%5Cindex.ts)
 ```
 import { ActionType } from '../action-types'
 
@@ -321,7 +328,7 @@ export type Action = SearchRepositoriesAction | SearchRepositoriesSuccessAction 
 ```
 <br/>
 
-`state\reducers\repositoriesReducer.ts`
+[react\typescript\3_redux-ts\src\state\reducers\repositoriesReducer.ts](..%5Creact%5Ctypescript%5C3_redux-ts%5Csrc%5Cstate%5Creducers%5CrepositoriesReducer.ts)
 ```
 import { ActionType } from '../action-types'
 import { Action } from '../actions'
@@ -349,7 +356,7 @@ const reducer = (state: RepositoriesState = initialState, action: Action): Repos
 ```
 <br/>
 
-`state\reducers\index.ts`
+[react\typescript\3_redux-ts\src\state\reducers\index.ts](..%5Creact%5Ctypescript%5C3_redux-ts%5Csrc%5Cstate%5Creducers%5Cindex.ts)
 ```
 import { combineReducers } from 'redux'
 import repositoriesReducer from './repositoriesReducer'
@@ -372,7 +379,7 @@ export type RootState = ReturnType<typeof reducers>
 <br/>  
 
 
-`hooks\useActions.ts`
+[react\typescript\3_redux-ts\src\hooks\useActions.ts](..%5Creact%5Ctypescript%5C3_redux-ts%5Csrc%5Chooks%5CuseActions.ts)
 ```
 import { bindActionCreators } from 'redux'
 import { actionCreators } from '../state'
@@ -386,7 +393,8 @@ export const useActions = () => {
 ```
 <br/>  
 
-`hooks\useTypedSelector.ts`
+
+[react\typescript\3_redux-ts\src\hooks\useTypedSelector.ts](..%5Creact%5Ctypescript%5C3_redux-ts%5Csrc%5Chooks%5CuseTypedSelector.ts)
 ```
 import { useSelector, TypedUseSelectorHook } from 'react-redux'
 import { RootState } from '../state'
@@ -395,7 +403,8 @@ export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector
 ```
 <br/>
 
-`components\RepositoriesList.tsx`
+
+[react\typescript\3_redux-ts\src\components\RepositoriesList.tsx](..%5Creact%5Ctypescript%5C3_redux-ts%5Csrc%5Ccomponents%5CRepositoriesList.tsx)
 ```
 import { useActions } from '../hooks/useActions'
 import { useTypedSelector } from './../hooks/useTypedSelector'

@@ -1,39 +1,59 @@
-import { useState, useEffect } from 'react'
-import bundle from '../bundler'
+import './code-cell.css'
+import { useEffect } from 'react'
+import { useActions } from '../hooks/use-actions'
+import { useTypedSelector } from '../hooks/use-typed-selector'
+import { Cell } from '../state'
 import CodeEditor from './code-editor'
 import Preview from './preview'
 import Resizable from './resizable'
 
-const CodeCell = () => {
-  const [code, setCode] = useState('')
-  const [error, setError] = useState('')
-  const [input, setInput] = useState('')
+interface CodeCellProps {
+  cell: Cell
+}
+
+const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
+  const { updateCell, createBundle } = useActions()
+  const bundle = useTypedSelector((state) => state.bundles[cell.id])
 
   useEffect(() => {
+    if (!bundle) {
+      createBundle(cell.id, cell.content)
+      return
+    }
+
     const timer = setTimeout(async () => {
-      const output = await bundle(input)
-      setCode(output.code)
-      setError(output.error)
+      createBundle(cell.id, cell.content)
     }, 1000)
 
     // the cleanup fn will be called the next time the useEffect is called and will clear the previous timer
     return () => {
       clearTimeout(timer)
     }
-  }, [input])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cell.content, cell.id, createBundle])
 
   return (
     <Resizable direction="vertical">
-      <div style={{ height: '100%', display: 'flex', flexDirection: 'row' }}>
+      <div style={{ height: 'calc(100% - 10px)', display: 'flex', flexDirection: 'row' }}>
         <Resizable direction="horizontal">
           <CodeEditor
-            initialValue="const a = 1"
+            initialValue={cell.content}
             onChange={(value) => {
-              setInput(value)
+              updateCell(cell.id, value)
             }}
           />
         </Resizable>
-        <Preview code={code} bundlingError={error} />
+        <div className="progress-wrapper">
+          {!bundle || bundle.loading ? (
+            <div className="progress-cover">
+              <progress className="progress is-small is-primary" max="100">
+                Loading
+              </progress>
+            </div>
+          ) : (
+            <Preview code={bundle.code} bundlingError={bundle.error} />
+          )}
+        </div>
       </div>
     </Resizable>
   )

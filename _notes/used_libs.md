@@ -1,6 +1,8 @@
 # CSS
 
 * `bulmaswatch` ([react/typescript/jbook](..%5Creact%5Ctypescript%5Cjbook%5Csrc%5Cindex.tsx)) - _Bulma_ is a free, open source framework that provides ready-to-use frontend components that you can easily combine to build responsive web interfaces. _bulmaswatch = bulma + additional themes_ 
+
+* `@fortawesome/fontawesome-free` [react\typescript\jbook\src\index.tsx](..%5Creact%5Ctypescript%5Cjbook%5Csrc%5Cindex.tsx) - Font Awesome is the Internet's icon library and toolkit
 <br/><br/><br/>
 
 
@@ -24,8 +26,12 @@
 
 * `esbuild-wasm` ([react/typescript/jbook](..%5Creact%5Ctypescript%5Cjbook%5Csrc)) - This is the cross-platform WebAssembly binary for `esbuild`, a JavaScript bundler and minifier.
 
+* `parcel-bundler` - helps run TS in the browser (`parcel index.html` - starts the server and when it sees a ts file, it auto converts it to js)
+
+
 
 # NPM
+* `ts-node` - compile ts to js and run it (`ts-node index.ts` -> `index.ts => index.js; node index.js`)
 <br/><br/><br/>
 
 

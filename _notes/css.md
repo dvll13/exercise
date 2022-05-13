@@ -8,6 +8,19 @@
 .editor-wrapper:hover .button-format {
   opacity: 1;
 }
+
+---
+
+.add-cell {
+  opacity: 0;
+  transition: opacity 0.3s ease-in 0.1s;
+    <!-- 
+      transition-property: opacity;
+      transition-duration: 0.3s;
+      transition-timing-function: ease-in;
+      transition-delay: 0.1s;
+    -->
+}
 ```
 
 _**Workaround for css conflicts:** 3rd party component has the same className inside (.title), that bulma uses, so some bulma styles should be unset to prevent breaking the component:_

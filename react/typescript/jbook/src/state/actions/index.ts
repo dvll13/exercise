@@ -1,5 +1,6 @@
 import { ActionType } from '../action-types'
 import { CellTypes } from '../cell'
+import bundle from './../../bundler/index'
 
 export type Direction = 'up' | 'down'
 
@@ -16,8 +17,8 @@ export interface DeleteCellAction {
   payload: string
 }
 
-export interface InsertCellBeforeAction {
-  type: ActionType.INSERT_CELL_BEFORE
+export interface InsertCellAfterAction {
+  type: ActionType.INSERT_CELL_AFTER
   payload: {
     id: string | null
     type: CellTypes
@@ -32,4 +33,28 @@ export interface UpdateCellAction {
   }
 }
 
-export type Action = MoveCellAction | DeleteCellAction | InsertCellBeforeAction | UpdateCellAction
+export interface BundleStartAction {
+  type: ActionType.BUNDLE_START
+  payload: {
+    cellId: string
+  }
+}
+
+export interface BundleCompleteAction {
+  type: ActionType.BUNDLE_COMPLETE
+  payload: {
+    cellId: string
+    bundle: {
+      code: string
+      error: string
+    }
+  }
+}
+
+export type Action =
+  | MoveCellAction
+  | DeleteCellAction
+  | InsertCellAfterAction
+  | UpdateCellAction
+  | BundleStartAction
+  | BundleCompleteAction

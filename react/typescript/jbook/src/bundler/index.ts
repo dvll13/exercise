@@ -10,8 +10,8 @@ const bundle = async (rawCode: string) => {
   //   target: 'es2015'
   // })
 
-  console.log('Bundling started...')
-  console.time('Bundling time')
+  // console.log('Bundling started...')
+  // console.time('Bundling time')
   if (!service) {
     service = await esbuild.startService({
       worker: true,
@@ -42,7 +42,7 @@ const bundle = async (rawCode: string) => {
       error: error.message
     }
   } finally {
-    console.timeEnd('Bundling time')
+    // console.timeEnd('Bundling time')
   }
 }
 

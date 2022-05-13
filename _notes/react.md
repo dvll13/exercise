@@ -850,8 +850,16 @@ ALTERNATIVES:
 }
 
 
-{ // REACT HOOKS
+# REACT HOOKS
+> In the **dependency array** we have to list things that are used in the effect function and are _declared in the component_ or _received as a prop_.
+```
+export const useActions = () => {
+  const dispatch = useDispatch()
 
+  return useMemo(() => {
+    return bindActionCreators(actionCreators, dispatch)
+  }, [dispatch])
+```
     //REUSING hooks in different components
     //The state of these components is completely independent. Hooks are a way to reuse stateful logic, not state itself. In fact, each call to a Hook has a completely isolated state — so you can even use the same custom Hook twice in one component.
     //You can write custom Hooks that cover a wide range of use cases like form handling, animation, declarative subscriptions, timers,
