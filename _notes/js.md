@@ -33,7 +33,8 @@ console.log(add()) // 4
 
 
 # VARS
-_let, const -> scoped in the current context (block-scoped variables), unlike var_
+- `let`, `const` -> scoped in the current context (block-scoped variables), unlike `var`  
+- `var` variables can be redeclared multiple times without causing an error, unlike `let` and `const`
 <br/><br/>
 
 

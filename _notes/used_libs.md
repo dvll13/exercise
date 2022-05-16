@@ -31,6 +31,14 @@
 
 
 # NPM
+* `commander` - 
+
+* `lerna` ([exercise\react\typescript\jbook\packages](..%5Creact%5Ctypescript%5Cjbook)) - a tool for managing multi-package projects  
+  * `lerna init` - init a lerna project
+  * `lerna add` - __must__ be used instead of `npm i` so the links between modules wouldn't get broken.  
+    * `lerna add module-1` - install `module-1` in all packages
+    * `lerna add module-1 --scope=module-2` - installs `module-1` to `module-2`  
+
 * `ts-node` - compile ts to js and run it (`ts-node index.ts` -> `index.ts => index.js; node index.js`)
 <br/><br/><br/>
 

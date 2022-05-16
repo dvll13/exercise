@@ -28,7 +28,10 @@ const bundle = async (rawCode: string) => {
       define: {
         'process.env.NODE_ENV': '"production"', // fixes some warnings and now some dev code gets excluded from the bundle
         global: 'window'
-      }
+      },
+      // to avoid collisions with manually imported react by the user (ESBuild will then intelligently assign one react package to two variables (React and _React))
+      jsxFactory: '_React.createElement',
+      jsxFragment: '_React.Fragment'
     })
     console.log('Bundling result:', result)
 

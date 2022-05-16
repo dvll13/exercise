@@ -6,6 +6,7 @@ import { Cell } from '../state'
 import CodeEditor from './code-editor'
 import Preview from './preview'
 import Resizable from './resizable'
+import { useCumulativeCode } from './../hooks/use-cumulative-code'
 
 interface CodeCellProps {
   cell: Cell
@@ -14,15 +15,16 @@ interface CodeCellProps {
 const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
   const { updateCell, createBundle } = useActions()
   const bundle = useTypedSelector((state) => state.bundles[cell.id])
+  const cumulativeCode = useCumulativeCode(cell.id)
 
   useEffect(() => {
     if (!bundle) {
-      createBundle(cell.id, cell.content)
+      createBundle(cell.id, cumulativeCode)
       return
     }
 
     const timer = setTimeout(async () => {
-      createBundle(cell.id, cell.content)
+      createBundle(cell.id, cumulativeCode)
     }, 1000)
 
     // the cleanup fn will be called the next time the useEffect is called and will clear the previous timer
@@ -30,7 +32,7 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
       clearTimeout(timer)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cell.content, cell.id, createBundle])
+  }, [cumulativeCode, cell.id, createBundle])
 
   return (
     <Resizable direction="vertical">

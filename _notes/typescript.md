@@ -84,6 +84,8 @@ editingContainer.current.contains(event.target)
 // WORKAROUND (when we are sure that elements are compatible):
 editingContainer.current.contains(event.target as Node)
 ```
+
+> It is **not recommended to export** TS package because it could be imported in a JS package and this will cause errors.
 <br/><br/><br/>
 
 # Type definition file (*.d.ts)  
