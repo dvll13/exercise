@@ -7,5 +7,6 @@
 .history/
 .cache/
 dist/
+target/
 
 **/node_modules

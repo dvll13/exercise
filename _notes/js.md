@@ -1,6 +1,6 @@
 # CLOSURE
 _allows an inner function to to have access to the outer function's variables and use them as "private" ones_
-```
+```js
 const getAdd = () => {
   let foo = 1
   
@@ -50,7 +50,7 @@ Arrow functions handle `this` in a different way from regular functions:
 
 In short , in arrow function this represents the **definition** context while in regular function this represents the **execution** context.
 
-```
+```js
 const obj = {
   props: ['prop1', 'prop2'], 
   
@@ -77,7 +77,7 @@ Can be also used with a **default** value:
 
 
 # RESTRUCTURING
-```
+```js
 const adventureClimbing = {
   name: 'Everest',
   height: 8848,
@@ -98,7 +98,7 @@ _The **class** keyword in Javascript is just a Syntactic sugar. And under the ho
 
 
 ## Function analogue:
-```
+```js
 function Holiday(destination, days) {
   this.destination = destination
   this.days = days
@@ -112,7 +112,7 @@ nepal.info() // 'Nepal | 30'
 
 
 ## Class:
-```
+```js
 // SUPER CLASS
 class Holiday {  // has a function with a constructor underneath
   constructor(destination, days) { // sets the arguments as properties to the class
@@ -153,7 +153,7 @@ Modifiers (keywords):
 
 # Default parameters
 A good practice is to keep all default parameters to the **right**:
-```
+```js
 function add(a = 4, b) { // bad
 function add(a, b = 4) { // good
 ```
@@ -161,7 +161,7 @@ function add(a, b = 4) { // good
 
 
 # Swapping values
-```
+```js
 let a = 5;
 let b = 10;
 
@@ -171,7 +171,7 @@ let b = 10;
 
 
 # Generators
-```
+```js
 function* numberGenerator() {
     yield 1;
     yield 2;
@@ -191,12 +191,39 @@ console.log(last);   // { value: 3, done: true }
 <br/><br/>
 
 
+
+# ERRORS: when there's asynchronicity in a try-catch block
+```js
+try {
+  setTimeout(() => {
+    console.bla()
+  }, 100)
+} catch (e) {
+  //...
+}
+```
+
+_The try-catch block watches for an error in the block within only in the instant that it's executed. As soon as that code is executed, we exit the try-catch block and everything continues as usual. So when the ***asynchronously*** executed function runs, we are already outside of the try-catch block, which leads to an **Uncaught Error**._
+<br/><br/>
+
+
+## Catching uncaught errors (look also in the Promises section):
+```js
+// e.g. missed ASYNC errors
+window.addEventListener('error', (event) => {
+  event.preventDefault() // so the browser doesn't print the error
+  console.log('[ERROR]', event.error.message)
+})
+```
+<br/><br/>
+
+
 # Promises
 _JavaScript is a **single-threaded** language supporting synchronous and asynchronous operations. And promises are just a more elegant way to deal with these asynchronous tasks than callbacks. And a very handy way to avoid callback hell._
 
 _A promise is an object representing the result of asynchronous tasks which are tasks that don’t block the execution until it is finished. This approach is great for time consuming tasks._  
 
-```
+```js
 let promise = new Promise(function(resolve, reject) {
   setTimeout(() => resolve("resolved!"), 1000);
 });
@@ -207,11 +234,33 @@ promise.then(
   error => alert(error) // doesn't run
 );
 ```
+<br/>
+
+## Catching async errors (2):
+
+[exercise\react\typescript\jbook\packages\local-api\src\index.ts](..%5Creact%5Ctypescript%5Cjbook%5Cpackages%5Clocal-api%5Csrc%5Cindex.ts)
+```js
+return new Promise<void>((resolve, reject) => {
+  app.listen(port, resolve).on('error', reject)
+})
+```
+And then in [exercise\react\typescript\jbook\packages\cli\src\commands\serve.ts](..%5Creact%5Ctypescript%5Cjbook%5Cpackages%5Ccli%5Csrc%5Ccommands%5Cserve.ts)
+```js
+//...
+.action(async (filename = 'notebook.js', options: { port: string }) => {
+    try {
+      const dir = path.join(process.cwd(), path.dirname(filename)) // joins current path and relative path of the file (from current)
+      await serve(parseInt(options.port), path.basename(filename), dir) // returns a custom Promise so we could catch any async error
+    } catch (error) {
+      console.log(`Here's the problem: ${error}`)
+    }
+  })
+```
 <br/><br/>
 
 
 # Exponential operator (ES7)
-```
+```js
 let a = 2 ** 3
 let b = 3 ** 3
 console.log(a === Math.pow(2, 3)) // true
@@ -219,20 +268,6 @@ console.log(b === Math.pow(3, 3)) // true
 ```
 <br/><br/>
 
-
-# Asynchronicity in a try-catch block
-```
-try {
-  setTimeout(() => {
-    console.bla()
-  }, 100)
-} catch (e) {
-  ...
-}
-```
-
-_The try-catch block watches for an error in the block within only in the instant that it's executed. As soon as that code is executed, we exit the try-catch block and everything continues as usual. So when the ***asynchronously*** executed function runs, we are already outside of the try-catch block, which leads to an **Uncaught Error**_
-<br/><br/>
 
 
 # IFRAMES
@@ -296,19 +331,7 @@ MessageEvent {
     }
   }, [input])
 ```
-<br/>
-
-
-## Catching uncaught errors:
-```
-// e.g. missed ASYNC errors
-window.addEventListener('error', (event) => {
-  event.preventDefault() // so the browser doesn't print the error
-  console.log('[ERROR]', event.error.message)
-})
-```
-<br/>
-
+<br/><br/>
 
 
 ## Random ID generation

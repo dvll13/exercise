@@ -16,8 +16,6 @@
 * `react-resizable` ([react/typescript/jbook](..%5Creact%5Ctypescript%5Cjbook%5Csrc%5Ccomponents%5Cresizable.tsx)) - a simple widget that can be resizable by one or more handles  
 
 * `immer` ([react/typescript/jbook](..%5Creact%5Ctypescript%5Cjbook%5Csrc%5Cstate%5Creducers%5CcellsReducer.ts)) - Immer (German for: always) is a tiny package that allows you to work with immutable state in a more convenient way.
-
-
 <br/><br/><br/>
 
 
@@ -27,22 +25,32 @@
 * `esbuild-wasm` ([react/typescript/jbook](..%5Creact%5Ctypescript%5Cjbook%5Csrc)) - This is the cross-platform WebAssembly binary for `esbuild`, a JavaScript bundler and minifier.
 
 * `parcel-bundler` - helps run TS in the browser (`parcel index.html` - starts the server and when it sees a ts file, it auto converts it to js)
+<br/><br/><br/>
 
 
 
-# NPM
-* `commander` - 
+# CLI / NPM (common)
+
+* `commander` - eases and makes the work with the CLI more convenient ([exercise\react\typescript\jbook\packages\cli\src\commands\serve.ts](..%5Creact%5Ctypescript%5Cjbook%5Cpackages%5Ccli%5Csrc%5Ccommands%5Cserve.ts))
+  * it also generates a **help command** that shows to the user all the commands we've implemented
 
 * `lerna` ([exercise\react\typescript\jbook\packages](..%5Creact%5Ctypescript%5Cjbook)) - a tool for managing multi-package projects  
   * `lerna init` - init a lerna project
   * `lerna add` - __must__ be used instead of `npm i` so the links between modules wouldn't get broken.  
     * `lerna add module-1` - install `module-1` in all packages
     * `lerna add module-1 --scope=module-2` - installs `module-1` to `module-2`  
+  * `lerna run start --parallel` - runs the `start` script in all packages
 
 * `ts-node` - compile ts to js and run it (`ts-node index.ts` -> `index.ts => index.js; node index.js`)
 <br/><br/><br/>
 
 
 
-# NODE
+# NODE  
+
+* `cors` - ([exercise\react\typescript\jbook\packages\local-api](..%5Creact%5Ctypescript%5Cjbook%5Cpackages%5Clocal-api)) - CORS is a node.js package for providing a Connect/Express middleware that can be used to enable CORS with various options.
+
+* `express` ([exercise\react\typescript\jbook\packages\local-api](..%5Creact%5Ctypescript%5Cjbook%5Cpackages%5Clocal-api)) - Express is a node js web application framework that provides broad features for building web and mobile applications. It is used to build a single page, multipage, and hybrid web application. It's a layer built on the top of the Node js that helps manage servers and routes.
+  
+* `http-proxy-middleware` (([exercise\react\typescript\jbook\packages\local-api](..%5Creact%5Ctypescript%5Cjbook%5Cpackages%5Clocal-api))) - Node.js proxying made simple. Configure proxy middleware with ease for connect, express, browser-sync and many more.
 <br/><br/><br/>

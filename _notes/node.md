@@ -24,3 +24,30 @@ The browser is then set up to listen for the response from the network, and when
 That doesn’t mean that myCallback will be executed in 1,000 ms but rather that, in 1,000 ms, myCallback will be added to the **event loop queue**. The queue, however, might have other events that have been added earlier — your callback **will have to wait**.
 
 There are quite a few articles and tutorials on getting started with async code in JavaScript that suggest doing a setTimeout(callback, 0). Well, now you know what the Event Loop does and how setTimeout works: calling setTimeout with 0 as a second argument just defers the callback **until the Call Stack is clear.**
+
+## node command line argument access:
+- `node .\cl_args_test.js notes.js --port 1234`
+  - in `cl_args_test.js` we call `console.log(process.argv)`. output:
+   ```
+    [
+      'C:\\Program Files\\nodejs\\node.exe',
+      'D:\\MyRepos\\exercise\\react\\typescript\\jbook\\cl_args_test.js',
+      'notes.js',
+      '--port',
+      '1234'
+    ]
+   ```  
+- `node .\cl_args_test.js notes.js --port=1234`
+  - in `cl_args_test.js`: `console.log(process.argv)`:
+   ```
+    [
+      'C:\\Program Files\\nodejs\\node.exe',
+      'D:\\MyRepos\\exercise\\react\\typescript\\jbook\\cl_args_test.js',
+      'notes.js',
+      '--port=1234'
+    ]
+   ```  
+> the mentioned discrepancies can be tackled with the `commander` package ([used_libs.md](used_libs.md))  
+
+
+> `npm i @types/node --save-dev` - install node types to a project ([exercise\react\typescript\jbook\packages\cli](..%5Creact%5Ctypescript%5Cjbook%5Cpackages%5Ccli))

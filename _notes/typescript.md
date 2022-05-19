@@ -20,7 +20,7 @@
 
 **interface** - used to define the _structure of an object_; some of the props in an interface can be ignored. Can be _included_ in other interfaces.  
 
-```
+```ts
 interface Todo {  // this is a type
   id: number
   title: string
@@ -42,7 +42,7 @@ export interface Mappable {
   }
   markerContent(): string
 }
-  ...
+  //...
 
 const todo = response.data as Todo
 export class User implements Mappable {} // implements - optional, helps TS show better placed errors
@@ -55,6 +55,8 @@ arg?: string //optional argument
 
 
 # SYNTAX & FEATURES
+
+`tsc --init` - inits a project as TS project and creates tsconfig.json
 
 **type** - easy way to refer to the different props & fns a value has, eg. string. every value has a type  
 <br/><br/> 
@@ -77,19 +79,27 @@ arg?: string //optional argument
 
 
 > element `as` type:
-```
+```ts
 editingContainer.current.contains(event.target)
 // => TS error: Argument of type 'EventTarget' is not assignable to parameter of type 'Node'.
 
 // WORKAROUND (when we are sure that elements are compatible):
 editingContainer.current.contains(event.target as Node)
 ```
+> **start script** for the ts app: `"tsc --watch --preserveWatchOutput"`  
 
-> It is **not recommended to export** TS package because it could be imported in a JS package and this will cause errors.
+> It is **not recommended to export** TS from an NPM module of any kind because it could be used in a JS-only package and this will cause errors. It should be transpiled to JS before exporting. TS -> TSC -> dist/index.js
 <br/><br/><br/>
 
 # Type definition file (*.d.ts)  
-*describes the different types of values, functions, classes that exist in a js library*  
+> describes the different types of values, functions, classes that exist in a js library   
+
+<br/>
+
+If we are **not going to import** our package anywhere else:
+- the type definition file is **not needed** (in `tsconfig.json` `declarationMap` key can stay commented)
+- also in `package.json` we don't need a `main` key set in such case  
+<br/>
 
 ### TS -> Type definition file -> JS Library  
 if a TDF is missing in a JS Lib (for which there's a warning), then it could be found and used from "Definitely Typed" (`@types/[js-lib-name]`)
@@ -115,7 +125,7 @@ modifiers (keywords):
 ## PROPS 
 
 [react\typescript\2_react-ts\src\state](..%5Creact%5Ctypescript%5C2_react-ts%5Csrc%5Cprops):
-```
+```ts
 interface ChildProps {
   color: string
   onClick: () => void
@@ -132,7 +142,7 @@ Using the _second_ approach TS recognizes this as a _React Function Component_, 
 - might have props like `propTypes`, `contextTypes`, `displayName`, etc.
 - `<SomePropsInterface>` - tells what props types will be received
 - _expects a `children` prop by default - after **react 18** they make you include children in each FC interface:_
-```
+```ts
 interface ResizableProps {
   direction: 'horizontal' | 'vertical'
   children?: React.ReactNode
@@ -143,7 +153,7 @@ interface ResizableProps {
 ## STATE  
 
 [react\typescript\2_react-ts\src\state\GuestList.tsx](..%5Creact%5Ctypescript%5C2_react-ts%5Csrc%5Cstate%5CGuestList.tsx):
-```
+```ts
   const [guests, setGuests] = useState([]) // TS assumes that the array will be forever empty -> guests: never[]
   const [guests, setGuests] = useState<string[]>([]) // now all is good
 
@@ -153,7 +163,7 @@ interface ResizableProps {
 
 ## EVENTS
 [react\typescript\2_react-ts\src\events\EventComponent.tsx](..%5Creact%5Ctypescript%5C2_react-ts%5Csrc%5Cevents%5CEventComponent.tsx):
-```
+```ts
 // TS knows what `e` is because it's an onChange callback
 <input type="text" onChange={(e) => console.log(e)} />
 
@@ -180,7 +190,7 @@ const onDragStart = (event: React.DragEvent<HTMLDivElement>) => {...}
 
 ## CLASS COMPONENTS
 [react\typescript\2_react-ts\src\classes\UserSearch.tsx](..%5Creact%5Ctypescript%5C2_react-ts%5Csrc%5Cclasses%5CUserSearch.tsx):
-```
+```ts
 interface User {
   name: string
   age: number
@@ -201,14 +211,14 @@ class UserSearch extends Component<UserSearchProps> {
     user: undefined
   }
 
-  ...
+  //...
 }
 ```
 <br/><br/>
 
 ## REFS
 [react\typescript\2_react-ts\src\refs\UserSearch.tsx](..%5Creact%5Ctypescript%5C2_react-ts%5Csrc%5Crefs%5CUserSearch.tsx):
-```
+```ts
 const inputRef = useRef<HTMLInputElement | null>(null)
 // we tell TS that we start with a `null` value and at some point in time we could change it to HTML element 
 // the other HTML element interfaces can be seen by Ctrl+click on HTMLInputElement
@@ -230,7 +240,7 @@ useEffect(() => {
 
 # REDUX
 [react\typescript\3_redux-ts\src\state](..%5Creact%5Ctypescript%5C3_redux-ts%5Csrc%5Cstate):
-```
+```ts
 interface RepositoriesState {
   loading: boolean
   error: string | null
@@ -279,7 +289,7 @@ const reducer = (state: RepositoriesState, action: Action): RepositoriesState =>
 <br/>
 
 ## specific parts:
-```
+```ts
 const container = document.getElementById('root')!
 
 
@@ -290,18 +300,18 @@ export * from './reducers'
 ```
 
 [react\typescript\3_redux-ts\src\state\action-creators\index.ts](..%5Creact%5Ctypescript%5C3_redux-ts%5Csrc%5Cstate%5Caction-creators%5Cindex.ts)
-```
+```ts
 import { Dispatch } from 'redux'
 import { Action } from '../actions'
 
-...
+//...
 
 export const searchRepositories = (term: string) => {
   return async (dispatch: Dispatch<Action>) => {
     // a fn that can only be called with an argument, matching Action; now TS knows what the type and payload below can be in each case
 
     dispatch({ type: ActionType.SEARCH_REPOSITORY })
-    ...
+    //...
 
   }
 }
@@ -309,7 +319,7 @@ export const searchRepositories = (term: string) => {
 <br/>  
 
 [react\typescript\3_redux-ts\src\state\actions\index.ts](..%5Creact%5Ctypescript%5C3_redux-ts%5Csrc%5Cstate%5Cactions%5Cindex.ts)
-```
+```ts
 import { ActionType } from '../action-types'
 
 interface SearchRepositoriesAction {
@@ -331,7 +341,7 @@ export type Action = SearchRepositoriesAction | SearchRepositoriesSuccessAction 
 <br/>
 
 [react\typescript\3_redux-ts\src\state\reducers\repositoriesReducer.ts](..%5Creact%5Ctypescript%5C3_redux-ts%5Csrc%5Cstate%5Creducers%5CrepositoriesReducer.ts)
-```
+```ts
 import { ActionType } from '../action-types'
 import { Action } from '../actions'
 
@@ -352,14 +362,14 @@ const reducer = (state: RepositoriesState = initialState, action: Action): Repos
   switch (action.type) {
     case ActionType.SEARCH_REPOSITORY:
       return { ...state, loading: true, error: null, data: [] }
-    ...
+    //...
   }
 }
 ```
 <br/>
 
 [react\typescript\3_redux-ts\src\state\reducers\index.ts](..%5Creact%5Ctypescript%5C3_redux-ts%5Csrc%5Cstate%5Creducers%5Cindex.ts)
-```
+```ts
 import { combineReducers } from 'redux'
 import repositoriesReducer from './repositoriesReducer'
 
@@ -382,7 +392,7 @@ export type RootState = ReturnType<typeof reducers>
 
 
 [react\typescript\3_redux-ts\src\hooks\useActions.ts](..%5Creact%5Ctypescript%5C3_redux-ts%5Csrc%5Chooks%5CuseActions.ts)
-```
+```ts
 import { bindActionCreators } from 'redux'
 import { actionCreators } from '../state'
 
@@ -397,7 +407,7 @@ export const useActions = () => {
 
 
 [react\typescript\3_redux-ts\src\hooks\useTypedSelector.ts](..%5Creact%5Ctypescript%5C3_redux-ts%5Csrc%5Chooks%5CuseTypedSelector.ts)
-```
+```ts
 import { useSelector, TypedUseSelectorHook } from 'react-redux'
 import { RootState } from '../state'
 
@@ -407,7 +417,7 @@ export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector
 
 
 [react\typescript\3_redux-ts\src\components\RepositoriesList.tsx](..%5Creact%5Ctypescript%5C3_redux-ts%5Csrc%5Ccomponents%5CRepositoriesList.tsx)
-```
+```ts
 import { useActions } from '../hooks/useActions'
 import { useTypedSelector } from './../hooks/useTypedSelector'
 
@@ -423,6 +433,6 @@ const RepositoriesList: React.FC = () => {
     // dispatch(actionCreators.searchRepositories(term))
     searchRepositories(term)
   }
-  ...
+  //...
 }
 ```
