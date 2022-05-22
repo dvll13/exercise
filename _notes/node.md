@@ -51,3 +51,21 @@ There are quite a few articles and tutorials on getting started with async code 
 
 
 > `npm i @types/node --save-dev` - install node types to a project ([exercise\react\typescript\jbook\packages\cli](..%5Creact%5Ctypescript%5Cjbook%5Cpackages%5Ccli))
+
+
+[exercise\react\typescript\jbook\packages\local-api\src\index.ts](..%5Creact%5Ctypescript%5Cjbook%5Cpackages%5Clocal-api%5Csrc%5Cindex.ts):
+
+
+# COMMANDS
+
+`require.resolve()` - uses the node's algorithm to find the path to a file, so we get the **absolute** path to it in the end; will find it in the user's node_modules directory
+
+`path.dirname()` - gives the path from the current to the target folder  
+
+<br/><br/>
+
+# TIPS
+
+`process.env.NODE_ENV` - shouldn't be relied on too much since it could be overridden by a user
+
+`import fs from 'fs/promises'` - `fs` is used for **saving/loading files**. the default uses **callbacks**, while `fs/promises` uses **promises** which allows us to use async/await logic with it which is much more convenient ([exercise\react\typescript\jbook\packages\local-api\src\routes\cells.ts](..%5Creact%5Ctypescript%5Cjbook%5Cpackages%5Clocal-api%5Csrc%5Croutes%5Ccells.ts))

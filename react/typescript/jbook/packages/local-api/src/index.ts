@@ -1,7 +1,33 @@
 import express from 'express'
+import { createProxyMiddleware } from 'http-proxy-middleware'
+import path from 'path'
+import { createCellsRouter } from './routes/cells'
 
-export const serve = (port: number, filename: string, dir: string) => {
+export const serve = (port: number, filename: string, dir: string, useProxy: boolean) => {
   const app = express()
+
+  if (useProxy) {
+    // DEV mode
+
+    // proxy from the default port 4005 to 3000
+    app.use(
+      createProxyMiddleware({
+        target: 'http://localhost:3000',
+        ws: true, // CRA uses websockets to tell the browser that a file is changed
+        logLevel: 'silent'
+      })
+    )
+  } else {
+    // PROD mode
+    const packagePath = require.resolve('local-client/build/index.html')
+    // require.resolve() uses the node's algorithm to find the path to a file, so we get the ABSOLUTE path to it in the end; will find it in the user's node_modules directory
+
+    // Static Middleware
+    app.use(express.static(path.dirname(packagePath)))
+    // path.dirname() gives the path from the current to the target folder
+  }
+
+  app.use(createCellsRouter(filename, dir))
 
   return new Promise<void>((resolve, reject) => {
     app.listen(port, resolve).on('error', reject)

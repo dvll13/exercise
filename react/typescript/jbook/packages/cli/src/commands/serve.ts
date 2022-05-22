@@ -2,6 +2,8 @@ import { Command } from 'commander'
 import { serve } from 'local-api'
 import path from 'path'
 
+const isProduction = process.env.NODE_ENV === 'production'
+
 export const serveCommand = new Command()
   .command('serve [filename]') // [] - optional value
   .description('Open a command for editing')
@@ -9,7 +11,7 @@ export const serveCommand = new Command()
   .action(async (filename = 'notebook.js', options: { port: string }) => {
     try {
       const dir = path.join(process.cwd(), path.dirname(filename)) // joins current path and relative path of the file (from current)
-      await serve(parseInt(options.port), path.basename(filename), dir) // returns a custom Promise so we could catch any async error
+      await serve(parseInt(options.port), path.basename(filename), dir, !isProduction) // returns a custom Promise so we could catch any async error
       console.log(`Opened ${filename}. Navigate to http://localhost:${options.port} to edit the file.`)
     } catch (error: any) {
       if (error.code === 'EADDRINUSE') {

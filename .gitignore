@@ -8,5 +8,6 @@
 .cache/
 dist/
 target/
+build/
 
 **/node_modules
