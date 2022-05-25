@@ -423,6 +423,8 @@ import {AuthContext} from "../../../containers/App";
 
     // middleware runs between the dispatching of the action and the point of time the action reaches the reducer
 
+> **middleware** - a function that returns a function that returns a function ([exercise\react\typescript\jbook\packages\local-client\src\state\middlewares\persist-middleware.ts](..%5Creact%5Ctypescript%5Cjbook%5Cpackages%5Clocal-client%5Csrc%5Cstate%5Cmiddlewares%5Cpersist-middleware.ts))
+
 
     // /store/actions.js
     {
@@ -523,6 +525,32 @@ import {AuthContext} from "../../../containers/App";
             ctr: counterReducer,
             res: resultReducer
         });
+
+
+## REDUX THUNK
+[exercise\react\typescript\jbook\packages\local-client\src\state\action-creators\index.ts](..%5Creact%5Ctypescript%5Cjbook%5Cpackages%5Clocal-client%5Csrc%5Cstate%5Caction-creators%5Cindex.ts)
+```ts
+export const saveCells = () => {
+  // getState - returns the current state out of a redux store so we could use props from it
+  return async (dispatch: Dispatch<Action>, getState: () => RootState) => {
+    const {
+      cells: { data, order }
+    } = getState()
+
+    const cells = order.map((id) => data[id])
+
+    try {
+      await axios.post('/cells', { cells })
+    } catch (error: any) {
+      dispatch({
+        type: ActionType.SAVE_CELLS_ERROR,
+        payload: error.message
+      })
+    }
+  }
+}
+```
+
 
         //MIDDLEWARE
         const logger = store => {

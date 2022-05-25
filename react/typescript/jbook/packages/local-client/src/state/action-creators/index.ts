@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { Dispatch } from 'react'
 import bundle from '../../bundler'
 import { ActionType } from '../action-types'
@@ -9,7 +10,8 @@ import {
   MoveCellAction,
   UpdateCellAction
 } from '../actions'
-import { CellTypes } from '../cell'
+import { Cell, CellTypes } from '../cell'
+import { RootState } from '../reducers'
 
 export const updateCell = (id: string, content: string): UpdateCellAction => {
   return {
@@ -49,6 +51,7 @@ export const insertCellAfter = (id: string | null, cellType: CellTypes): InsertC
 }
 
 export const createBundle = (cellId: string, input: string) => {
+  // redux thunk
   return async (dispatch: Dispatch<Action>) => {
     dispatch({
       type: ActionType.BUNDLE_START,
@@ -66,5 +69,45 @@ export const createBundle = (cellId: string, input: string) => {
         bundle: result
       }
     })
+  }
+}
+
+export const fetchCells = () => {
+  return async (dispatch: Dispatch<Action>) => {
+    dispatch({ type: ActionType.FETCH_CELLS })
+
+    try {
+      const { data }: { data: Cell[] } = await axios.get('/cells')
+
+      dispatch({
+        type: ActionType.FETCH_CELLS_COMPLETE,
+        payload: data
+      })
+    } catch (error: any) {
+      dispatch({
+        type: ActionType.FETCH_CELLS_ERROR,
+        payload: error.message
+      })
+    }
+  }
+}
+
+export const saveCells = () => {
+  // getState - returns the current state out of a redux store so we could use props from it
+  return async (dispatch: Dispatch<Action>, getState: () => RootState) => {
+    const {
+      cells: { data, order }
+    } = getState()
+
+    const cells = order.map((id) => data[id])
+
+    try {
+      await axios.post('/cells', { cells })
+    } catch (error: any) {
+      dispatch({
+        type: ActionType.SAVE_CELLS_ERROR,
+        payload: error.message
+      })
+    }
   }
 }

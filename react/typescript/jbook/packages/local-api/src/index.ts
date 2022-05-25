@@ -9,6 +9,8 @@ export const serve = (port: number, filename: string, dir: string, useProxy: boo
   if (useProxy) {
     // DEV mode
 
+    app.use(createCellsRouter(filename, dir))
+
     // proxy from the default port 4005 to 3000
     app.use(
       createProxyMiddleware({
@@ -26,8 +28,6 @@ export const serve = (port: number, filename: string, dir: string, useProxy: boo
     app.use(express.static(path.dirname(packagePath)))
     // path.dirname() gives the path from the current to the target folder
   }
-
-  app.use(createCellsRouter(filename, dir))
 
   return new Promise<void>((resolve, reject) => {
     app.listen(port, resolve).on('error', reject)

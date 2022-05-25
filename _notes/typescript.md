@@ -436,3 +436,10 @@ const RepositoriesList: React.FC = () => {
   //...
 }
 ```
+
+```ts
+state.data = action.payload.reduce((acc, cell) => {
+  acc[cell.id] = cell
+  return acc
+}, {} as CellsState['data'])
+```
