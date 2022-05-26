@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // import serve from 'local-api'
 // serve()
 import { program } from 'commander'

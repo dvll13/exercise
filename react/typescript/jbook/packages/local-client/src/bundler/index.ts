@@ -26,7 +26,7 @@ const bundle = async (rawCode: string) => {
       write: false,
       plugins: [unpkgPathPlugin(), fetchPlugin(rawCode)],
       define: {
-        'process.env.NODE_ENV': '"production"', // fixes some warnings and now some dev code gets excluded from the bundle
+        'process.env.NODE_ENV': '"production"', // replace process.env.NODE_ENV with "production" - fixes some warnings and now some dev code gets excluded from the bundle
         global: 'window'
       },
       // to avoid collisions with manually imported react by the user (ESBuild will then intelligently assign one react package to two variables (React and _React))

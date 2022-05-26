@@ -21,6 +21,9 @@
 
 
 # BUNDLERS
+* `esbuild` ([exercise\react\typescript\jbook\packages\cli\package.json](..%5Creact%5Ctypescript%5Cjbook%5Cpackages%5Ccli%5Cpackage.json)) - bundle everything into one file ("scripts": {
+    "prepublishOnly": "esbuild src/index.ts --platform=node --outfile=dist/index.js --bundle --minify --define:process.env.NODE_ENV=\\\"production\\\""
+  })
 
 * `esbuild-wasm` ([react/typescript/jbook](..%5Creact%5Ctypescript%5Cjbook%5Csrc)) - This is the cross-platform WebAssembly binary for `esbuild`, a JavaScript bundler and minifier.
 
@@ -39,7 +42,9 @@
   * `lerna add` - __must__ be used instead of `npm i` so the links between modules wouldn't get broken.  
     * `lerna add module-1` - install `module-1` in all packages
     * `lerna add module-1 --scope=module-2` - installs `module-1` to `module-2`  
-  * `lerna run start --parallel` - runs the `start` script in all packages
+  * `lerna run start --parallel` - runs the `start` script in all packages  
+  * `lerna bootstrap` - re-link all packages
+  * `lerna publish --no-push`
 
 * `ts-node` - compile ts to js and run it (`ts-node index.ts` -> `index.ts => index.js; node index.js`)
 <br/><br/><br/>

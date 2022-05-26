@@ -64,8 +64,29 @@ There are quite a few articles and tutorials on getting started with async code 
 
 <br/><br/>
 
+
+# Publishing to npmjs.com
+([exercise\react\typescript\tiny-npm-deploy](..%5Creact%5Ctypescript%5Ctiny-npm-deploy))
+> In **npm** we publish the package compiled from TS to JS;  
+
+In `package.json`:
+- we specify the **files** we want to publish under the "files" key  
+- set the **access**: `"publishConfig": { "access": "public" }`
+- if our package is **CLI**, then we should point which file should be run by the user from the console: `"bin": "dist/index.js"`
+- right **before publishing** the package the build command must be run: `"scripts: {"prepublishOnly": "npm run build"}`
+- publish: `npm publish`
+<br/><br/>
+
+> A collection of packages is called **organization**, e.g. @types, @bm etc. The packages inside the organization are called **scoped** packages. 
+
+<br/><br/><br/><br/>
+
+
+
 # TIPS
 
 `process.env.NODE_ENV` - shouldn't be relied on too much since it could be overridden by a user
 
 `import fs from 'fs/promises'` - `fs` is used for **saving/loading files**. the default uses **callbacks**, while `fs/promises` uses **promises** which allows us to use async/await logic with it which is much more convenient ([exercise\react\typescript\jbook\packages\local-api\src\routes\cells.ts](..%5Creact%5Ctypescript%5Cjbook%5Cpackages%5Clocal-api%5Csrc%5Croutes%5Ccells.ts))
+
+`#!/usr/bin/env node` - to make it very clear that this is a file that can be directly executed from the terminal. we directly execute it rather that writing `node` in front of the filename in the CLI ([exercise\react\typescript\tiny-npm-deploy\src\index.ts](..%5Creact%5Ctypescript%5Ctiny-npm-deploy%5Csrc%5Cindex.ts))

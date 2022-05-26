@@ -88,8 +88,16 @@ editingContainer.current.contains(event.target as Node)
 ```
 > **start script** for the ts app: `"tsc --watch --preserveWatchOutput"`  
 
-> It is **not recommended to export** TS from an NPM module of any kind because it could be used in a JS-only package and this will cause errors. It should be transpiled to JS before exporting. TS -> TSC -> dist/index.js
-<br/><br/><br/>
+> It is **not recommended to export** TS from an NPM module of any kind because it could be used in a JS-only package and this will cause errors. It should be transpiled to JS before exporting. TS -> TSC -> dist/index.js.  
+
+<br/>
+
+
+> In **npm** we publish the package compiled from TS to JS;  
+
+<br/><br/>
+
+
 
 # Type definition file (*.d.ts)  
 > describes the different types of values, functions, classes that exist in a js library   
@@ -99,13 +107,14 @@ editingContainer.current.contains(event.target as Node)
 If we are **not going to import** our package anywhere else:
 - the type definition file is **not needed** (in `tsconfig.json` `declarationMap` key can stay commented)
 - also in `package.json` we don't need a `main` key set in such case  
-<br/>
+<br/><br/>
 
 ### TS -> Type definition file -> JS Library  
 if a TDF is missing in a JS Lib (for which there's a warning), then it could be found and used from "Definitely Typed" (`@types/[js-lib-name]`)
 
 `npm i @types/faker`
 <br/><br/><br/><br/>
+
 
 
 # CLASSES  

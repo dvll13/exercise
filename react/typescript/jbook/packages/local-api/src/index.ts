@@ -21,7 +21,7 @@ export const serve = (port: number, filename: string, dir: string, useProxy: boo
     )
   } else {
     // PROD mode
-    const packagePath = require.resolve('local-client/build/index.html')
+    const packagePath = require.resolve('@jsnote/local-client/build/index.html')
     // require.resolve() uses the node's algorithm to find the path to a file, so we get the ABSOLUTE path to it in the end; will find it in the user's node_modules directory
 
     // Static Middleware
