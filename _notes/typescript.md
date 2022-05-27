@@ -1,4 +1,4 @@
-## typescript = js + a type system  
+## typescript = js + a type system; a js superset  
 
 ## The TS Type System
 - helps catch errors **during coding**
@@ -78,6 +78,8 @@ arg?: string //optional argument
 `// @ts-ignore` - ignore TS errors on the next line
 
 
+> `document.getElementById("num1")! as HTMLInputElement` - the `!` tells TS that we are sure this will always yield a value !== null and that it will always be an HTMLInputElement
+
 > element `as` type:
 ```ts
 editingContainer.current.contains(event.target)
@@ -114,7 +116,6 @@ if a TDF is missing in a JS Lib (for which there's a warning), then it could be 
 
 `npm i @types/faker`
 <br/><br/><br/><br/>
-
 
 
 # CLASSES  
