@@ -58,7 +58,7 @@ arg?: string //optional argument
 
 `tsc --init` - inits a project as TS project and creates tsconfig.json
 
-**type** - easy way to refer to the different props & fns a value has, eg. string. every value has a type  
+**type** - easy way to refer to the different props & fns a value has, eg. string. every value has a type. JS has **dynamic types** resolved at **runtime**, while TS has **static types** set during **development**
 <br/><br/> 
 
 **type annotation** - code *we* add to tell TS what type of value a variable will refer to. We should rely on it:
@@ -67,10 +67,24 @@ arg?: string //optional argument
   - when a function returns the 'any' type and we want to clarify the value
 
 **type inference** -  *TS* tries to figure out what type of value a variable refers to (*when the variable is initialized with a value/expression on the same line*). **We should rely on it whenever we can**  
-<br/><br/>
+
+```ts
+const num1 = 5 // const num1: 5
+let num2 = 5 // let num2: number
+```
+
+<br/>
+
+## CORE TYPES  
+- number
+- string
+- boolean
+
+<br/>
 
 **the 'any' type** - TS doesn't know what type the value is, we should **avoid** leaving 'any'. TS **can't** do any error checking around that value  
 
+<br/>
 
 **functions** - TS tries to infer the *return* value type, but the *arguments* types **must** be specified by us
 
