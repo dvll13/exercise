@@ -51,7 +51,7 @@
 
 
 
-# NODE  
+# NODE / SERVERS
 
 * `cors` - ([exercise\react\typescript\jbook\packages\local-api](..%5Creact%5Ctypescript%5Cjbook%5Cpackages%5Clocal-api)) - CORS is a node.js package for providing a Connect/Express middleware that can be used to enable CORS with various options.
 
@@ -61,4 +61,7 @@
   * `router.use(express.json())` - use request body-parsing middleware
   
 * `http-proxy-middleware` ([exercise\react\typescript\jbook\packages\local-api\src\index.ts](..%5Creact%5Ctypescript%5Cjbook%5Cpackages%5Clocal-api%5Csrc%5Cindex.ts)) - Node.js proxying made simple. Configure proxy middleware with ease for connect, express, browser-sync and many more.
+
+* `lite-server` ([exercise\typescript\understanding-ts-2022\Understanding-TS\package.json](..%5Ctypescript%5Cunderstanding-ts-2022%5CUnderstanding-TS%5Cpackage.json)) - Simple and lightweight development only node server that serves a web app, opens it in the browser, refreshes when html or javascript change, injects CSS changes using sockets, and has a fallback page when a route is not found.
+
 <br/><br/><br/>
