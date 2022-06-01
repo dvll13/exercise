@@ -6,7 +6,145 @@
 - only active *during development*
 - doesn't provide *performance optimization*
 
-## ts -> compiler -> js
+
+# SYNTAX & FEATURES
+
+**type** - easy way to refer to the different props & fns a value has, eg. string. every value has a type. JS has **dynamic types** resolved at **runtime**, while TS has **static types** set during **development**
+<br/><br/> 
+
+**type annotation** - code *we* add to tell TS what type of value a variable will refer to. We should rely on it:
+  - when we declare a var on one line then initialize it later
+  - when we want the var to have a type that can be inferred
+  - when a function returns the 'any' type and we want to clarify the value
+
+**type inference** -  *TS* tries to figure out what type of value a variable refers to (*when the variable is initialized with a value/expression on the same line*). **We should rely on it whenever we can**  
+
+```ts
+const num1 = 5 // const num1: 5
+let num2 = 5 // let num2: number
+```
+
+<br/>
+
+## CORE TYPES  
+- **`number`**
+
+- **`string`**
+
+- **`boolean`**
+
+- **`object`** || **`{...}`**
+
+- **`Array`**
+  ```ts
+  let favoriteActivities: any[]
+  let favoriteActivities: (string | number)[]
+  ```
+
+- **`Tuple`** - fixed length & type array _(`Array.push()` errors are not caught though)_
+  ```ts
+  role: [number, string]
+  ```
+
+- **`enum`** - automatically enumerated global constant identifiers. Behind the scenes every item **receives a number identifier**, starting from 0:
+  ```ts
+  enum Role { ADMIN, READ_ONLY, AUTHOR }
+  console.log(Role.ADMIN, Role.READ_ONLY) // 0, 1
+
+  // numbers can be changed:
+  enum Role2 { ADMIN = 5, READ_ONLY, AUTHOR = 200, TEST = 'TEST' }
+  console.log(Role2.ADMIN, Role2.READ_ONLY, Role2.AUTHOR, Role2.TEST) // 5, 6, 200, 'TEST'
+  ```
+
+- **`union`** - `string | number` - sometimes an additional check would be needed if we operate with the types inside the union, because TS doesn't check the types inside
+
+- **`literal`** - `resultConversion: 'as-number' | 'as-string'`  - union of literals
+
+---
+
+- **type aliases**:
+  ```ts
+  type Combinable = number | string
+
+  const input1: Combinable
+  ```
+
+- **functions** - TS tries to infer the *return* value type, but the *arguments* types **must** be specified by us. The return `void` type means that TS won't check it
+  ```ts
+  let combineValues: Function
+  let combineValues2: (a: number, b: number) => number
+  ```
+
+- **`any`** - TS doesn't know what type the value is, we should **avoid** leaving `any` if we can. TS **doesn't** do any error checking around that value
+
+- **`unknown`** - a bit more restrictive than `any`. Requires additional type checks, and that makes it a **better choice** over `any`
+  ```ts
+  let userInput: unknown
+  let userInput2: any
+  let username: string
+
+  userInput = 5
+  userInput = 'Max'
+  userInput2 = 'test'
+
+  username = userInput2 // ok
+  username = userInput // Type 'unknown' is not assignable to type 'string'.ts(2322)
+
+  if (typeof userInput === 'string') {
+    username = userInput // ok
+  }
+  ```
+
+- **`never`** - specifies that this function is **intended** to never return anything
+
+<br/><br/>
+
+> `// @ts-ignore` - ignore TS errors on the next line  
+
+<br/><br/><br/>
+
+# TS compiler
+## _ts -> compiler -> js_
+<br/>
+
+> **compiler watch mode** - `tsc app.ts --watch` or `tsc app.ts -w`  
+
+> `tsc --init` - inits a project as TS project and creates a `tsconfig.json`. Now the `tsc` automatically compiles **all** ts files in the project to js.
+
+<br/>
+
+Some **`tsconfig.js` options** worth mentioning:
+- **exclude** files from `tsc` compilation:
+  ```json
+  "exclude": [ "**/*.dev.ts" ]
+  ```
+- **include** files in the compilation process  
+  ```json
+  "include": [ "app.ts" ]
+
+  "files": ["app.ts"] // can't specify folders
+  ```
+- **`target`** - to which JS versions to **transpile** (es5, es6, etc.)
+- **`lib`** - which features to be available for the TS project (like DOM APIs, JS methods) - `"lib": ["dom", "es6", "dom.iterable", "scripthost"] - defaults
+- **`allowJS`** - a js file will be compiled by TS even if it doesn't end with `.ts`
+- **`checkJS`** - will check the syntax in JS files and report potential errors
+- **`sourceMap`** - generates `.map` files which act as a bridge for the browser to connect the js files to the input files (the TS files in our case) and show the latter in the Sources panel for debugging purposes. _Required_ for debugging TS from the browser or the IDE
+- **`outDir`** - where the created JS files should be stored (usually the `./dist` folder)
+- **`rootDir`** - tells TS where the source files are located so it doesn't look anywhere else (usually `./src`). The compiler will keep the same project structure in the `outDir`
+- **`removeComments`** - should comments be removed in the compiled files
+- **`noEmit`** - don't generate JS files. good for dry runs to check for errors
+- **`noEmitOnError`** - don't generate JS files if there is an error
+- **`downlevelIteration`** - generates more verbose code. should be turned on if there are loops and the generated code behaves differently than it should regarding those loops
+- **`strict`** - enable all strict type-checking options:
+  - **`noImplicitAny`** - requires all params to be typed (while some variables could be tracked and inferred by TS)
+  - **`strictNullChecks`** - tells TS to be maximally strict when working with values that could potentially hold `null` values (like `document.getElementById('root')`), bypassed by an `!` if we are sure we have a value or adding additional checks
+ - **`strictBindCallApply`** - checks if we pass the correct parameters with `bind()`, `call()`, `apply()`
+ - **`alwaysStrict`** - adds `use strict` js rule to the generated files
+ - **`noUnusedLocals`** - declared and unused local vars should trigger TS errors
+ - **`noUnusedParameters`** - not used params trigger TS errors
+ - **`noImplicitReturns`** - to fail if we have a function that sometimes returns and sometimes doesn't
+<br/><br/>
+
 
 `npm i -g typescript ts-node`
 
@@ -51,45 +189,8 @@ const logToDo = (id: number, title: string, completed: boolean)
 
 arg?: string //optional argument
 ```  
-<br/><br/>  
+<br/><br/><br/>  
 
-
-# SYNTAX & FEATURES
-
-`tsc --init` - inits a project as TS project and creates tsconfig.json
-
-**type** - easy way to refer to the different props & fns a value has, eg. string. every value has a type. JS has **dynamic types** resolved at **runtime**, while TS has **static types** set during **development**
-<br/><br/> 
-
-**type annotation** - code *we* add to tell TS what type of value a variable will refer to. We should rely on it:
-  - when we declare a var on one line then initialize it later
-  - when we want the var to have a type that can be inferred
-  - when a function returns the 'any' type and we want to clarify the value
-
-**type inference** -  *TS* tries to figure out what type of value a variable refers to (*when the variable is initialized with a value/expression on the same line*). **We should rely on it whenever we can**  
-
-```ts
-const num1 = 5 // const num1: 5
-let num2 = 5 // let num2: number
-```
-
-<br/>
-
-## CORE TYPES  
-- number
-- string
-- boolean
-
-<br/>
-
-**the 'any' type** - TS doesn't know what type the value is, we should **avoid** leaving 'any'. TS **can't** do any error checking around that value  
-
-<br/>
-
-**functions** - TS tries to infer the *return* value type, but the *arguments* types **must** be specified by us
-
-
-`// @ts-ignore` - ignore TS errors on the next line
 
 
 > `document.getElementById("num1")! as HTMLInputElement` - the `!` tells TS that we are sure this will always yield a value !== null and that it will always be an HTMLInputElement
