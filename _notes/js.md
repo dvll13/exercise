@@ -34,7 +34,7 @@ console.log(add()) // 4
 
 # VARS
 - `let`, `const` -> scoped in the current context (block-scoped variables), unlike `var`  
-- `var` variables can be redeclared multiple times without causing an error, unlike `let` and `const`
+- `var` variables can be redeclared multiple times without causing an error, unlike `let` and `const`; they have **global and function** scope
 <br/><br/>
 
 
@@ -68,11 +68,28 @@ const obj = {
 <br/><br/>
 
 
-# DESTRUCTURING
-`const [, secondElement] = [1, 2, 3] // 2` 
+# SPREAD
+```js
+someArray.push( ...items )
+const copiedPerson = { ...person }
+```
+<br/><br/>
 
-Can be also used with a **default** value:
-`const { name, age = 55 } = user`
+
+# REST (parameters)
+```js
+const fn = (...args) => {}
+```
+<br/><br/>
+
+
+# DESTRUCTURING
+```js
+const [, secondElement] = [1, 2, 3] // 2 
+
+//Can be also used with a DEFAULT value:
+const { name: newNameVar, position, age = 55 } = user
+```
 <br/><br/>
 
 
@@ -95,7 +112,6 @@ const adventureClimbing = {
 
 # CLASSES
 _The **class** keyword in Javascript is just a Syntactic sugar. And under the hood it’s just a special function._
-
 
 ## Function analogue:
 ```js
@@ -142,15 +158,76 @@ class Expedition extends Holiday {
 
 const tripWithGear = new Expedition('Everest', 30, ['sunglasses', 'flags'])
 tripWithGear.info() // '... Gear: sunglasses and flags'
-```
+```   
 
-Modifiers (keywords):
-  * **private** - can only be called by *other methods* in *this* class
-  * **protected** - can be called by other methods in *this* class, or by other methods in *child* classes
-  * **public** *(default)* - can be called _anywhere_
+<br/>
+
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Public_class_fields
+  
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain
+
+<br/>
+
+> **Hoisting** - an important difference between function declarations and class declarations is that while functions can be called in code that appears before they are defined, classes must be defined before they can be constructed. 
+
 <br/><br/>
 
+## Getters and Setters
+[exercise\typescript\understanding-ts-2022\classes\src\app.ts](..%5Ctypescript%5Cunderstanding-ts-2022%5Cclasses%5Csrc%5Capp.ts)
+```ts
+class AccountingDepartment extends Department {
+  private lastReport
 
+  // getter (allows access to a prop with additional logic) - later executed as a prop, not as a fn
+  get mostRecentReport() {
+    if (this.lastReport) {
+      return this.lastReport
+    }
+    throw Error('No reports found.')
+  }
+  
+  set mostRecentReport(value: string) {
+    if (!value) {
+      throw new Error('Please pass in a valid value!')
+    }
+    this.addReport(value)
+  }
+  ...
+}
+
+// using getter and setter
+accounting.mostRecentReport = ''
+console.log(accounting.mostRecentReport)
+```
+
+<br/>
+
+## Static properties
+
+- allows adding properties and methods to classes which are not accessible to class instances but only inside the class itself.
+- Usually for utility fns and global constants for a class. 
+- Cannot be accessed by the non-static parts of the class. 
+- No need for calling `new`. 
+- Example: Math.PI, Math.pow()  
+
+```ts
+class Department {
+  static fiscalYear = 2022
+  static createEmployee(name: string) {
+    return { name }
+  }
+
+  constructor() {
+    this.fiscalYear // cannot be accessed by the constructor
+    Department.fiscalYear // now can be accessed
+  }
+} 
+
+const employee1 = Department.createEmployee('Max')
+console.log(employee1, Department.fiscalYear) // {name: 'Max'} 2022
+```
+
+<br/><br/><br/>
 # Default parameters
 A good practice is to keep all default parameters to the **right**:
 ```js

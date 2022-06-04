@@ -73,6 +73,17 @@ let num2 = 5 // let num2: number
   ```ts
   let combineValues: Function
   let combineValues2: (a: number, b: number) => number
+
+  // arrow functions typing
+  // TS requires the args with default values to be last
+  const add = (a: number, b: number = 1) => a + b
+  const printOutput: (a: number | string) => void = output => console.log(output)
+
+  const add = (...numbers: number[]) => {
+    numbers.reduce((currentResult, currentValue) => {
+      return currentResult + currentValue
+    }, 0)
+  }
   ```
 
 - **`any`** - TS doesn't know what type the value is, we should **avoid** leaving `any` if we can. TS **doesn't** do any error checking around that value
@@ -125,21 +136,21 @@ Some **`tsconfig.js` options** worth mentioning:
   "files": ["app.ts"] // can't specify folders
   ```
 - **`target`** - to which JS versions to **transpile** (es5, es6, etc.)
-- **`lib`** - which features to be available for the TS project (like DOM APIs, JS methods) - `"lib": ["dom", "es6", "dom.iterable", "scripthost"] - defaults
+- **`lib`** - which features to be available for the TS project (like DOM APIs, JS methods). Defaults: `"lib": ["dom", "es6", "dom.iterable", "scripthost"]
 - **`allowJS`** - a js file will be compiled by TS even if it doesn't end with `.ts`
 - **`checkJS`** - will check the syntax in JS files and report potential errors
-- **`sourceMap`** - generates `.map` files which act as a bridge for the browser to connect the js files to the input files (the TS files in our case) and show the latter in the Sources panel for debugging purposes. _Required_ for debugging TS from the browser or the IDE
+- **`sourceMap`** - generates `.map` files which act as a bridge for the browser to connect the js files to the input files (the TS files in our case) and show the latter in the Sources panel for **debugging** purposes. _Required_ for debugging TS from the browser or the IDE
 - **`outDir`** - where the created JS files should be stored (usually the `./dist` folder)
 - **`rootDir`** - tells TS where the source files are located so it doesn't look anywhere else (usually `./src`). The compiler will keep the same project structure in the `outDir`
 - **`removeComments`** - should comments be removed in the compiled files
 - **`noEmit`** - don't generate JS files. good for dry runs to check for errors
 - **`noEmitOnError`** - don't generate JS files if there is an error
-- **`downlevelIteration`** - generates more verbose code. should be turned on if there are loops and the generated code behaves differently than it should regarding those loops
+- **`downlevelIteration`** - generates more verbose code. Should be turned on if there are loops and the generated code behaves differently than it should regarding those loops
 - **`strict`** - enable all strict type-checking options:
   - **`noImplicitAny`** - requires all params to be typed (while some variables could be tracked and inferred by TS)
   - **`strictNullChecks`** - tells TS to be maximally strict when working with values that could potentially hold `null` values (like `document.getElementById('root')`), bypassed by an `!` if we are sure we have a value or adding additional checks
- - **`strictBindCallApply`** - checks if we pass the correct parameters with `bind()`, `call()`, `apply()`
- - **`alwaysStrict`** - adds `use strict` js rule to the generated files
+   - **`strictBindCallApply`** - checks if we pass the correct parameters with `bind()`, `call()`, `apply()`
+   - **`alwaysStrict`** - adds `use strict` js rule to the generated files
  - **`noUnusedLocals`** - declared and unused local vars should trigger TS errors
  - **`noUnusedParameters`** - not used params trigger TS errors
  - **`noImplicitReturns`** - to fail if we have a function that sometimes returns and sometimes doesn't
@@ -234,12 +245,34 @@ if a TDF is missing in a JS Lib (for which there's a warning), then it could be 
 
 
 # CLASSES  
+```ts
+class Department {
+  name: string // field or property
 
-modifiers (keywords):
-  * **private** - can only be called by other methods in _this class_
-  * **protected** - can be called by other methods in _this class_, or by other methods in _child classes_
-  * **public** *(default)* - can be called _anywhere_
-<br/><br/><br/><br/>
+  constructor(n: string) {
+    this.name = n
+  }
+
+  describe(this: Department) {
+    // `this` is not required to be passed when describe is executed, but adding `this` as a param tells TS that the usage of `this` inside of the fn must refer to the Department object and TS will notify if it's not used correctly or doesn't refer to it
+    console.log('Department:', this.name)
+  }
+}
+
+const accountingCopy = { describe: accounting.describe }
+// if `this` is added as a `describe` param, then TS will warn about this:
+console.log(accountingCopy.describe()) // Department: undefined (`this` refers to the thing, responsible for calling the method, in this case accountingCopy)
+
+// if we add a `name` prop to the accountingCopy object, then there'll be no errors
+
+```
+
+## Modifiers (keywords) for properties and methods:
+  * **private** - can only be called by *other methods* in *this* class
+  * **protected** - can be called by other methods in *this* class, or by other methods in *child* classes
+  * **public** *(default, can be omitted)* - can be called _anywhere_  
+
+<br/><br/><br/>
 
 
 # REACT + TS  
