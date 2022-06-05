@@ -1,28 +1,29 @@
-class Department {
-  // readonly - can be set only once
+abstract class Department {
+  // READONLY - can be set only once
 
   // private readonly id: string
   // public name: string // field or property
   protected employees: string[] = []
 
   // SHORTCUT: instead defining the props on top and then initializing them in the constructor, instead they can be once written as arguments in the constructor with their MODIFIERS in front
-  constructor(private readonly id: number, public name: string) {
+  constructor(protected readonly id: number, public name: string) {
     // this.name = name
     // this.fiscalYear // cannot be accessed by the constructor
     // Department.fiscalYear // now can be accessed
   }
 
-  // static
+  // STATIC
   static fiscalYear = 2022
 
   static createEmployee(name: string) {
     return { name }
   }
 
-  describe(this: Department) {
-    // `this` is not required to be passed when describe is executed, but this notation tells TS that the usage of `this` inside the fn must refer to the Department object and TS will notify if it's not used correctly or doesn't refer to it
-    console.log('Department:', this.id, this.name)
-  }
+  abstract describe(this: Department): void
+  //{
+  // `this` is not required to be passed when describe is executed, but this notation tells TS that the usage of `this` inside the fn must refer to the Department object and TS will notify if it's not used correctly or doesn't refer to it
+  // console.log('Department:', this.id, this.name)
+  //}
 
   // can be overridden by children classes
   addEmployee(employee: string) {
@@ -34,6 +35,9 @@ class Department {
     console.log(this.employees)
   }
 }
+
+/*
+// Cannot create an instance of an abstract class.ts(2511)
 
 const finance = new Department(0, 'Finance') // constructor is called an a new normal js object is created
 console.log(finance)
@@ -61,6 +65,11 @@ class ITDepartment extends Department {
     super(id, 'IT Dept.') // MUST be called BEFORE any usages of `this` in the child constructor
     this.admins = admins
   }
+
+  describe() {
+    console.log('IT Dept. ID:', this.id)
+  }
+  // if describe() is not defined: Non-abstract class 'ITDepartment' does not implement inherited abstract member 'describe' from class 'Department'.ts(2515)
 }
 
 const it = new ITDepartment(2, ['Ivan'])
@@ -71,6 +80,7 @@ console.log(it)
 
 class AccountingDepartment extends Department {
   private lastReport
+  private static instance: AccountingDepartment // singleton pattern
 
   // getter (to publicly retrieve private prop) - later executed as a prop, not as a fn
   get mostRecentReport() {
@@ -87,12 +97,28 @@ class AccountingDepartment extends Department {
     this.addReport(value)
   }
 
-  constructor(id: number, private reports: string[]) {
+  private constructor(id: number, private reports: string[]) {
     super(id, 'Accounting')
     this.lastReport = reports[0]
+  } // private -> singleton pattern
+
+  // singleton pattern
+  static getInstance() {
+    // this = AccountingDepartment since it's a static method
+    if (AccountingDepartment.instance) {
+      return this.instance
+    }
+
+    this.instance = new AccountingDepartment(5, [])
+    return this.instance
   }
 
-  addEmployee(name: string): void {
+  // OVERRIDE base method
+  describe() {
+    console.log('Accounting dept. ID:', this.id)
+  }
+
+  addEmployee(name: string) {
     if (name === 'Max') return
 
     this.employees.push(name)
@@ -110,7 +136,9 @@ class AccountingDepartment extends Department {
 
 console.log('### AccountingDepartment ###')
 
-const accounting = new AccountingDepartment(3, [])
+// const accounting = new AccountingDepartment(3, [])
+const accounting = AccountingDepartment.getInstance() // not singleton
+const accounting2 = AccountingDepartment.getInstance() // same instance as with accounting
 
 // using getter and setter
 accounting.mostRecentReport = 'Ivan'
@@ -121,8 +149,10 @@ accounting.addReport('Something went wrong...')
 accounting.addEmployee('Max')
 accounting.addEmployee('Anna')
 
-accounting.printReports()
-accounting.printEmployeeInformation()
+// accounting.printReports()
+// accounting.printEmployeeInformation()
+
+accounting.describe() // overridden method
 
 // static methods:
 const employee1 = Department.createEmployee('Max')
