@@ -24,7 +24,10 @@ const num1 = 5 // const num1: 5
 let num2 = 5 // let num2: number
 ```
 
-<br/>
+<br/><br/>
+
+# INIT
+`npx create-react-app <app_name> --template typescript` - create react ts app
 
 ## CORE TYPES  
 - **`number`**
@@ -122,7 +125,22 @@ let num2 = 5 // let num2: number
 
 > `tsc --init` - inits a project as TS project and creates a `tsconfig.json`. Now the `tsc` automatically compiles **all** ts files in the project to js.
 
-<br/>
+`tsc index.ts` - ts compile and create `index.js`  
+<br/><br/><br/>
+
+
+## TS-NODE
+`npm i -g typescript ts-node`
+
+`ts-node index.ts` - compile `ts` to `js` and run it *(index.ts => index.js; node index.js)*  
+`npm i -g parcel-bundler` - helps run TS in the browser
+  * `parcel index.html` - starts the server and when it sees a ts file, it auto converts it to js  
+
+
+
+<br/><br/>
+
+# TS config
 
 Some **`tsconfig.js` options** worth mentioning:
 - **exclude** files from `tsc` compilation:
@@ -154,18 +172,130 @@ Some **`tsconfig.js` options** worth mentioning:
  - **`noUnusedLocals`** - declared and unused local vars should trigger TS errors
  - **`noUnusedParameters`** - not used params trigger TS errors
  - **`noImplicitReturns`** - to fail if we have a function that sometimes returns and sometimes doesn't
+
+<br/> <br/> 
+
+> `document.getElementById("num1")! as HTMLInputElement` - the `!` tells TS that we are sure this will always yield a value !== null and that it will always be an HTMLInputElement
+
 <br/><br/>
 
 
-`npm i -g typescript ts-node`
 
-`tsc index.ts` - ts compile and create `index.js`  
-`ts-node index.ts` - compile `ts` to `js` and run it *(index.ts => index.js; node index.js)*  
-`npm i -g parcel-bundler` - helps run TS in the browser
-  * `parcel index.html` - starts the server and when it sees a ts file, it auto converts it to js  
+> **start script** for the ts app: `"tsc --watch --preserveWatchOutput"`  
 
-`npx create-react-app <app_name> --template typescript` - create react ts app
-<br/> <br/> 
+> It is **not recommended to export** TS from an NPM module of any kind because it could be used in a JS-only package and this will cause errors. It should be transpiled to JS before exporting. TS -> TSC -> dist/index.js.  
+
+<br/>
+
+
+> In **npm** we publish the package compiled from TS to JS;  
+
+<br/><br/>
+
+
+
+# Type definition file (*.d.ts)  
+> describes the different types of values, functions, classes that exist in a js library   
+
+<br/>
+
+If we are **not going to import** our package anywhere else:
+- the type definition file is **not needed** (in `tsconfig.json` `declarationMap` key can stay commented)
+- also in `package.json` we don't need a `main` key set in such case  
+<br/><br/>
+
+### TS -> Type definition file -> JS Library  
+if a TDF is missing in a JS Lib (for which there's a warning), then it could be found and used from "Definitely Typed" (`@types/[js-lib-name]`)
+
+`npm i @types/faker`
+<br/><br/><br/><br/>
+
+
+# CLASSES  
+[exercise\typescript\understanding-ts-2022\classes\src\app.ts](..%5Ctypescript%5Cunderstanding-ts-2022%5Cclasses%5Csrc%5Capp.ts)
+
+
+```ts
+class Department {
+  name: string // field or property
+
+  constructor(n: string) {
+    this.name = n
+  }
+
+  describe(this: Department) {
+    // `this` is not required to be passed when describe is executed, but adding `this` as a param tells TS that the usage of `this` inside of the fn must refer to the Department object and TS will notify if it's not used correctly or doesn't refer to it
+    console.log('Department:', this.name)
+  }
+}
+
+const accountingCopy = { describe: accounting.describe }
+// if `this` is added as a `describe` param, then TS will warn about this:
+console.log(accountingCopy.describe()) // Department: undefined (`this` refers to the thing, responsible for calling the method, in this case accountingCopy)
+
+// if we add a `name` prop to the accountingCopy object, then there'll be no errors
+
+```
+
+## Modifiers (keywords) for properties and methods:
+  * **private** - can only be called by *other methods* in *this* class
+  * **protected** - can be called by other methods in *this* class, or by other methods in *child* classes
+  * **public** *(default, can be omitted)* - can be called _anywhere_  
+
+<br/><br/>
+
+## Abstract classes  
+
+> used to **force certain methods to be implemented/overridden** in each extending class in its own way
+
+> abstract classes **cannot be instantiated**, only inherited, and the inheriting classes can be instantiated
+
+```ts
+  abstract class Department {
+    abstract describe(this: Department): void
+  }
+
+  const finance = new Department(0, 'Finance') // ERROR: Cannot create an instance of an abstract class.ts(2511)
+
+  // ok:
+  class ITDepartment extends Department {
+    describe() {...}
+  // if describe is not defined we get a TS error: Non-abstract class 'ITDepartment' does not implement inherited abstract member 'describe' from class 'Department'.ts(2515)
+  }
+```
+
+<br/><br/>
+
+## Private Constructors
+
+> **Singleton pattern** - to ensure that you have **only one** instance/object based on a certain class  
+
+```ts
+class AccountingDepartment extends Department {
+  private static instance: AccountingDepartment
+
+  private constructor() {...} // private ensures we can't call `new` on the class any more
+
+  static getInstance() {
+    // in static methods `this` refers to the class, while in non-static methods `this` refers to the instance
+
+    // this = AccountingDepartment since it's a static method
+    
+    if (AccountingDepartment.instance) {
+      return this.instance
+    }
+
+    this.instance = new AccountingDepartment(5, [])
+    return this.instance
+  }
+}
+```
+
+
+
+
+
+<br/><br/><br/><br/><br/>
 
 **interface** - used to define the _structure of an object_; some of the props in an interface can be ignored. Can be _included_ in other interfaces.  
 
@@ -204,7 +334,7 @@ arg?: string //optional argument
 
 
 
-> `document.getElementById("num1")! as HTMLInputElement` - the `!` tells TS that we are sure this will always yield a value !== null and that it will always be an HTMLInputElement
+
 
 > element `as` type:
 ```ts
@@ -214,66 +344,8 @@ editingContainer.current.contains(event.target)
 // WORKAROUND (when we are sure that elements are compatible):
 editingContainer.current.contains(event.target as Node)
 ```
-> **start script** for the ts app: `"tsc --watch --preserveWatchOutput"`  
-
-> It is **not recommended to export** TS from an NPM module of any kind because it could be used in a JS-only package and this will cause errors. It should be transpiled to JS before exporting. TS -> TSC -> dist/index.js.  
-
-<br/>
-
-
-> In **npm** we publish the package compiled from TS to JS;  
 
 <br/><br/>
-
-
-
-# Type definition file (*.d.ts)  
-> describes the different types of values, functions, classes that exist in a js library   
-
-<br/>
-
-If we are **not going to import** our package anywhere else:
-- the type definition file is **not needed** (in `tsconfig.json` `declarationMap` key can stay commented)
-- also in `package.json` we don't need a `main` key set in such case  
-<br/><br/>
-
-### TS -> Type definition file -> JS Library  
-if a TDF is missing in a JS Lib (for which there's a warning), then it could be found and used from "Definitely Typed" (`@types/[js-lib-name]`)
-
-`npm i @types/faker`
-<br/><br/><br/><br/>
-
-
-# CLASSES  
-```ts
-class Department {
-  name: string // field or property
-
-  constructor(n: string) {
-    this.name = n
-  }
-
-  describe(this: Department) {
-    // `this` is not required to be passed when describe is executed, but adding `this` as a param tells TS that the usage of `this` inside of the fn must refer to the Department object and TS will notify if it's not used correctly or doesn't refer to it
-    console.log('Department:', this.name)
-  }
-}
-
-const accountingCopy = { describe: accounting.describe }
-// if `this` is added as a `describe` param, then TS will warn about this:
-console.log(accountingCopy.describe()) // Department: undefined (`this` refers to the thing, responsible for calling the method, in this case accountingCopy)
-
-// if we add a `name` prop to the accountingCopy object, then there'll be no errors
-
-```
-
-## Modifiers (keywords) for properties and methods:
-  * **private** - can only be called by *other methods* in *this* class
-  * **protected** - can be called by other methods in *this* class, or by other methods in *child* classes
-  * **public** *(default, can be omitted)* - can be called _anywhere_  
-
-<br/><br/><br/>
-
 
 # REACT + TS  
 

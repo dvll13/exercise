@@ -170,6 +170,8 @@ tripWithGear.info() // '... Gear: sunglasses and flags'
 
 > **Hoisting** - an important difference between function declarations and class declarations is that while functions can be called in code that appears before they are defined, classes must be defined before they can be constructed. 
 
+> Methods can be **overridden**
+
 <br/><br/>
 
 ## Getters and Setters
@@ -207,6 +209,7 @@ console.log(accounting.mostRecentReport)
 - allows adding properties and methods to classes which are not accessible to class instances but only inside the class itself.
 - Usually for utility fns and global constants for a class. 
 - Cannot be accessed by the non-static parts of the class. 
+- in static methods `this` refers to the class, while in non-static methods `this` refers to the instance
 - No need for calling `new`. 
 - Example: Math.PI, Math.pow()  
 
@@ -228,7 +231,9 @@ console.log(employee1, Department.fiscalYear) // {name: 'Max'} 2022
 ```
 
 <br/><br/><br/>
+
 # Default parameters
+
 A good practice is to keep all default parameters to the **right**:
 ```js
 function add(a = 4, b) { // bad
