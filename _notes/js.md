@@ -341,6 +341,24 @@ And then in [exercise\react\typescript\jbook\packages\cli\src\commands\serve.ts]
 <br/><br/>
 
 
+# Optional chaining
+```js
+a?.b // if a ...
+```
+<br/><br/>
+
+
+# Nullish coalescing (??)
+```js
+// ?? - if it's null/undefined
+// || - if it's falsy
+const userInput = ''
+console.log(userInput ?? 'DEFAULT') // ''
+console.log(userInput || 'DEFAULT') // 'DEFAULT'
+```
+<br/><br/>
+
+
 # Exponential operator (ES7)
 ```js
 let a = 2 ** 3

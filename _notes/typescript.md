@@ -6,116 +6,12 @@
 - only active *during development*
 - doesn't provide *performance optimization*
 
-
-# SYNTAX & FEATURES
-
-**type** - easy way to refer to the different props & fns a value has, eg. string. every value has a type. JS has **dynamic types** resolved at **runtime**, while TS has **static types** set during **development**
-<br/><br/> 
-
-**type annotation** - code *we* add to tell TS what type of value a variable will refer to. We should rely on it:
-  - when we declare a var on one line then initialize it later
-  - when we want the var to have a type that can be inferred
-  - when a function returns the 'any' type and we want to clarify the value
-
-**type inference** -  *TS* tries to figure out what type of value a variable refers to (*when the variable is initialized with a value/expression on the same line*). **We should rely on it whenever we can**  
-
-```ts
-const num1 = 5 // const num1: 5
-let num2 = 5 // let num2: number
-```
-
 <br/><br/>
 
 # INIT
 `npx create-react-app <app_name> --template typescript` - create react ts app
 
-## CORE TYPES  
-- **`number`**
-
-- **`string`**
-
-- **`boolean`**
-
-- **`object`** || **`{...}`**
-
-- **`Array`**
-  ```ts
-  let favoriteActivities: any[]
-  let favoriteActivities: (string | number)[]
-  ```
-
-- **`Tuple`** - fixed length & type array _(`Array.push()` errors are not caught though)_
-  ```ts
-  role: [number, string]
-  ```
-
-- **`enum`** - automatically enumerated global constant identifiers. Behind the scenes every item **receives a number identifier**, starting from 0:
-  ```ts
-  enum Role { ADMIN, READ_ONLY, AUTHOR }
-  console.log(Role.ADMIN, Role.READ_ONLY) // 0, 1
-
-  // numbers can be changed:
-  enum Role2 { ADMIN = 5, READ_ONLY, AUTHOR = 200, TEST = 'TEST' }
-  console.log(Role2.ADMIN, Role2.READ_ONLY, Role2.AUTHOR, Role2.TEST) // 5, 6, 200, 'TEST'
-  ```
-
-- **`union`** - `string | number` - sometimes an additional check would be needed if we operate with the types inside the union, because TS doesn't check the types inside
-
-- **`literal`** - `resultConversion: 'as-number' | 'as-string'`  - union of literals
-
----
-
-- **type aliases**:
-  ```ts
-  type Combinable = number | string
-
-  const input1: Combinable
-  ```
-
-- **functions** - TS tries to infer the *return* value type, but the *arguments* types **must** be specified by us. The return `void` type means that TS won't check it
-  ```ts
-  let combineValues: Function
-  let combineValues2: (a: number, b: number) => number
-
-  // arrow functions typing
-  // TS requires the args with default values to be last
-  const add = (a: number, b: number = 1) => a + b
-  const printOutput: (a: number | string) => void = output => console.log(output)
-
-  const add = (...numbers: number[]) => {
-    numbers.reduce((currentResult, currentValue) => {
-      return currentResult + currentValue
-    }, 0)
-  }
-  ```
-
-- **`any`** - TS doesn't know what type the value is, we should **avoid** leaving `any` if we can. TS **doesn't** do any error checking around that value
-
-- **`unknown`** - a bit more restrictive than `any`. Requires additional type checks, and that makes it a **better choice** over `any`
-  ```ts
-  let userInput: unknown
-  let userInput2: any
-  let username: string
-
-  userInput = 5
-  userInput = 'Max'
-  userInput2 = 'test'
-
-  username = userInput2 // ok
-  username = userInput // Type 'unknown' is not assignable to type 'string'.ts(2322)
-
-  if (typeof userInput === 'string') {
-    username = userInput // ok
-  }
-  ```
-
-- **`never`** - specifies that this function is **intended** to never return anything
-
 <br/><br/>
-
-> `// @ts-ignore` - ignore TS errors on the next line  
-
-<br/><br/><br/>
 
 # TS compiler
 ## _ts -> compiler -> js_
@@ -211,6 +107,108 @@ if a TDF is missing in a JS Lib (for which there's a warning), then it could be 
 <br/><br/><br/><br/>
 
 
+# SYNTAX & FEATURES
+
+**type** - easy way to refer to the different props & fns a value has, eg. string. every value has a type. JS has **dynamic types** resolved at **runtime**, while TS has **static types** set during **development**
+<br/><br/> 
+
+**type annotation** - code *we* add to tell TS what type of value a variable will refer to. We should rely on it:
+  - when we declare a var on one line then initialize it later
+  - when we want the var to have a type that can be inferred
+  - when a function returns the 'any' type and we want to clarify the value
+
+**type inference** -  *TS* tries to figure out what type of value a variable refers to (*when the variable is initialized with a value/expression on the same line*). **We should rely on it whenever we can**  
+
+```ts
+const num1 = 5 // const num1: 5
+let num2 = 5 // let num2: number
+```
+
+<br/><br/>
+
+# CORE TYPES  
+- **`number`**
+- **`string`**
+- **`boolean`**
+- **`object`** || **`{...}`**
+- **`Array`**
+  ```ts
+  let favoriteActivities: any[]
+  let favoriteActivities: (string | number)[]
+  ```
+- **`Tuple`** - fixed length & type array _(`Array.push()` errors are not caught though)_
+  ```ts
+  role: [number, string]
+  ```
+- **`enum`** - automatically enumerated global constant identifiers. Behind the scenes every item **receives a number identifier**, starting from 0:
+  ```ts
+  enum Role { ADMIN, READ_ONLY, AUTHOR }
+  console.log(Role.ADMIN, Role.READ_ONLY) // 0, 1
+
+  // numbers can be changed:
+  enum Role2 { ADMIN = 5, READ_ONLY, AUTHOR = 200, TEST = 'TEST' }
+  console.log(Role2.ADMIN, Role2.READ_ONLY, Role2.AUTHOR, Role2.TEST) // 5, 6, 200, 'TEST'
+  ```
+- **`union`** - `string | number` - sometimes an additional check would be needed if we operate with the types inside the union, because TS doesn't check the types inside
+- **`literal`** - `resultConversion: 'as-number' | 'as-string'`  - union of literals
+
+---
+
+- **type aliases**:
+  ```ts
+  type Combinable = number | string
+
+  const input1: Combinable
+  ```
+- **functions** - TS tries to infer the *return* value type, but the *arguments* types **must** be specified by us. The return `void` type means that TS won't check it
+  ```ts
+  let combineValues: Function
+  let combineValues2: (a: number, b: number) => number
+
+  // arrow functions typing
+  // TS requires the args with default values to be last
+  const add = (a: number, b: number = 1) => a + b
+  const printOutput: (a: number | string) => void = output => console.log(output)
+
+  const add = (...numbers: number[]) => {
+    numbers.reduce((currentResult, currentValue) => {
+      return currentResult + currentValue
+    }, 0)
+  }
+  ```
+- **`any`** - TS doesn't know what type the value is, we should **avoid** leaving `any` if we can. TS **doesn't** do any error checking around that value
+- **`unknown`** - a bit more restrictive than `any`. Requires additional type checks, and that makes it a **better choice** over `any`
+  ```ts
+  let userInput: unknown
+  let userInput2: any
+  let username: string
+
+  userInput = 5
+  userInput = 'Max'
+  userInput2 = 'test'
+
+  username = userInput2 // ok
+  username = userInput // Type 'unknown' is not assignable to type 'string'.ts(2322)
+
+  if (typeof userInput === 'string') {
+    username = userInput // ok
+  }
+  ```
+- **`never`** - specifies that this function is **intended** to never return anything
+
+<br/><br/>
+
+> `// @ts-ignore` - ignore TS errors on the next line  
+
+<br/><br/>
+
+> **!** - tell TS that the expression in front of `!` will never yield null
+```ts
+document.querySelector('#user-input')!
+```
+
+<br/><br/><br/>
+
 # CLASSES  
 [exercise\typescript\understanding-ts-2022\classes\src\app.ts](..%5Ctypescript%5Cunderstanding-ts-2022%5Cclasses%5Csrc%5Capp.ts)
 
@@ -238,8 +236,8 @@ console.log(accountingCopy.describe()) // Department: undefined (`this` refers t
 ```
 
 ## Modifiers (keywords) for properties and methods:
-  * **private** - can only be called by *other methods* in *this* class
-  * **protected** - can be called by other methods in *this* class, or by other methods in *child* classes
+  * **private** - can only be called by *other methods* in *this* class (internal access)
+  * **protected** - can be called by other methods in *this* class, or by other methods in *child* classes (internal access in inherited classes)
   * **public** *(default, can be omitted)* - can be called _anywhere_  
 
 <br/><br/>
@@ -291,15 +289,14 @@ class AccountingDepartment extends Department {
 }
 ```
 
+<br/><br/><br/>
 
+# Interfaces
 
-
-
-<br/><br/><br/><br/><br/>
-
-**interface** - used to define the _structure of an object_; some of the props in an interface can be ignored. Can be _included_ in other interfaces.  
+> used to define the **structure of an object or class**; some of the props in an interface can be ignored. Can be _included_ in other interfaces.  
 
 ```ts
+// type Todo = {
 interface Todo {  // this is a type
   id: number
   title: string
@@ -328,12 +325,307 @@ export class User implements Mappable {} // implements - optional, helps TS show
 
 const logToDo = (id: number, title: string, completed: boolean)
 
-arg?: string //optional argument
-```  
+
+// a class can implement multiple interfaces
+class SomeClass implements Interface1, Interface2 {}
+
+
+interface Person {
+  readonly id: number // can have readonly
+  name: string
+  age: number
+  greet(phrase: string): void
+}
+
+let user1: Person
+
+user1 = {
+  name: 'Ivan',
+  age: 11,
+  greet(phrase) {
+    console.log(phrase + ' ' + this.name)
+  }
+}
+
+
+
+interface Named {
+  readonly name: string
+  // optionals:
+  outputName?: string
+  myMethod?(): number
+}
+
+// INTERFACE INHERITANCE
+interface Greetable extends Named, SomeOtherInterface {
+  greet(phrase: string): void
+}
+
+
+class SomePerson implements Greetable {
+  name: string
+  age = 30
+  secondName?: string
+
+  constructor(n: string, sn?:string) {
+    this.name = n
+    if (sn) {
+      this.secondName = sn
+    }
+  }
+
+  greet(phrase: string) {...}
+}
+
+// no error because the class structure satisfies the Greetable interface
+let user2: Greetable
+user2 = new SomePerson('Seth')
+user2.name = 'Test' // error
+
+
+// DEFINING FUNCTIONS
+// type AddFn = (a: number, b: number) => number
+interface AddFn {
+  (a: number, b: number): number
+}
+
+let add: AddFn
+
+add = (n1, n2) => {
+  return n1 + n2
+}
+``` 
+
+<br/><br/>
+
+# Advanced typing concepts
+[exercise\typescript\understanding-ts-2022\advanced-types\src\app.ts](..%5Ctypescript%5Cunderstanding-ts-2022%5Cadvanced-types%5Csrc%5Capp.ts)  
+<br/>
+- **Intersection types / interfaces**. Intersection of:
+  - `object` types => combination of props
+  - `union` types => the types they have in common
+- **Type guards**
+  - general checks:
+    - `typeof`
+    - prop `in` object
+  - classes checks:
+    - prop `in` object
+    - `instanceof`
+- **Discriminated union pattern** (common prop + switch)
+- **Type casting** - tell TS what type to expect when it can't infer it correctly
+- **Index properties** - for an object, when we know the value type but we don't know the count and the names of the properties in it
+- **Function overloads** - when TS can't infer the fn return type by it's own, we define the different combinations and what return value type they lead to
+- **Optional chaining** - `a?.b`
+- **Nullish coalescing** - `a ?? b` - if `a` is `null` or `undefined` (`||` - for `falsy` value)
+
+```ts
+// ### INTERSECTION TYPES / INTERFACES
+
+// interface Admin {
+type Admin = {
+  name: string
+  privileges: string[]
+}
+
+// interface Employee {
+type Employee = {
+  name: string
+  startDate: Date
+}
+
+// interface ElevatedEmployee extends Admin, Employee {}
+type ElevatedEmployee = Admin & Employee
+
+const e1: ElevatedEmployee = {
+  name: 'Peter',
+  privileges: ['start-server'],
+  startDate: new Date()
+}
+
+type Combinable = string | number
+type Numeric = number | boolean
+
+type Universal = Combinable & Numeric // number
+
+
+
+// ### TYPE GUARDS
+
+function add(a: Combinable, b: Combinable) {
+  // type guard: typeof
+  if (typeof a === 'string' || typeof b === 'string') {
+    return a.toString() + b.toString()
+  }
+  return a + b
+}
+
+type UnknownEmployee = Employee | Admin
+
+function printEmployeeInformation(emp: UnknownEmployee) {
+  console.log('Name:', this.name)
+  
+  // console.log('Privileges:', emp.privileges) // TS error
+
+  // type guard: prop in obj
+  if ('privileges' in emp) {
+    console.log('Privileges:', emp.privileges) // ok
+  }
+}
+
+
+
+// ### TYPE GUARDS FOR CLASSES
+class Car {
+  drive() {
+    console.log('Driving...')
+  }
+}
+
+class Truck {
+  drive() {
+    console.log('Driving a truck...')
+  }
+
+  loadCargo(amount: number) {
+    console.log('Loading cargo', amount)
+  }
+}
+
+type Vehicle = Car | Truck
+
+const v1 = new Car()
+const v2 = new Truck()
+
+function useVehicle(vehicle: Vehicle) {
+  vehicle.drive()
+
+  // type guard: prop in obj
+  // if ('loadCargo' in vehicle) {
+  //   vehicle.loadCargo(6)
+  // }
+
+  // better (since classes are compiled to constructor fns and js understands them):
+  if (vehicle instanceof Truck) {
+    vehicle.loadCargo(6)
+  }
+}
+
+
+
+// ### DISCRIMINATED UNION PATTERN (common prop + switch) - useful when working with objects, union types and interfaces
+
+interface Bird {
+  type: 'bird' // we add some common prop
+  flyingSpeed: number
+}
+
+interface Horse {
+  type: 'horse'
+  runningSpeed: number
+}
+
+type Animal = Bird | Horse
+
+function moveAnimal(animal: Animal) {
+  let speed
+  switch (animal.type) {
+    case 'bird': // TS detects and suggests cases
+      speed = animal.flyingSpeed
+      break
+    case 'horse':
+      speed = animal.runningSpeed
+      break
+  }
+
+  console.log('Moving at speed: ' + speed)
+}
+
+
+
+// ### TYPE CASTING - tell TS what type to expect when it can't infer it correctly
+
+const userInputElement = document.querySelector('#user-input')! as HTMLInputElement
+
+// equivalent (for React projects this could be mistaken for a JSX element, so the `as` keyword case is more suitable there):
+const userInputElement = <HTMLInputElement>document.querySelector('#user-input')
+
+
+
+// ### INDEX PROPERTIES - in an object when we know the value type but we don't know the count and the names of the properties in it
+
+interface ErrorContainer {
+  id: string
+  // id: number // nope - since it's defined as string below
+  [prop: string]: string
+}
+// properties should be of type string and the values should be string
+
+const error: ErrorContainer = {
+  id: 'd1',
+  email: 'Invalid email!',
+  1: 'test' // ok
+}
+
+interface ErrorContainer2 {
+  [key: number]: string
+}
+const error2: ErrorContainer2 = {
+  1: 'test'
+  // '1': 'test2' // error
+}
+
+
+
+// ### FUNCTION OVERLOADS - when TS can't infer the fn return type by it's own, we define the different combinations and what return value type they lead to
+
+// TS merges all combinations with the function definition and now can predict correctly the return value type
+function sum(a: number, b: number): number
+function sum(a: string, b: string): string
+function sum(a: number, b: string): string
+function sum(a: number, b: number): string
+function sum(a: Combinable, b: Combinable) {
+  // type guard: typeof
+  if (typeof a === 'string' || typeof b === 'string') {
+    return a.toString() + b.toString()
+  }
+  return a + b
+}
+
+const result = sum(1, 5) // const result: number; function sum(a: number, b: number): number (+3 overloads)
+const result2 = sum(4, 'a') // function sum(a: number, b: string): string (+3 overloads)
+
+
+
+// ### OPTIONAL CHAINING
+
+const fetchedUserData = {
+  id: 1,
+  name: 'Ivan',
+  // job: { title: 'CEO', ... }
+}
+
+console.log(fetchedUserData?.job?.title)
+
+
+
+// ### NULLISH COALESCING
+
+// ?? - if it's null/undefined
+// || - if it's falsy
+const userInput = ''
+console.log(userInput ?? 'DEFAULT') // ''
+console.log(userInput || 'DEFAULT') // 'DEFAULT'
+```
+<br/>
+
+
+
+
+
+<br/><br/><br/> <br/><br/><br/>  
+
+----
 <br/><br/><br/>  
-
-
-
 
 
 > element `as` type:
