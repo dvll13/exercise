@@ -1,4 +1,4 @@
-```
+```css
 .editor-wrapper .button-format {
   ...
   opacity: 0;
@@ -14,17 +14,17 @@
 .add-cell {
   opacity: 0;
   transition: opacity 0.3s ease-in 0.1s;
-    <!-- 
+    /* 
       transition-property: opacity;
       transition-duration: 0.3s;
       transition-timing-function: ease-in;
       transition-delay: 0.1s;
-    -->
+    */
 }
 ```
 
 _**Workaround for css conflicts:** 3rd party component has the same className inside (.title), that bulma uses, so some bulma styles should be unset to prevent breaking the component:_
-```
+```css
 .w-md-editor .title {
   line-height: unset;
   font-size: unset;
@@ -36,11 +36,12 @@ _**Workaround for css conflicts:** 3rd party component has the same className in
 > https://www.youtube.com/watch?v=-oyeaIirVC0 Next-generation web styling (Chrome Dev Summit 2019)
 
 ## Scroll settles perfectly for each item on each scroll:
-```
+
+```css
 section {
-    overflow: auto
-    overflow-behavior-x: contain
-    scroll-snap-type: x mandatory
+    overflow: auto;
+    overflow-behavior-x: contain;
+    scroll-snap-type: x mandatory;
 }
 section > picture {
     scroll-snap-align: center
@@ -52,12 +53,12 @@ section > picture {
 
 > `:focus-within`
 
-```
+```css
 @media (prefers-reduced-motion: reduce) {}
 @media (prefers-color-scheme: dark) {}
 ```
 
-```
+```css
 .box {
     //height: 300px;
     block-size: 300px;
@@ -68,7 +69,7 @@ section > picture {
 }
 ```
 
-```
+```css
 dl > dt {
     position: sticky;
     top: 0

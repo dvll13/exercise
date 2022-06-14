@@ -34,7 +34,7 @@ console.log(add()) // 4
 
 # VARS
 - `let`, `const` -> scoped in the current context (block-scoped variables), unlike `var`  
-- `var` variables can be redeclared multiple times without causing an error, unlike `let` and `const`; they have **global and function** scope
+- `var` variables can be redeclared multiple times without causing an error, unlike `let` and `const`; they have **global and function** scopes
 <br/><br/>
 
 
@@ -59,12 +59,47 @@ const obj = {
     
     setTimeout(function() { 
       console.log(this) // this -> window
-    }, 2000)
+    }, 1000)
 
     setTimeout(() => console.log(this), 2000) // this -> obj
+  },
+
+  printPropsA: () => {
+    console.log(this) // this -> window
+    
+    setTimeout(function() { 
+      console.log(this) // this -> window
+    }, 1000)
+
+    setTimeout(() => console.log(this), 2000) // this -> window
   }
 }
 ```
+
+> Arrow functions **CANNOT** be used as **constructors** : 
+This is because of how Arrow Functions use the `this` keyword. JS will simply throw an error if it sees an arrow function being invoked as a "constructor".
+
+```js
+function personCreator(name) {
+   this.name = name
+}
+const person1 = new personCreator('John') // personCreator {name: 'John'}
+```
+
+The `new` keyword do some of its magic and makes the `this` keyword that is inside of `personCreator` to be initially an empty object instead of referencing the global object. After that, a new property called `name` is created inside that empty this object, and its value will be `'John'`. At the end, the `this` object is returned.
+
+As we see, the `new` keyword changed the value of `this` from referencing the `global` object to `now` be an empty object `{}`.
+
+**Arrow functions do not allow their `this` object to be modified**. Their `this` object is **always** locked to the value of the `this` of the scope where they were statically **created**. This is called **Static Lexical Scope**. That is why you **cannot** do operations like `bind`, `apply`, or `call` with arrow functions. 
+
+_A **lexical scope** is just the area where a function is created._
+
+- `this` keywords specifics from above
+- Also **no `arguments`** keyword  
+- No **`new`** keyword
+
+Arrow functions **don't have** their own `this` or `arguments` binding. Instead, those identifiers are resolved in the **lexical scope** like any other variable. That means that inside an arrow function, `this` and `arguments` refer to the values of `this` and `arguments` in the environment the arrow function is **defined**
+
 <br/><br/>
 
 
@@ -303,7 +338,8 @@ window.addEventListener('error', (event) => {
 # Promises
 _JavaScript is a **single-threaded** language supporting synchronous and asynchronous operations. And promises are just a more elegant way to deal with these asynchronous tasks than callbacks. And a very handy way to avoid callback hell._
 
-_A promise is an object representing the result of asynchronous tasks which are tasks that don’t block the execution until it is finished. This approach is great for time consuming tasks._  
+_A promise is an object representing the result of asynchronous tasks which are tasks that don’t block the execution until it is finished. This approach is great for time consuming tasks._
+_The promise class constructor takes one argument which is a function with two arguments that will be passed to us _  
 
 ```js
 let promise = new Promise(function(resolve, reject) {
@@ -439,6 +475,86 @@ MessageEvent {
 const randomId = () => Math.random().toString(36).substring(2, 7)
 ```
 
+<br/>
 
 ## Convert to number
 `+var`
+
+<br/>
+
+## Property descriptors
+> they allow to define an object property in more detail.  
+
+<br/>
+
+> `Object.defineProperty(obj1, prop, descriptor): obj1` - This method allows a precise **addition to or modification of a property** on an object. Normal property addition through assignment creates properties which show up during property enumeration (`for...in` loop or `Object.keys` method), whose values may be changed, and which may be deleted. This method allows these extra details to be changed from their defaults. By default, values added using `Object.defineProperty()` are immutable and not enumerable.
+
+
+
+```js
+const object1 = {};
+
+Object.defineProperty(object1, 'property1', {
+  value: 42,
+  writable: false
+});
+
+object1.property1 = 77;
+// throws an error in strict mode
+
+console.log(object1.property1);
+// expected output: 42
+```
+<br/>
+
+Property descriptors present in objects come in two main flavors: **data descriptors** and **accessor descriptors**. A data descriptor is a property that has a value, which may or may not be writable. An accessor descriptor is a property described by a getter-setter pair of functions.  
+<br/>
+
+Both data and accessor descriptors are objects. They share the following **optional keys**:
+- `configurable` [false]
+  - the **type** of this property cannot be changed between data property and accessor property
+  - the property may not be **deleted**
+  - other **attributes of its descriptor** cannot be changed (however, if it's a data descriptor with `writable: true`, the value can be changed, and `writable` can be changed to `false`).
+- `enumerable` [false] - should this property shows up during enumeration of the properties on the corresponding object
+- `value` [undefined] - the value of the property
+- `writable` - should the value associated with the property may be changed with an assignment operator  
+
+**Accessor** descriptor **additional** keys:
+- `get`
+- `set`
+
+```js
+const o = {}; 
+const bValue = 38;
+
+Object.defineProperty(o, 'b', {
+  get() { return bValue; },
+  set(newValue) { bValue = newValue; },
+  enumerable: true,
+  configurable: true
+});
+
+o.b; // 38
+o.b = 22 // Uncaught TypeError: Assignment to constant variable.
+```
+> A **method** is a property with a function as a value.
+```js
+{ get: function()  <=> get() {} }
+```
+<br/><br/>
+
+## Bind
+```js
+class Printer {
+  message = 'This works!'
+
+  showMessage() {
+    console.log(this.message)
+  }
+}
+
+const printer = new Printer()
+const button = document.querySelector('button')!
+// button.addEventListener('click', printer.showMessage) // logs 'undefined', because this -> button
+button.addEventListener('click', printer.showMessage.bind(printer)) // now this -> printer
+```

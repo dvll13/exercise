@@ -122,6 +122,8 @@ if a TDF is missing in a JS Lib (for which there's a warning), then it could be 
 ```ts
 const num1 = 5 // const num1: 5
 let num2 = 5 // let num2: number
+
+function someFunc(_: Function) // _ - tell TS you are aware of the arg, but don't intend to use it
 ```
 
 <br/><br/>
@@ -210,8 +212,9 @@ document.querySelector('#user-input')!
 <br/><br/><br/>
 
 # CLASSES  
-[exercise\typescript\understanding-ts-2022\classes\src\app.ts](..%5Ctypescript%5Cunderstanding-ts-2022%5Cclasses%5Csrc%5Capp.ts)
+[exercise\typescript\understanding-ts-2022\classes_interfaces\src\classes.ts](../typescript/understanding-ts-2022/classes_interfaces/src/classes.ts)
 
+> **accessors** - getters and setters
 
 ```ts
 class Department {
@@ -550,6 +553,12 @@ const userInputElement = document.querySelector('#user-input')! as HTMLInputElem
 const userInputElement = <HTMLInputElement>document.querySelector('#user-input')
 
 
+editingContainer.current.contains(event.target) // => TS error: Argument of type 'EventTarget' is not assignable to parameter of type 'Node'.
+
+// WORKAROUND (when we are sure that elements are compatible):
+editingContainer.current.contains(event.target as Node)
+
+
 
 // ### INDEX PROPERTIES - in an object when we know the value type but we don't know the count and the names of the properties in it
 
@@ -616,28 +625,452 @@ const userInput = ''
 console.log(userInput ?? 'DEFAULT') // ''
 console.log(userInput || 'DEFAULT') // 'DEFAULT'
 ```
+<br/><br/><br/>
+
+
+
+# GENERICS
+> A type, connected to some other type and is really flexible regarding which type this other type is
+
 <br/>
 
+- **built-in** generic types
+```ts
+// tell TS what type of data an array stores
+const names: Array<string> = [] // === string[]
+// names[0].split(' ') // string methods suggested
+
+// tell TS what type of data a promise returns
+// Promise<string> -> this is a promise that'll eventually yield a string
+const promise: Promise<string> = new Promise((resolve, reject) => {
+  setTimeout(() => resolve('resolved!'), 1000)
+})
+promise.then((data) => {
+  data.split(' ')
+})
+```
+
+- **custom** generics (locks in the usage of the generic type inside the function/class):
+  - GENERIC **FUNCTIONS**
+  ```ts
+  function merge(objA: object, objB: object) { // type object is too general
+    return Object.assign(objA, objB)
+  }
+  const mergedObj = merge({ name: 'Ivan' }, { age: 21 })
+  mergedObj.name // ERROR: Property 'name' does not exist on type 'object'.
+
+  // by convention we start with T for a Type, and then continue with U and so on
+  function merge<T, U>(objA: T, objB: U) {
+    // return [objA, objB] // function merge<T, U>(objA: T, objB: U): (T | U)[]
+    return Object.assign(objA, objB) // => function merge<T, U>(objA: T, objB: U): T & U
+  }
+  // we could specify the result type by `: T & U` but its not needed since TS infers it in this case
+
+  const mergedObj = merge({ name: 'Ivan' }, { age: 21 }) // TS understands that T and U are of different types and infers them: const mergedObj { name: string } & { age: number }
+  mergedObj.name // no error and (name | age) are auto-suggested
+
+  const mergedObj2 = merge({ sex: 'm' }, { age: 45 }) // { sex: string } & { age: number }
+  const mergedObj3 = merge<string, number>('test', 45) // we could also fill in different values for U and T types for different function calls if TS doesn't infer them
+
+
+
+  // CONSTRAINTS
+
+  function merge<T extends object, U extends object | number>(objA: T, objB: U) {
+    return Object.assign(objA, objB)
+  }
+
+
+  // here we only care that we receive an element with a length property and return a tuple:
+  interface Lengthy {
+    length: number
+  }
+  function countAndDescribe<T extends Lengthy>(element: T): [T, string] {
+    let description = 'Got no value.'
+    if (element.length === 1) {
+      description = `Got 1 element.`
+    } else if (element.length > 1) {
+      description = `Got ${element.length} elements.`
+    }
+    return [element, description]
+  }
+  console.log(countAndDescribe('Hey you!'))
 
 
 
 
-<br/><br/><br/> <br/><br/><br/>  
+  // ### THE keyof CONSTRAINT
+
+  // `U extends keyof T` - U should be a key, present in the T object
+  function extractAndConvert<T extends object, U extends keyof T>(obj: T, key: U) {
+    return obj[key]
+  }
+  extractAndConvert({}, 'name') // ERROR
+  extractAndConvert({ name: 'Al' }, 'name') // ok
+  ```
+
+  - GENERIC **CLASSES**
+  ```ts
+  // define some generic type we use for storing our data
+  class DataStorage<T extends string | number | boolean> {
+    private data: T[] = []
+
+    addItem(item: T) {
+      this.data.push(item)
+    }
+
+    removeItem(item: T) {
+      if (this.data.indexOf(item) === -1) {
+        return
+      }
+      this.data.splice(this.data.indexOf(item), 1)
+    }
+
+    getItems() {
+      return [...this.data]
+    }
+  }
+
+  const textStorage = new DataStorage<string>()
+  textStorage.addItem('test') // TS: addItem(item: string): void
+  // textStorage.addItem(1) // ERROR
+
+  const numberStorage = new DataStorage<number | string>()
+  numberStorage.addItem(4) // (method) DataStorage<string | number>.addItem(item: string | number): void
+  ```
+
+- **GENERIC** UTILITY TYPES
+  - `Partial` - TEMPORARY wrap the Type and turn it into a type where all the objects are OPTIONAL
+  
+  ```ts
+  function createCourseGoal(title: string, description: string, date: Date): CourseGoal {
+    let courseGoal: Partial<CourseGoal> = {} // Partial - tells TS that this is an object that in the end will be of CourseGoal type
+
+    courseGoal.title = title
+    courseGoal.description = description
+    courseGoal.completeUntil = date
+
+    return courseGoal as CourseGoal // cast back from Partial to CourseGoal
+  }
+  ```
+
+  - **Readonly** - makes an `array` or an `object` readonly
+  ```ts
+  const names: Readonly<string[]> = ['a', 'b']
+  names.push() // error
+  names.pop() // error
+  ```
+<br/><br/><br/>  
+
+# DECORATORS
+
+_uncomment `experimentalDecorators` in `tsconfig.js` first and set `"target": "es6"`_  
+
+> A **Decorator** is a special kind of declaration that can be **attached** to a class declaration, method, accessor, property, or parameter. Decorators provide a way to add both **annotations** and a **meta-programming** syntax for class declarations and members. Decorators use the form `@expression`, where expression must evaluate to a function that will be called at runtime with information about the decorated declaration. They can **return** a value.
+
+> *Note:* A Declarator automatically **binds** the `this` keyword.
+
+<br/><br/>
+
+- USAGE IN **CLASSES**
+[exercise\typescript\understanding-ts-2022\decorators\src\for-classes.ts](../typescript/understanding-ts-2022/decorators/src/for-classes.ts)
+```ts
+// decorator - a function you apply to something, e.g. a class in a certain way. Usually starts with a capital letter
+function Logger(constructor: Function) {
+  console.log('Logging...') //1
+  console.log(constructor) //2
+}
+
+// decorators run when the class is defined, not when it's instantiated
+@Logger
+class Person {
+  name = 'Al'
+  constructor() {
+    console.log('Creating person object...') //6
+  }
+}
+
+// DECORATOR FACTORY - allows passing args
+
+function LoggerWithArgs(logString: string) {
+  console.log('LOGGER FACTORY') //3
+  return function (constructor: Function) {
+    console.log(logString) //7
+    console.log(constructor) //8
+  }
+}
+
+function withTemplate(template: string, domElId: string) {
+  console.log('TEMPLATE FACTORY') //4
+  // `_` - tells TS you are aware of the arg but don't intend to use it
+  // return function (_: Function) {
+  return function (constructor: any) {
+    console.log('Rendering template...') //5
+
+    const hookEl = document.getElementById(domElId)
+    const p = new constructor()
+    if (hookEl) {
+      hookEl.innerHTML = template
+      hookEl.querySelector('h1')!.textContent = p.name
+    }
+  }
+}
+
+// EXECUTION ORDER: factories up-to-down, decorators in them down-to-up
+
+@LoggerWithArgs('LOGGING - PERSON')
+@withTemplate('<h1>My person object</h1>', 'app')
+class Person2 {
+  name = 'Al'
+  constructor() {
+    console.log('Creating person object...')
+  }
+}
+```
+<br/>
+
+- OTHER USAGES (properties, accessors, methods, parameters)
+```ts
+// ### PROPERTIES
+function LogProperty(target: any, propertyName: string | Symbol) {
+  /* target:
+    - for an instance of a property, it will be the prototype of the object that was created
+    - for a static property - the constructor
+  */
+  console.log('Running property decorator', { target, propertyName })
+}
+
+// ### ACCESSORS (GETTERS/SETTERS)
+// target: if it's an instance -> prototype; static one -> the constructor
+function LogAccessor(target: any, name: string, descriptor: PropertyDescriptor) {
+  console.log('Accessor decorator:', { target, name, descriptor })
+}
+
+// ### METHODS
+// target: instance -> prototype; static -> the constructor
+function LogMethod(target: any, name: string | Symbol, descriptor: PropertyDescriptor) {
+  console.log('Method decorator:', { target, name, descriptor })
+}
+
+// ### PARAMETERS
+// target: instance -> prototype; static -> the constructor
+function LogParameter(target: any, name: string | Symbol, argumentPosition: number) {
+  console.log('Parameter decorator:', { target, name, argumentPosition })
+}
+
+class Product {
+  @LogProperty // add a decorator to a PROPERTY
+  title: string
+  private _price: number
+
+  @LogAccessor
+  set price(value: number) {
+    if (value > 0) {
+      this._price = value
+    } else {
+      throw new Error('Invalid price - should be positive!')
+    }
+  }
+
+  constructor(t: string, p: number) {
+    this.title = t
+    this._price = p
+  }
+
+  @LogMethod
+  getPriceWithTax(@LogParameter tax: number) {
+    return this._price * (1 + tax)
+  }
+}
+```
+
+- you can **return**
+  - a function that can replace the **constructor** and thus override class's behavior
+  ```ts
+  function WithTemplate(template: string, domElId: string) {
+    console.log('TEMPLATE FACTORY') //4
+    // `_` - tells TS you are aware of the arg but don't intend to use it
+    // return function (_: Function) {
+
+    // T is an object generated from a constructor that could accept any kind of arguments. the only certain property is `name`
+    return function <T extends { new (...args: any[]): { name: string } }>(originalConstructor: T) {
+      // RUNS ON DECORATOR FN EXECUTION (ON CLASS DEFINITION)
+
+      // console.log('Rendering template...') //5
+
+      // const hookEl = document.getElementById(domElId)
+      // const p = new originalConstructor()
+      // if (hookEl) {
+      //   hookEl.innerHTML = template
+      //   hookEl.querySelector('h1')!.textContent = p.name
+      // }
+
+      // extend and replace the current CONSTRUCTOR fn
+      return class extends originalConstructor {
+        constructor(..._: any[]) {
+          super() // saves the original class methods&props
+
+          // RUNS ON INSTANTIATING THE CLASS
+          console.log('Rendering template...') //5
+
+          const hookEl = document.getElementById(domElId)
+          // const p = new originalConstructor()
+          if (hookEl) {
+            hookEl.innerHTML = template
+            hookEl.querySelector('h1')!.textContent = this.name
+          }
+        }
+      }
+    }
+  }
+
+  // EXECUTION ORDER: factories up-to-down, decorators in them down-to-up
+
+  @LoggerWithArgs('LOGGING - PERSON')
+  @WithTemplate('<h1>My person object</h1>', 'app')
+  class Person2 {
+    name = 'Al'
+    constructor() {
+      console.log('Creating person object...')
+    }
+  }
+
+  const p = new Person2() // decorator runs on instantiating now
+  ```
+
+  - for **methods** and **accessors** - a new `PropertyDescriptor` could be returned
+
+<br/>
+
+- **AUTOBIND** decorator
+```ts
+function Autobind(_: any, _2: string, descriptor: PropertyDescriptor) {
+  // we want to make sure that we'll always assign `this` to the obj this method belongs to
+  const originalMethod = descriptor.value
+  const adjustedDescriptor: PropertyDescriptor = {
+    configurable: true,
+    enumerable: false,
+    // execute some extra logic when the user tries to access this prop (add an extra getter layer)
+    get() {
+      const boundFn = originalMethod.bind(this) // this -> obj that defined the getter and triggers it
+      return boundFn
+    }
+  }
+
+  return adjustedDescriptor
+}
+
+class Printer {
+  message = 'This works!'
+
+  @Autobind
+  showMessage() {
+    console.log(this.message)
+  }
+}
+
+const printer = new Printer()
+const button = document.querySelector('button')!
+// button.addEventListener('click', printer.showMessage) // logs 'undefined', because this -> button
+// button.addEventListener('click', printer.showMessage.bind(printer)) // now this -> printer
+// INSTEAD OF manually calling .bind(printer) every time, after adding Autobind decorator:
+button.addEventListener('click', printer.showMessage) // this -> printer
+```
+<br/>
+
+- decorators for **VALIDATION**
+```ts
+interface ValidatorConfig {
+  [property: string]: {
+    // class name
+    [validatableProp: string]: string[] // ['required', 'positive', ...]
+  }
+}
+
+const registeredValidators: ValidatorConfig = {}
+
+function RequiredValue(target: any, propName: string) {
+  registeredValidators[target.constructor.name] = {
+    ...registeredValidators[target.constructor.name],
+    [propName]: ['required']
+  }
+}
+
+function PositiveNumber(target: any, propName: string) {
+  registeredValidators[target.constructor.name] = {
+    ...registeredValidators[target.constructor.name],
+    [propName]: ['positive']
+  }
+}
+
+function validate(obj: any) {
+  const objValidatorConfig = registeredValidators[obj.constructor.name]
+  if (!objValidatorConfig) {
+    return true
+  }
+
+  let isValid = true
+  for (const prop in objValidatorConfig) {
+    for (const validator of objValidatorConfig[prop]) {
+      switch (validator) {
+        case 'required':
+          isValid = isValid && !!obj[prop]
+          break
+        case 'positive':
+          isValid = isValid && obj[prop] > 0
+          break
+      }
+    }
+  }
+
+  return isValid
+}
+
+class Course {
+  @RequiredValue
+  title: string
+  @PositiveNumber
+  price: number
+
+  constructor(t: string, p: number) {
+    this.title = t
+    this.price = p
+  }
+}
+
+const courseForm = document.querySelector('form')!
+courseForm.addEventListener('submit', (event) => {
+  event.preventDefault()
+  const titleEl = document.getElementById('title') as HTMLInputElement
+  const priceEl = document.getElementById('price') as HTMLInputElement
+
+  const title = titleEl.value
+  const price = +priceEl.value
+
+  const createdCourse = new Course(title, price)
+
+  if (!validate(createdCourse)) {
+    alert('Invalid input!')
+    return
+  }
+
+  console.log(createdCourse)
+})
+```
+
+<br/>
+
+## Usage of decorators
+- `class-validator`
+- `nestjs` - node.js framework for SSR apps
+- `angular`
+
+
+<br/><br/><br/><br/><br/><br/>  
 
 ----
 <br/><br/><br/>  
 
-
-> element `as` type:
-```ts
-editingContainer.current.contains(event.target)
-// => TS error: Argument of type 'EventTarget' is not assignable to parameter of type 'Node'.
-
-// WORKAROUND (when we are sure that elements are compatible):
-editingContainer.current.contains(event.target as Node)
-```
-
-<br/><br/>
 
 # REACT + TS  
 
@@ -965,3 +1398,4 @@ state.data = action.payload.reduce((acc, cell) => {
   return acc
 }, {} as CellsState['data'])
 ```
+

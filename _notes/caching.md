@@ -9,5 +9,5 @@ _IndexedDB is a low-level API for client-side storage of significant amounts of 
 
 `localForage` - an `npm` helper lib that makes the usage of async storage like IndexedDB or WebSQL easier with a localStorage-way of interaction. It uses localStorage in browsers with no IndexedDB or WebSQL  
 
-_used in `\MyRepos\exercise\react\typescript\jbook\src\plugins\unpkg-path-plugin.ts`_  
+_used in [exercise\react\typescript\jbook\src\plugins\unpkg-path-plugin.ts](..%5Creact%5Ctypescript%5Cjbook%5Cpackages%5Clocal-client%5Csrc%5Cbundler%5Cplugins%5Cunpkg-path-plugin.ts)_  
 

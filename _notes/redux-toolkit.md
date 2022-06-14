@@ -1,6 +1,6 @@
 ## Slice
 [react\redux-saga\redux-essentials-example-app\src\features\posts\postsSlice.js](..%5Creact%5Credux-saga%5Credux-essentials-example-app%5Csrc%5Cfeatures%5Cposts%5CpostsSlice.js)
-```
+```js
 import { createSlice } from '@reduxjs/toolkit'
 
 // createSlice (using the Immer library) lets us write "mutating" logic in our reducers
@@ -101,7 +101,7 @@ Alternately, **extraReducers** can also be an object. This is a legacy syntax - 
 # OPTIMIZATIONS
 
 ## 1) MEMOIZING
-```
+```js
 const postsForUser = useSelector((state) => {
   const allPosts = selectAllPosts()
   return allPosts.filter((post) => post.user === userId) // filter returns always a NEW ARRAY, which makes the hook return new value and make the component RE-RENDER UNNECESSARILY
@@ -111,7 +111,7 @@ const postsForUser = useSelector((state) => {
 **Reselect** is a library for creating memoized selector functions, and was specifically designed to be used with Redux. createSelector function that generates MEMOIZED selectors that will only recalculate results when the inputs change. Redux Toolkit exports the **createSelector** function, so we already have it available.
 
 > SOLUTION:
-```
+```js
 export const selectPostsByUser = createSelector([selectAllPosts, (state, userId) => userId], (posts, userId) =>
   posts.filter((post) => post.user === userId)
 ) // memoized (If we try calling selectPostsByUser multiple times, it will only re-run the output selector if either posts or userId has changed)
@@ -129,7 +129,7 @@ If we try calling selectPostsByUser multiple times, it will _only_ re-run the ou
  - Data that has been normalized is kept in a **lookup table**, where the item IDs are the keys, and the items themselves are the values.
  - There may also be an **array of all the IDs** for a particular item type.
 EXAMPLE:
-```
+```js
 {
   users: {
     ids: ["user1", "user2", "user3"],
@@ -181,4 +181,4 @@ Redux Toolkit's **createEntityAdapter** API provides a standardized way to store
 
 > **Derived state** property - its value depends entirely on another value, stored in state and nothing else. _Should be avoided._  
 
-> **Selectors** shouldn't be used for **asynchronous** operations. They returned a cached value if called again with the same params.
+> **Selectors** shouldn't be used for **asynchronous** operations. They could return a cached value if called again with the same params.

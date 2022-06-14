@@ -46,7 +46,7 @@
   * `lerna bootstrap` - re-link all packages
   * `lerna publish --no-push`
 
-* `ts-node` - compile ts to js and run it (`ts-node index.ts` -> `index.ts => index.js; node index.js`)
+* `ts-node` - compile ts to js and run it (`ts-node index.ts`: `index.ts => index.js; node index.js`)
 <br/><br/><br/>
 
 

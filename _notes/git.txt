@@ -23,5 +23,5 @@
     git fetch
     git rebase (resolve conflicts; repeat afterwards from the previous step in case any commit is made in the master meanwhile)
     git checkout master
-    git merge feature
+    git merge feature -ff
     git push origin master

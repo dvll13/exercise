@@ -1,35 +1,34 @@
-NODE - a platform that allows running javascript on a computer
-REPL - read evaluate print loop (node console)
+- NODE - a platform that allows running javascript on a computer
+- REPL - read evaluate print loop (node console)
 
 
-ENTER NODE CONSOLE
-------------------
-type `node` in the normal console
-you have top level `global` and `process` objects
-entire app is running in the `process` module, so what's added to the process.exports object (private - can be checked by console.log(process) FROM the app) will be visible throughout the whole app
+# ENTER NODE CONSOLE
+- type `node` in the normal console
+- you have top level `global` and `process` objects
+- entire app is running in the `process` module, so what's added to the `process.exports` object (private - can be checked by console.log(process) FROM the app) will be visible throughout the whole app
 
 
-npm init - initialize a project and auto create a package.json
-`nodemon` package - reloading the server on file changes
-`express` - server
-`body-parser` - helps us parse the request body
-`uuid` - create timestamps, unique ids etc.
-const crypto = require('crypto') // nodejs cryptographic functionality
-`jsonwebtoken` - - create a web token and store it in the user's localStorage to keep him logged in
-`cookie-parser` - help us parse the request cookie
-`express-jwt` - helps protect routes
-`formidable` - for parsing form data, especially file uploads
+`npm init` - initialize a project and auto create a package.json  
+`nodemon` package - reloading the server on file changes  
+`express` - server  
+`body-parser` - helps us parse the request body  
+`uuid` - create timestamps, unique ids etc.  
+`const crypto = require('crypto')` - nodejs cryptographic functionality  
+`jsonwebtoken` - - create a web token and store it in the user's localStorage to keep him logged in  
+`cookie-parser` - help us parse the request cookie  
+`express-jwt` - helps protect routes  
+`formidable` - for parsing form data, especially file uploads  
 `cors` - when you have api and frontend on separate domains browsers will block the requests to another domain for security reasons. to fix this we'll use the cors npm package
 
-NODE EVENT LOOP (asynchronous programming) single threaded non blocking model, callbacks, FIFO; the called callbacks get in the stack and get executed from there
+> **NODE EVENT LOOP** (asynchronous programming) - single threaded non blocking model, callbacks, FIFO; the called callbacks get in the stack and get executed from there
 
 
-fs.watch(fileName, onFileChange)
-fs.readFile(fileName, (error, data) => {}) - asynchronous
-const data = fs.readFileSync(fileName) - synchronous, no callback
+`fs.watch(fileName, onFileChange)`
+`fs.readFile(fileName, (error, data) => {})` - asynchronous
+`const data = fs.readFileSync(fileName)` - synchronous, no callback
 
 
-//MIDDLEWARE - something that's executed between the start and the end of a process
+> **MIDDLEWARE** - something that's executed between the start and the end of a process
 //middleware > routes > controllers
 app.use(morgan('dev')) - HTTP request logger middleware for node.js
 app.use(bodyParser.json()) - to be able to parse and see the request body
