@@ -17,11 +17,14 @@
 ## _ts -> compiler -> js_
 <br/>
 
+`tsc index.ts` - ts compile and create `index.js`  
+
 > **compiler watch mode** - `tsc app.ts --watch` or `tsc app.ts -w`  
 
-> `tsc --init` - inits a project as TS project and creates a `tsconfig.json`. Now the `tsc` automatically compiles **all** ts files in the project to js.
+> `tsc --init` - inits a project as TS project and creates a `tsconfig.json`. Now the `tsc` automatically compiles **all** ts files in the project to js: `tsc -w`
 
-`tsc index.ts` - ts compile and create `index.js`  
+> **start script** for the ts app preserving console output: `"tsc --watch --preserveWatchOutput"`  
+
 <br/><br/><br/>
 
 
@@ -76,9 +79,6 @@ Some **`tsconfig.js` options** worth mentioning:
 <br/><br/>
 
 
-
-> **start script** for the ts app: `"tsc --watch --preserveWatchOutput"`  
-
 > It is **not recommended to export** TS from an NPM module of any kind because it could be used in a JS-only package and this will cause errors. It should be transpiled to JS before exporting. TS -> TSC -> dist/index.js.  
 
 <br/>
@@ -123,7 +123,7 @@ if a TDF is missing in a JS Lib (for which there's a warning), then it could be 
 const num1 = 5 // const num1: 5
 let num2 = 5 // let num2: number
 
-function someFunc(_: Function) // _ - tell TS you are aware of the arg, but don't intend to use it
+function someFunc(_: Function, _2: string, _name: string) // _ - tell TS you are aware of the arg, but don't intend to use it
 ```
 
 <br/><br/>
@@ -138,7 +138,7 @@ function someFunc(_: Function) // _ - tell TS you are aware of the arg, but don'
   let favoriteActivities: any[]
   let favoriteActivities: (string | number)[]
   ```
-- **`Tuple`** - fixed length & type array _(`Array.push()` errors are not caught though)_
+- **`Tuple`** - fixed length & type array _(`Array.push()` errors are **not caught** though)_
   ```ts
   role: [number, string]
   ```
@@ -206,7 +206,7 @@ function someFunc(_: Function) // _ - tell TS you are aware of the arg, but don'
 
 > **!** - tell TS that the expression in front of `!` will never yield null
 ```ts
-document.querySelector('#user-input')!
+document.querySelector('#user-input')! as HTMLInputElement
 ```
 
 <br/><br/><br/>
@@ -256,12 +256,12 @@ console.log(accountingCopy.describe()) // Department: undefined (`this` refers t
     abstract describe(this: Department): void
   }
 
-  const finance = new Department(0, 'Finance') // ERROR: Cannot create an instance of an abstract class.ts(2511)
+  const finance = new Department(0, 'Finance') // ERROR: Cannot create an instance of an abstract class.ts
 
   // ok:
   class ITDepartment extends Department {
     describe() {...}
-  // if describe is not defined we get a TS error: Non-abstract class 'ITDepartment' does not implement inherited abstract member 'describe' from class 'Department'.ts(2515)
+  // if describe is not defined we get a TS error: Non-abstract class 'ITDepartment' does not implement inherited abstract member 'describe' from class 'Department'.ts
   }
 ```
 
@@ -407,23 +407,8 @@ add = (n1, n2) => {
 - **Intersection types / interfaces**. Intersection of:
   - `object` types => combination of props
   - `union` types => the types they have in common
-- **Type guards**
-  - general checks:
-    - `typeof`
-    - prop `in` object
-  - classes checks:
-    - prop `in` object
-    - `instanceof`
-- **Discriminated union pattern** (common prop + switch)
-- **Type casting** - tell TS what type to expect when it can't infer it correctly
-- **Index properties** - for an object, when we know the value type but we don't know the count and the names of the properties in it
-- **Function overloads** - when TS can't infer the fn return type by it's own, we define the different combinations and what return value type they lead to
-- **Optional chaining** - `a?.b`
-- **Nullish coalescing** - `a ?? b` - if `a` is `null` or `undefined` (`||` - for `falsy` value)
 
 ```ts
-// ### INTERSECTION TYPES / INTERFACES
-
 // interface Admin {
 type Admin = {
   name: string
@@ -449,74 +434,80 @@ type Combinable = string | number
 type Numeric = number | boolean
 
 type Universal = Combinable & Numeric // number
+```
 
+- **Type guards**
+  - general checks:
+    - `typeof`
+    - prop `in` object
 
+    ```ts
+    function add(a: Combinable, b: Combinable) {
+      // type guard: typeof
+      if (typeof a === 'string' || typeof b === 'string') {
+        return a.toString() + b.toString()
+      }
+      return a + b
+    }
 
-// ### TYPE GUARDS
+    type UnknownEmployee = Employee | Admin
 
-function add(a: Combinable, b: Combinable) {
-  // type guard: typeof
-  if (typeof a === 'string' || typeof b === 'string') {
-    return a.toString() + b.toString()
-  }
-  return a + b
-}
+    function printEmployeeInformation(emp: UnknownEmployee) {
+      console.log('Name:', this.name)
+      
+      // console.log('Privileges:', emp.privileges) // TS error
 
-type UnknownEmployee = Employee | Admin
+      // type guard: prop in obj
+      if ('privileges' in emp) {
+        console.log('Privileges:', emp.privileges) // ok
+      }
+    }
+    ```
 
-function printEmployeeInformation(emp: UnknownEmployee) {
-  console.log('Name:', this.name)
-  
-  // console.log('Privileges:', emp.privileges) // TS error
+  - classes checks:
+    - prop `in` object
+    - `instanceof`
 
-  // type guard: prop in obj
-  if ('privileges' in emp) {
-    console.log('Privileges:', emp.privileges) // ok
-  }
-}
+    ```ts
+    class Car {
+      drive() {
+        console.log('Driving...')
+      }
+    }
 
+    class Truck {
+      drive() {
+        console.log('Driving a truck...')
+      }
 
+      loadCargo(amount: number) {
+        console.log('Loading cargo', amount)
+      }
+    }
 
-// ### TYPE GUARDS FOR CLASSES
-class Car {
-  drive() {
-    console.log('Driving...')
-  }
-}
+    type Vehicle = Car | Truck
 
-class Truck {
-  drive() {
-    console.log('Driving a truck...')
-  }
+    const v1 = new Car()
+    const v2 = new Truck()
 
-  loadCargo(amount: number) {
-    console.log('Loading cargo', amount)
-  }
-}
+    function useVehicle(vehicle: Vehicle) {
+      vehicle.drive()
 
-type Vehicle = Car | Truck
+      // type guard: prop in obj
+      // if ('loadCargo' in vehicle) {
+      //   vehicle.loadCargo(6)
+      // }
 
-const v1 = new Car()
-const v2 = new Truck()
+      // better (since classes are compiled to constructor fns and js understands them):
+      if (vehicle instanceof Truck) {
+        vehicle.loadCargo(6)
+      }
+    }
+    ```
 
-function useVehicle(vehicle: Vehicle) {
-  vehicle.drive()
+- **Discriminated union pattern** (common prop + switch) - useful when working with objects, union types and interfaces
 
-  // type guard: prop in obj
-  // if ('loadCargo' in vehicle) {
-  //   vehicle.loadCargo(6)
-  // }
-
-  // better (since classes are compiled to constructor fns and js understands them):
-  if (vehicle instanceof Truck) {
-    vehicle.loadCargo(6)
-  }
-}
-
-
-
-// ### DISCRIMINATED UNION PATTERN (common prop + switch) - useful when working with objects, union types and interfaces
-
+```ts
 interface Bird {
   type: 'bird' // we add some common prop
   flyingSpeed: number
@@ -542,11 +533,11 @@ function moveAnimal(animal: Animal) {
 
   console.log('Moving at speed: ' + speed)
 }
+```
 
+- **Type casting** - tell TS what type to expect when it can't infer it correctly
 
-
-// ### TYPE CASTING - tell TS what type to expect when it can't infer it correctly
-
+```ts
 const userInputElement = document.querySelector('#user-input')! as HTMLInputElement
 
 // equivalent (for React projects this could be mistaken for a JSX element, so the `as` keyword case is more suitable there):
@@ -557,11 +548,11 @@ editingContainer.current.contains(event.target) // => TS error: Argument of type
 
 // WORKAROUND (when we are sure that elements are compatible):
 editingContainer.current.contains(event.target as Node)
+```
 
+- **Index properties** - for an object, when we know the value type but we don't know the count and the names of the properties in it
 
-
-// ### INDEX PROPERTIES - in an object when we know the value type but we don't know the count and the names of the properties in it
-
+```ts
 interface ErrorContainer {
   id: string
   // id: number // nope - since it's defined as string below
@@ -582,11 +573,11 @@ const error2: ErrorContainer2 = {
   1: 'test'
   // '1': 'test2' // error
 }
+```
 
+- **Function overloads** - when TS can't infer the fn return type by it's own, we define the different combinations and what return value type they lead to
 
-
-// ### FUNCTION OVERLOADS - when TS can't infer the fn return type by it's own, we define the different combinations and what return value type they lead to
-
+```ts
 // TS merges all combinations with the function definition and now can predict correctly the return value type
 function sum(a: number, b: number): number
 function sum(a: string, b: string): string
@@ -602,11 +593,11 @@ function sum(a: Combinable, b: Combinable) {
 
 const result = sum(1, 5) // const result: number; function sum(a: number, b: number): number (+3 overloads)
 const result2 = sum(4, 'a') // function sum(a: number, b: string): string (+3 overloads)
+```
 
+- **Optional chaining** - `a?.b`
 
-
-// ### OPTIONAL CHAINING
-
+```ts
 const fetchedUserData = {
   id: 1,
   name: 'Ivan',
@@ -614,11 +605,11 @@ const fetchedUserData = {
 }
 
 console.log(fetchedUserData?.job?.title)
+```
 
+- **Nullish coalescing** - `a ?? b` - if `a` is `null` or `undefined` (`||` - for `falsy` value)
 
-
-// ### NULLISH COALESCING
-
+```ts
 // ?? - if it's null/undefined
 // || - if it's falsy
 const userInput = ''
@@ -630,11 +621,20 @@ console.log(userInput || 'DEFAULT') // 'DEFAULT'
 
 
 # GENERICS
-> A type, connected to some other type and is really flexible regarding which type this other type is
+> A type, connected to some other type and is really flexible regarding which type this other type is. It creates a component that can work with a variety of data types rather than a single data type.
+
+```ts
+function identity<T>(arg: T): T {    
+    return arg;    
+}    
+let output1 = identity<string>("myString");    
+let output2 = identity<number>( 100 );  
+```
 
 <br/>
 
 - **built-in** generic types
+
 ```ts
 // tell TS what type of data an array stores
 const names: Array<string> = [] // === string[]
@@ -652,6 +652,7 @@ promise.then((data) => {
 
 - **custom** generics (locks in the usage of the generic type inside the function/class):
   - GENERIC **FUNCTIONS**
+  
   ```ts
   function merge(objA: object, objB: object) { // type object is too general
     return Object.assign(objA, objB)
@@ -672,14 +673,11 @@ promise.then((data) => {
   const mergedObj2 = merge({ sex: 'm' }, { age: 45 }) // { sex: string } & { age: number }
   const mergedObj3 = merge<string, number>('test', 45) // we could also fill in different values for U and T types for different function calls if TS doesn't infer them
 
-
-
-  // CONSTRAINTS
+  // ### CONSTRAINTS
 
   function merge<T extends object, U extends object | number>(objA: T, objB: U) {
     return Object.assign(objA, objB)
   }
-
 
   // here we only care that we receive an element with a length property and return a tuple:
   interface Lengthy {
@@ -696,9 +694,6 @@ promise.then((data) => {
   }
   console.log(countAndDescribe('Hey you!'))
 
-
-
-
   // ### THE keyof CONSTRAINT
 
   // `U extends keyof T` - U should be a key, present in the T object
@@ -710,6 +705,7 @@ promise.then((data) => {
   ```
 
   - GENERIC **CLASSES**
+  
   ```ts
   // define some generic type we use for storing our data
   class DataStorage<T extends string | number | boolean> {
@@ -739,9 +735,9 @@ promise.then((data) => {
   numberStorage.addItem(4) // (method) DataStorage<string | number>.addItem(item: string | number): void
   ```
 
-- **GENERIC** UTILITY TYPES
+  - **GENERIC** UTILITY TYPES
   - `Partial` - TEMPORARY wrap the Type and turn it into a type where all the objects are OPTIONAL
-  
+
   ```ts
   function createCourseGoal(title: string, description: string, date: Date): CourseGoal {
     let courseGoal: Partial<CourseGoal> = {} // Partial - tells TS that this is an object that in the end will be of CourseGoal type
@@ -766,7 +762,7 @@ promise.then((data) => {
 
 _uncomment `experimentalDecorators` in `tsconfig.js` first and set `"target": "es6"`_  
 
-> A **Decorator** is a special kind of declaration that can be **attached** to a class declaration, method, accessor, property, or parameter. Decorators provide a way to add both **annotations** and a **meta-programming** syntax for class declarations and members. Decorators use the form `@expression`, where expression must evaluate to a function that will be called at runtime with information about the decorated declaration. They can **return** a value.
+> A **Decorator** is a special kind of declaration that can be **attached** to a `class` declaration, `method`, `accessor`, `property`, or `parameter`. Decorators provide a way to add both **annotations** and a **meta-programming** syntax for class declarations and members. Decorators use the form `@expression`, where expression must evaluate to a function that will be called at runtime with information about the decorated declaration. They can **return** a value.
 
 > *Note:* A Declarator automatically **binds** the `this` keyword.
 
@@ -774,6 +770,7 @@ _uncomment `experimentalDecorators` in `tsconfig.js` first and set `"target": "e
 
 - USAGE IN **CLASSES**
 [exercise\typescript\understanding-ts-2022\decorators\src\for-classes.ts](../typescript/understanding-ts-2022/decorators/src/for-classes.ts)
+
 ```ts
 // decorator - a function you apply to something, e.g. a class in a certain way. Usually starts with a capital letter
 function Logger(constructor: Function) {
@@ -800,7 +797,7 @@ function LoggerWithArgs(logString: string) {
   }
 }
 
-function withTemplate(template: string, domElId: string) {
+function WithTemplate(template: string, domElId: string) {
   console.log('TEMPLATE FACTORY') //4
   // `_` - tells TS you are aware of the arg but don't intend to use it
   // return function (_: Function) {
@@ -819,7 +816,7 @@ function withTemplate(template: string, domElId: string) {
 // EXECUTION ORDER: factories up-to-down, decorators in them down-to-up
 
 @LoggerWithArgs('LOGGING - PERSON')
-@withTemplate('<h1>My person object</h1>', 'app')
+@WithTemplate('<h1>My person object</h1>', 'app')
 class Person2 {
   name = 'Al'
   constructor() {
@@ -827,32 +824,30 @@ class Person2 {
   }
 }
 ```
+
 <br/>
 
-- OTHER USAGES (properties, accessors, methods, parameters)
+- OTHER USAGES (`properties`, `accessors` (get/set), `methods`, `parameters`)
+
 ```ts
-// ### PROPERTIES
-function LogProperty(target: any, propertyName: string | Symbol) {
   /* target:
     - for an instance of a property, it will be the prototype of the object that was created
     - for a static property - the constructor
   */
+function LogProperty(target: any, propertyName: string | Symbol) {
   console.log('Running property decorator', { target, propertyName })
 }
 
-// ### ACCESSORS (GETTERS/SETTERS)
-// target: if it's an instance -> prototype; static one -> the constructor
+// target: instance -> prototype; static -> the constructor
 function LogAccessor(target: any, name: string, descriptor: PropertyDescriptor) {
   console.log('Accessor decorator:', { target, name, descriptor })
 }
 
-// ### METHODS
 // target: instance -> prototype; static -> the constructor
 function LogMethod(target: any, name: string | Symbol, descriptor: PropertyDescriptor) {
   console.log('Method decorator:', { target, name, descriptor })
 }
 
-// ### PARAMETERS
 // target: instance -> prototype; static -> the constructor
 function LogParameter(target: any, name: string | Symbol, argumentPosition: number) {
   console.log('Parameter decorator:', { target, name, argumentPosition })
@@ -886,6 +881,7 @@ class Product {
 
 - you can **return**
   - a function that can replace the **constructor** and thus override class's behavior
+  
   ```ts
   function WithTemplate(template: string, domElId: string) {
     console.log('TEMPLATE FACTORY') //4
@@ -942,7 +938,8 @@ class Product {
 
 <br/>
 
-- **AUTOBIND** decorator
+- **AUTOBIND** decorator - adds an extra getter layer, that binds `this` in a called from outside method to the class instance (by using `PropertyDescriptor`)
+
 ```ts
 function Autobind(_: any, _2: string, descriptor: PropertyDescriptor) {
   // we want to make sure that we'll always assign `this` to the obj this method belongs to
@@ -979,10 +976,10 @@ button.addEventListener('click', printer.showMessage) // this -> printer
 <br/>
 
 - decorators for **VALIDATION**
+
 ```ts
 interface ValidatorConfig {
-  [property: string]: {
-    // class name
+  [className: string]: {
     [validatableProp: string]: string[] // ['required', 'positive', ...]
   }
 }

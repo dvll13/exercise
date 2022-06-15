@@ -405,6 +405,31 @@ console.log(b === Math.pow(3, 3)) // true
 <br/><br/>
 
 
+# Enums & checks
+```js
+!= null // not null or undefined
+
+// for...of
+for (const element of array1) { console.log(element) }
+
+// for...in
+if (prop in obj) {...}
+for (const property in object) { console.log(`${property}: ${object[property]}`) }
+
+// instanceof
+function Car(make, model, year) {
+  this.make = make;
+  this.model = model;
+  this.year = year;
+}
+const auto = new Car('Honda', 'Accord', 1998);
+console.log(auto instanceof Car) // true
+console.log(auto instanceof Object) // true
+```
+
+<br/><br/>
+
+
 
 # IFRAMES
 
@@ -543,6 +568,13 @@ o.b = 22 // Uncaught TypeError: Assignment to constant variable.
 ```
 <br/><br/>
 
+
+## Symbol
+
+
+<br/><br/>
+
+
 ## Bind
 ```js
 class Printer {
@@ -557,4 +589,23 @@ const printer = new Printer()
 const button = document.querySelector('button')!
 // button.addEventListener('click', printer.showMessage) // logs 'undefined', because this -> button
 button.addEventListener('click', printer.showMessage.bind(printer)) // now this -> printer
+```
+
+# DOM
+- `document.importNode(node: DocumentFragment, deep?: boolean | undefined): DocumentFragment` - Returns a **copy** of a node. If deep is true, the copy also includes the node's descendants.
+
+- `someDomElement.insertAdjacentElement(where: InsertPosition, element: Element): Element | null` - **inserts** a given element node at a given **position** relative to the element it is invoked upon
+
+```html
+<template id="template1">
+  <div>Test</div>
+</template>
+<div id="container"></div>
+```
+```js
+const t = document.getElementById('template1')
+const deepClone = true
+const importedNode = document.importNode(t.content, deepClone)
+const element = importedNode.firstElementChild
+document.getElementById('container').insertAdjacentElement('afterbegin', element)
 ```
