@@ -214,13 +214,20 @@ document.querySelector('#user-input')! as HTMLInputElement
 # CLASSES  
 [exercise\typescript\understanding-ts-2022\classes_interfaces\src\classes.ts](../typescript/understanding-ts-2022/classes_interfaces/src/classes.ts)
 
-> **accessors** - getters and setters
+> **modifiers** - `public`, `private`, `protected` _(by convention `public` methods must be put **before** `private` ones)_
+
+> in an inherited class's constructor `this` **cannot be used** before the `super()` has finished running. `super()` must be **called first**
+
+> **accessors** - `get` and `set` _(by convention they must be **between** the `props` and the `constructor`)_: [js.md](js.md)
+
+> **`static`**: [js.md](js.md)
 
 ```ts
 class Department {
   name: string // field or property
 
-  constructor(n: string) {
+  // shortcut: adding a modifier to param in constructor's args - then the prop is automatically created and no need to add it explicitly like 'name'
+  constructor(n: string, public lastName: string, private age: number) {
     this.name = n
   }
 
@@ -247,9 +254,11 @@ console.log(accountingCopy.describe()) // Department: undefined (`this` refers t
 
 ## Abstract classes  
 
+> `abstract` classes **cannot be instantiated**, only **inherited**, and the inheriting classes can then be instantiated
+
 > used to **force certain methods to be implemented/overridden** in each extending class in its own way
 
-> abstract classes **cannot be instantiated**, only inherited, and the inheriting classes can be instantiated
+> **cannot have** `private abstract` methods
 
 ```ts
   abstract class Department {
@@ -1062,6 +1071,10 @@ courseForm.addEventListener('submit', (event) => {
 - `nestjs` - node.js framework for SSR apps
 - `angular`
 
+<br/><br/><br/> 
+
+# Exercise TS projects
+- Drag & Drop ([exercise\typescript\understanding-ts-2022\project_drag-drop\src](../typescript/understanding-ts-2022/project_drag-drop/src)) - OOP, decorators (autobind, validation), generics, singleton, static, project state management via a class, abstract class for inheritance, accessors
 
 <br/><br/><br/><br/><br/><br/>  
 
