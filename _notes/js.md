@@ -58,6 +58,12 @@
   - **regular** function - points to the **`object`** that is **calling** the method 
   - **arrow** function - points to the **upper** context 
 
+In a Method	Owner             Object(Which invoked method)
+Alone                         Global Object
+In a function (Default Mode)	Global Object
+In a function (Strict Mode)	  undefined
+In an event	                  the target of the event
+
   ```js
   const obj1 = {
     a: 1,
@@ -95,6 +101,8 @@ const SomeConstructorFn = function (firstProp, secondProp) {
 const obj1 = new SomeConstructorFn('first', 2) // => obj1 { firstProp: "first", secondProp: 2 }
 ```
 
+[eyeballing this](https://gist.github.com/zcaceres/2a4ac91f9f42ec0ef9cd0d18e4e71262)
+
 <br/><br/><br/>
 
 # Primitive and reference types
@@ -103,9 +111,21 @@ const obj1 = new SomeConstructorFn('first', 2) // => obj1 { firstProp: "first", 
 // these are primitive types too:
 typeof undefined // undefined
 typeof null // object (NB! should be checked with `someVar === null` instead)
+
+typeof someFunction // function
+
+typeof someArray // object
+typeof someObject // object
+// BETTER:
+instanceof Array // true
+instanceof Object // true
+instanceof Function // true
+// since all the reference types are children of Object, hence Array/Function instanceof Object -> true
 ```
 
 > **De-referencing** an object - when we **remove** all pointers to a memory allocated space for an object, then the JS engine will clean it from the memory (garbage collect). This can be done by **`obj1 = null`**.
+
+> **Wrapper types** for primitive values - JS uses them to allow us to call methods on them like `someString.substring()`. Adds the wrapper when it notices the method call and destroys it immediately, that's why `someString instanceof String === false`
 
 <br/><br/><br/>
 
@@ -155,6 +175,22 @@ console.log(add()) // 4
 # VARS
 - `let`, `const` -> scoped in the current context (block-scoped variables), unlike `var`  
 - `var` variables can be redeclared multiple times without causing an error, unlike `let` and `const`; they have **global and function** scopes
+<br/><br/>
+
+
+# FUNCTIONS
+
+There are 2 ways to **define** them:
+  - **declaration** - `function a() {...}` -> **hoisting** (js engine pushes it to the top of the scope)
+  - **expression** - `const a = function() {...}` -> **no hoisting** because the js engine doesn't know the name of the function ahead of time
+
+> **`arguments`** - stores all passed params even if they are not declared
+
+> **`someFunction.length`** - returns the number of **named** params
+
+- **`call()`** - `someFunc.call(objectToPassToThis, ...arguments)`, no params -> passes the global scope to `this`. Allows a function to be defined outside of the objects that will invoke it
+- **`apply()`** -  `someFunc.call(objectToPassToThis, [...arguments])` - same as `call` but the only difference is that it accepts an array of arguments instead of passing them one by one
+- **`bind()`** - `const boundFn = fn.bind(obj1, ...args)` - returns a function in which `this = obj1`; `args` could also be passed to the `boundFn`
 <br/><br/>
 
 
@@ -219,6 +255,207 @@ _A **lexical scope** is just the area where a function is created._
 - No **`new`** keyword
 
 Arrow functions **don't have** their own `this` or `arguments` binding. Instead, those identifiers are resolved in the **lexical scope** like any other variable. That means that inside an arrow function, `this` and `arguments` refer to the values of `this` and `arguments` in the environment the arrow function is **defined**
+
+<br/><br/>
+
+
+# REGULAR (R) VS ARROW (A) FUNCTIONS
+
+- **syntax**
+- **no `this` and `arguments` binding in A** - they are resolved in the lexical scope like any other variable (the env in which the A is defined)
+- **`new` keyword** - **R** are **constructible** and they can be called with the `new` keyword
+- **no duplicate params** in **A**, while **R** allow it if not in `strict mode`
+
+[https://stackoverflow.com/questions/34361379/are-arrow-functions-and-functions-equivalent-interchangeable](https://stackoverflow.com/questions/34361379/are-arrow-functions-and-functions-equivalent-interchangeable)
+
+<br/><br/>
+
+# OBJECTS
+
+> **`obj1.hasOwnProperty('prop1')`** method - check if a property is present and **not inherited**
+
+> **`delete obj.prop`** - delete a property, returns `true` if it's deleted and `false` otherwise
+
+> **`obj1.propertyIsEnumerable('prop1')`**- not all props are enumerable (get cycled in loops), can be checked with this method
+
+
+## Accessors
+```js
+var a = {
+  _name: 'one',
+  _second: 'once',
+  set name(value) { this._name = value },
+  get name() { return this._name }
+}
+
+console.log(a.second) // undefined
+console.log(a.name) // one
+a.name = 'two'
+console.log(a.name) // two
+```
+
+> If only a **getter** is defined, then the prop will be **read-only**.
+
+
+## Property descriptors
+> they allow to define an object property in more detail.  
+
+<br/>
+
+> `Object.defineProperty(obj1, prop, descriptor): obj1` - This method allows a precise **addition to or modification of a property** on an object. Normal property addition through assignment creates properties which show up during property enumeration (`for...in` loop or `Object.keys` method), whose values may be changed, and which may be deleted. This method allows these extra details to be changed from their defaults. By default, values added using `Object.defineProperty()` are immutable and not enumerable.
+
+
+
+```js
+const object1 = {};
+
+Object.defineProperty(object1, 'property1', {
+  value: 42,
+  writable: false
+});
+
+object1.property1 = 77;
+// throws an error in strict mode
+
+console.log(object1.property1);
+// expected output: 42
+```
+<br/>
+
+Property descriptors present in objects come in two main flavors: **data descriptors** and **accessor descriptors**. A data descriptor is a property that has a value, which may or may not be writable. An accessor descriptor is a property described by a getter-setter pair of functions.  
+<br/>
+
+Both data and accessor descriptors are objects. They share the following **optional keys**:
+- `configurable` [false]
+  - the **type** of this property cannot be changed between data property and accessor property
+  - the property may not be **deleted**
+  - other **attributes of its descriptor** cannot be changed (however, if it's a data descriptor with `writable: true`, the value can be changed, and `writable` can be changed to `false`)
+  - once set to `true` **can't be changed back** to `false`
+- `enumerable` [false] - should this property shows up during enumeration of the properties on the corresponding object
+- `value` [undefined] - the value of the property
+- `writable` [false] - should the value associated with the property may be changed with an assignment operator  
+
+**Accessor** descriptor **additional** keys:
+- `get`
+- `set`
+
+```js
+const o = {}; 
+const bValue = 38;
+
+Object.defineProperty(o, 'b', {
+  get() { return bValue; },
+  set(newValue) { bValue = newValue; },
+  enumerable: true,
+  configurable: true
+});
+
+o.b; // 38
+o.b = 22 // Uncaught TypeError: Assignment to constant variable.
+```
+> A **method** is a property with a function as a value.
+```js
+{ get: function()  <=> get() {} }
+```
+
+<br/><br/>
+
+
+# Constructor
+
+> A function using which we can **create objects** with the same properties and methods
+
+```js
+function FlightNoParams() {}
+function Flight(airlines, flightNumber) {
+  this.airlines = airlines
+  this.flightNumber = flightNumber
+  this.display = function() { console.log(this.airlines, this.flightNumber) }
+
+  // Object.defineProperty() can be used in the constructor
+}
+
+const flight1 = new FlightNoParams // parenthesis can be omitted when there are no params
+const flight2 = new Flight('American Airlines', 'AA123')
+console.log(flight2 instanceof Flight) // true
+console.log(flight2.constructor === Flight) // true
+```
+
+<br/><br/>
+
+
+# Prototypes
+
+> Every **function** has a reference type property called `prototype` and if we create `objects` using this `function` they will have a property `prototype` that will point to the `function`'s `prototype`.
+
+**Advantages**:
+- if we save a method in the `prototype` of the `function` then the `objects` using it will point to it and **save memory**. we can reuse methods and properties on the prototypes
+- we can use **prototype chaining** to implement **inheritance**
+
+```js
+const passenger = { name: 'John' }
+
+console.log('name' in passenger) // true
+console.log(passenger.hasOwnProperty('name')) // true
+console.log('hasOwnProperty' in passenger) // true
+console.log(passenger.hasOwnProperty('hasOwnProperty')) // false - because it comes from the Object.prototype.hasOwnProperty(). Every object gets access to it.
+console.log(Object.prototype.hasOwnProperty('hasOwnProperty')) // true
+```
+
+When an object prop is called JS Engine first checks for it in the **object**, then the **prototype** and if still not found, returns `undefined`.
+
+```js
+function Flight(airlines, flightNumber) {
+  this.airlines = airlines
+  this.flightNumber = flightNumber
+  // this.display = function() { console.log(this.airlines, this.flightNumber) }
+}
+
+// moving the function to the prototype to save memory
+// Flight.prototype.display = function() { console.log(this.airlines, this.flightNumber) }
+Flight.prototype = {
+  constructor: Flight, // good practice
+  display: function() { console.log(this.airlines, this.flightNumber) },
+  toString: function() {console.log(`Flight ${this.flightNumber}!`)}
+}
+
+var flight1 = new Flight('American Airlines', 'AA123')
+var flight2 = new Flight('South West', 'SW123')
+
+console.log(flight1.display === flight2.display) // true
+console.log(flight1.toString()) // Flight AA123!
+
+console.log(flight1 instanceof Flight) // true
+
+// BEFORE we add the constructor method:
+// console.log(flight1.constructor === Flight) // false 
+// console.log(flight1.constructor === Object) // true
+// AFTER adding the constructor: Flight
+console.log(flight1.constructor === Flight) // true
+console.log(flight1.constructor === Object) // false
+
+console.log(Object.getPrototypeOf(flight1)) // constructor: Flight(airlines, flightNumber), display: display(), toString: toString() 
+
+```
+
+```js
+var obj = {}
+var objPrototype = Object.getPrototypeOf(obj)
+
+console.log(objPrototype) // {constructor, hasOwnProperty, isPrototypeOf, propertyIsEnumerable, toString, ...}
+console.log(objPrototype === Object.prototype) // true
+console.log(Object.prototype.isPrototypeOf(objPrototype)) // true
+```
+
+```js
+// use with caution!
+
+String.prototype.display = function() {
+  console.log(this, this.toString())
+}
+
+'test'.display() // String { "test" }, 'test'
+```
 
 <br/><br/>
 
@@ -440,6 +677,15 @@ _JavaScript is a **single-threaded** language supporting synchronous and asynchr
 
 > A promise is an object representing the result of asynchronous tasks which are tasks that **don’t block the execution** until it is finished. This approach is great for time consuming tasks.
 
+A Promise is a **proxy for a value** not necessarily known when the promise is created. It allows you to associate handlers with an asynchronous action's eventual success value or failure reason. This lets asynchronous methods return values like synchronous methods: instead of immediately returning the final value, the asynchronous method returns a promise to supply the value at some point in the future.
+
+A Promise is in one of these **states**:
+- pending: initial state, neither fulfilled nor rejected.
+- fulfilled: meaning that the operation was completed successfully.
+- rejected: meaning that the operation failed.
+
+Promises can be **chained**
+
 > The **promise class constructor** takes one argument which is a function with two arguments `(resolve, reject` that will be passed to us  
 
 ```js
@@ -515,6 +761,8 @@ And then in [exercise\react\typescript\jbook\packages\cli\src\commands\serve.ts]
 
 
 ## async/await
+
+An async function is a function declared with the async keyword, and the await keyword is permitted within it. The async and await keywords enable asynchronous, **promise-based behavior to be written in a cleaner style, avoiding the need to explicitly configure promise chains**.
 
 > Produced to **consume** promises instead of creating them
 
@@ -678,73 +926,47 @@ const randomId = () => Math.random().toString(36).substring(2, 7)
 ## Convert to number
 `+var`
 
-<br/>
-
-## Property descriptors
-> they allow to define an object property in more detail.  
-
-<br/>
-
-> `Object.defineProperty(obj1, prop, descriptor): obj1` - This method allows a precise **addition to or modification of a property** on an object. Normal property addition through assignment creates properties which show up during property enumeration (`for...in` loop or `Object.keys` method), whose values may be changed, and which may be deleted. This method allows these extra details to be changed from their defaults. By default, values added using `Object.defineProperty()` are immutable and not enumerable.
-
-
-
-```js
-const object1 = {};
-
-Object.defineProperty(object1, 'property1', {
-  value: 42,
-  writable: false
-});
-
-object1.property1 = 77;
-// throws an error in strict mode
-
-console.log(object1.property1);
-// expected output: 42
-```
-<br/>
-
-Property descriptors present in objects come in two main flavors: **data descriptors** and **accessor descriptors**. A data descriptor is a property that has a value, which may or may not be writable. An accessor descriptor is a property described by a getter-setter pair of functions.  
-<br/>
-
-Both data and accessor descriptors are objects. They share the following **optional keys**:
-- `configurable` [false]
-  - the **type** of this property cannot be changed between data property and accessor property
-  - the property may not be **deleted**
-  - other **attributes of its descriptor** cannot be changed (however, if it's a data descriptor with `writable: true`, the value can be changed, and `writable` can be changed to `false`).
-- `enumerable` [false] - should this property shows up during enumeration of the properties on the corresponding object
-- `value` [undefined] - the value of the property
-- `writable` - should the value associated with the property may be changed with an assignment operator  
-
-**Accessor** descriptor **additional** keys:
-- `get`
-- `set`
-
-```js
-const o = {}; 
-const bValue = 38;
-
-Object.defineProperty(o, 'b', {
-  get() { return bValue; },
-  set(newValue) { bValue = newValue; },
-  enumerable: true,
-  configurable: true
-});
-
-o.b; // 38
-o.b = 22 // Uncaught TypeError: Assignment to constant variable.
-```
-> A **method** is a property with a function as a value.
-```js
-{ get: function()  <=> get() {} }
-```
 <br/><br/>
 
 
 ## Symbol
 
+Symbols are new **primitive** type introduced in ES6. Symbols are completely **unique identifiers**. Just like their primitive counterparts (Number, String, Boolean), they can be created using the factory function Symbol() which returns a Symbol. Symbol object props are **not enumerable**
 
+```js
+var a = Symbol('test')
+var b = Symbol('test')
+
+a === b // false
+a // Symbol(test)
+a.description // 'test'
+
+
+
+const obj = {
+  [Symbol('my_key')]  : 1, 
+   enum               : 2, 
+   nonEnum            : 3
+};
+
+Object.defineProperty(obj, 'nonEnum', { enumerable: false }); // Making 'nonEnum' as not enumerable.
+
+// Ignores symbol-valued property keys:
+> Object.getOwnPropertyNames(obj)
+['enum', 'nonEnum']
+
+// Ignores string-valued property keys:
+> Object.getOwnPropertySymbols(obj)
+[Symbol(my_key)]
+
+// Considers all kinds of keys:
+> Reflect.ownKeys(obj)
+[Symbol(my_key),'enum', 'nonEnum']
+
+// Only considers enumerable property keys that are strings:
+> Object.keys(obj)
+['enum']
+```
 <br/><br/>
 
 
@@ -782,3 +1004,98 @@ const importedNode = document.importNode(t.content, deepClone)
 const element = importedNode.firstElementChild
 document.getElementById('container').insertAdjacentElement('afterbegin', element)
 ```
+
+
+# Drag & Drop
+[exercise\typescript\understanding-ts-2022\project_drag-drop\src](../typescript/understanding-ts-2022/project_drag-drop/src)
+
+```html
+<li draggable="true"></li>
+```
+
+```js
+// DRAGGED element:
+
+liElement.addEventListener('dragstart', (event) => {
+  // not all drag events have dataTransfer property
+  event.dataTransfer!.setData('text/plain', this.project.id)
+  // tells the browser about our intention and changes the cursor to the appropriate shape (move, copy, ...)
+  event.dataTransfer!.effectAllowed = 'move'
+})
+
+liElement.addEventListener('dragend', (_: DragEvent) => {
+  console.log('dragEnd')
+})
+
+
+// DROP TARGET element:
+
+@Autobind
+dragOverHandler(event: DragEvent) {
+  if (event.dataTransfer?.types[0] === 'text/plain') {
+    // tells JS that for this element we want to ALLOW a drop and the drop event will fire now on drop. by default it won't
+    event.preventDefault()
+
+    const listEl = this.element.querySelector('ul')!
+    listEl.classList.add('droppable')
+  }
+}
+
+@Autobind
+dropHandler(event: DragEvent) {
+  const projectId = event.dataTransfer!.getData('text/plain')
+  projectState.moveProject(projectId, this.type === 'active' ? ProjectStatus.Active : ProjectStatus.Finished)
+}
+
+@Autobind
+dragLeaveHandler(_: DragEvent) {
+  const listEl = this.element.querySelector('ul')!
+  listEl.classList.remove('droppable')
+}
+```
+
+<br/><br/><br/>
+
+
+### Import aliases
+```js
+import a as A from '...'
+import * as grouped from '...'
+
+grouped.a, grouped.b
+```
+
+> **Code in modules execution**: the code in every module (file) **runs only once**, when it's imported for a first time.
+
+<br/><br/><br/>
+
+
+
+# OPTIMIZE AN APP
+- use a **bundler** do minimize code, decrease requests for files (production build)
+- bundle analyzer - you can find and remove e.g. unused moment.js languages and lodash functions
+- **lazy loading** - React.Suspense and React.Lazy
+- use **React.Fragment** to avoid adding extra nodes to the dom
+- **React.memo** - to re-render only if props change
+- **Virtualization** for long flat lists
+- **multiple chunk files** - `CommonsChunkPlugin` - separate project and 3rd party libs code - `Vendor.bundle.js` and `app.bundle.js`. The browsers caches these files less frequently and retrieves resources in parallel, reducing load times.
+- **throttling** (delay execution) and **debouncing** - to filter frequent events
+- use **css animations** instead js animations
+- **Redux reselect** - to create memoized selectors
+
+
+<br/><br/>
+
+
+# Strict Mode
+
+- **functions** inside blocks are **scoped to blocks**
+- all **modules** and **classes** are in **strict mode**
+- not allowed to **define global variables** by mistyping the calling of a defined var
+- attempts to delete **undeletable** properties throws
+- requires regular **function params** to be **unique**
+- forbids **setting properties** on **primitive** values
+- **duplicate property names** throws
+- the **global context** is `undefined`
+- assignment to a non-writable **global** or **property**, assignment to a **getter-only** property, assignment to a **new property** on a **non-extensible** object will throw 
+- more **secure**

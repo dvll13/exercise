@@ -8,10 +8,14 @@
 
 <br/><br/>
 
+
 # INIT
 `npx create-react-app <app_name> --template typescript` - create react ts app
 
+> It's a good practice to install `typescript` to every project so that projects won't break if something changes with the globally installed TS.
+
 <br/><br/>
+
 
 # TS compiler
 ## _ts -> compiler -> js_
@@ -90,8 +94,10 @@ Some **`tsconfig.js` options** worth mentioning:
 
 
 
-# Type definition file (*.d.ts)  
-> describes the different types of values, functions, classes that exist in a js library   
+# Type definition file (declaration file) (*.d.ts)
+_Allows the usage of Vanilla JS libs in a TS project_
+
+> They don't contain actual logic, but **instructions to TS** about how something works and what's included in its package: the different types of values, functions, classes 
 
 <br/>
 
@@ -101,9 +107,12 @@ If we are **not going to import** our package anywhere else:
 <br/><br/>
 
 ### TS -> Type definition file -> JS Library  
-if a TDF is missing in a JS Lib (for which there's a warning), then it could be found and used from "Definitely Typed" (`@types/[js-lib-name]`)
+if a TDF is missing in a JS Lib (for which there's a warning), then it could be found and used from "Definitely Typed" (`npm i --save-dev @types/[js-lib-name]`)
 
 `npm i @types/faker`
+
+> You can search for such files like `jquery types`
+
 <br/><br/><br/><br/>
 
 
@@ -120,6 +129,9 @@ if a TDF is missing in a JS Lib (for which there's a warning), then it could be 
 **type inference** -  *TS* tries to figure out what type of value a variable refers to (*when the variable is initialized with a value/expression on the same line*). **We should rely on it whenever we can**  
 
 ```ts
+// tells TS not to worry about this var, that's been declared globally in the html file; same with features and packages without types 
+declare var GLOBAL: any
+
 const num1 = 5 // const num1: 5
 let num2 = 5 // let num2: number
 
@@ -340,6 +352,23 @@ const logToDo = (id: number, title: string, completed: boolean)
 
 // a class can implement multiple interfaces
 class SomeClass implements Interface1, Interface2 {}
+
+
+// exercise\typescript\understanding-ts-2022\project_drag-drop\src\app.ts
+interface Draggable {
+  dragStartHandler(event: DragEvent): void
+  dragEndHandler(event: DragEvent): void
+}
+
+interface DragTarget {
+  // the browser needs to be notified that the thing we're dragging something over is a valid dropping target, so dropping should be permitted
+  dragOverHandler(event: DragEvent): void
+  dropHandler(event: DragEvent): void
+  dragLeaveHandler(event: DragEvent): void
+}
+
+class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> implements Draggable {}
+
 
 
 interface Person {
@@ -1073,8 +1102,107 @@ courseForm.addEventListener('submit', (event) => {
 
 <br/><br/><br/> 
 
+# Code splitting
+
+- **Namespaces** (TS feature) and **File Bundling** (not recommended, some imports could be dangerously missed)
+  - use `namespace` code syntax to group code
+  - **per-file** or **bundled** compilation is possible (less imports to manage)
+  ```json
+  // tsconfig.json
+  {
+  "module": "amd",
+  "outFile": "./dist/bundle.js" // bundles all code, including namespaces together so in the bundled js everything is accessible
+  }
+  ```
+
+  ```ts
+  // drag-drop-interfaces.ts
+  namespace App {
+    export interface Draggable {
+      dragStartHandler(event: DragEvent): void
+      dragEndHandler(event: DragEvent): void
+    }
+
+    export interface DragTarget {
+      // the browser needs to be notified that the thing we're dragging something over is a valid dropping target, so dropping should be permitted
+      dragOverHandler(event: DragEvent): void
+      dropHandler(event: DragEvent): void
+      dragLeaveHandler(event: DragEvent): void
+    }
+  }
+  ```
+
+  ```ts
+  // App.ts
+  /// <reference path="drag-drop-interfaces.ts" />
+
+  namespace App {
+    ...
+  }
+  ```
+
+  ```html
+  <script src="dist/bundle.js" defer></script>
+  ```
+
+- **ES6 Modules (imports/exports)** (the more modern and preferred alternative, supported by TS and modern browsers natively)
+  - uses ES6 import/export syntax
+  - per-file compilation but a single `<script type="module">` import
+  - **bundling** via 3rd-party tools like Webpack is possible
+
+```json
+{
+  "module": "es2015",
+  //  "outFile": ""
+}
+```
+
+```html
+<script type="module" src="dist/app.js"></script>
+```
+
+```ts
+// NOTE: file extension must be added!
+import { ProjectInput } from './components/project-input.js'
+```
+> The **file extension** may be **omitted** if we use Webpack or another **bundler**, but if we rely on the **browser** to import our files, then we **need** the **extensions**.
+
+> On page load the **browser** starts from the main file, and then **makes a request** for each file, based on the imports chain.
+
+<br/><br/><br/> 
+
+
 # Exercise TS projects
-- Drag & Drop ([exercise\typescript\understanding-ts-2022\project_drag-drop\src](../typescript/understanding-ts-2022/project_drag-drop/src)) - OOP, decorators (autobind, validation), generics, singleton, static, project state management via a class, abstract class for inheritance, accessors
+- Drag & Drop ([exercise\typescript\understanding-ts-2022\project_drag-drop\src](../typescript/understanding-ts-2022/project_drag-drop/src)) - OOP, decorators (autobind, validation), generics, singleton, static, project state management via a class, abstract class for inheritance, accessors, webpack, ES6 modules
+  - `tsconfig.json` settings for running `Webpack`:
+  
+  ```json
+  {
+    "target": "es6",
+    "module": "es2015",
+    "outDir": "./dist",
+    "sourceMap": true,
+    // "rootDir": "./src"  // not needed any more since Webpack will determine where the src files are
+  }
+  ```
+
+  - add a `webpack.config.js` file (uses `node.js` syntax - `modules.exports = {...}`)
+
+  - `package.json`:
+  
+  ```json
+  { "scripts": {
+    "start": "webpack serve",
+    "build": "webpack --config webpack.config.prod.js" 
+  } }
+  ```
+
+- Address to Google location ([exercise\typescript\understanding-ts-2022\project_adress-to-location](../typescript/understanding-ts-2022/project_adress-to-location)) - 
+
+<br/><br/><br/> 
+
+
+
 
 <br/><br/><br/><br/><br/><br/>  
 

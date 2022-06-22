@@ -28,6 +28,16 @@
 * `esbuild-wasm` ([react/typescript/jbook](..%5Creact%5Ctypescript%5Cjbook%5Csrc)) - This is the cross-platform WebAssembly binary for `esbuild`, a JavaScript bundler and minifier.
 
 * `parcel-bundler` - helps run TS in the browser (`parcel index.html` - starts the server and when it sees a ts file, it auto converts it to js)
+
+* `webpack` [exercise\typescript\understanding-ts-2022](../typescript/understanding-ts-2022/project_drag-drop) - bundles and optimizes (minifies) project files, and could add additional build steps & tools
+```cli
+npm i --save-dev webpack webpack-cli webpack-dev-server typescript ts-loader
+```
+  * in the `Drag & Drop` project `Webpack` will be used to **transform** TS code to JS and **emit** a bundle, plus its `dev server` is being used
+  * `ts-loader` tells webpack how to **convert** TS to JS
+* `clean-webpack-plugin` - clean the build folder before every `build`
+
+_More in [typescript.md#exercise-ts-projects](typescript.md#exercise-ts-projects)_
 <br/><br/><br/>
 
 
@@ -65,3 +75,19 @@
 * `lite-server` ([exercise\typescript\understanding-ts-2022\Understanding-TS\package.json](..%5Ctypescript%5Cunderstanding-ts-2022%5CUnderstanding-TS%5Cpackage.json)) - Simple and lightweight development only node server that serves a web app, opens it in the browser, refreshes when html or javascript change, injects CSS changes using sockets, and has a fallback page when a route is not found.
 
 <br/><br/><br/>
+
+
+
+# UTILS
+
+- `lodash` [exercise\typescript\understanding-ts-2022\3rd-party-libs\src\app.ts](../typescript/understanding-ts-2022/3rd-party-libs/src/app.ts) - A modern JavaScript utility library delivering modularity, performance & extras. For TS projects needs DT: `@types/lodash`
+
+- `class-transformer` ([exercise\typescript\understanding-ts-2022\3rd-party-libs\src](../typescript/understanding-ts-2022/3rd-party-libs/src)) - for TS and JS projects: allows you to transform plain object to some instance of class and versa. Also it allows to serialize / deserialize object based on criteria. 
+
+<br/><br/><br/>
+
+
+
+# TYPESCRIPT
+
+- `class-validator` ([exercise\typescript\understanding-ts-2022\3rd-party-libs\src](../typescript/understanding-ts-2022/3rd-party-libs/src)) - validation by using TS decorators

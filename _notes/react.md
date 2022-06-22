@@ -1,3 +1,41 @@
+> **Redux state** shouldn't be **mutated** because it will have the same reference as before and the pure/memo components won't re-render.
+
+> **useCallback** - a react hook that returns a memorized callback when passed a function and a list of dependencies that set the parameters. It’s useful when a component is passing a callback to its child component in order to prevent rendering. It saves a reference to the function and only changes the callback when one of its dependencies is changed.
+
+> **useMemo** - very similar to useCallback. It accepts a function and a list of dependencies, but the difference between useMemo and useCallback is that useMemo returns the memoized value returned by the passed function. It only recalculates the value when one of the dependencies changes. It’s very useful if you want to avoid expensive calculations on every render when the returned value isn’t changing.
+
+> **useEffect** - accepts a function as a first parameter and a list of dependencies as a second parameter. When the dependencies change, it executes the passed function. The hook helps developers perform mutations, subscriptions, logging, and other side effects once all the components have been rendered
+
+> **React.Memo()** - it signals the intent to resume code but doesn’t extend to functions passed as parameters. When a component is wrapped with useCallback, React saves a reference to the function. Passing this reference as a property to new components will shorten your rendering time
+
+
+You should wrap functions with **useCallback** when passing **a function as a dependency** to other **hooks** or wrapping a **functional component in React.Memo()** that accepts your method as a property. You can use **useMemo** when you are working on functions where the inputs gradually change, where data values aren’t large enough to cause memory issues, or if the parameters are large enough so that the cost of comparison doesn’t outweigh the use of the wrapper.
+
+**useCallback** works well in instances where the code would otherwise be **recompiled with every call**. Memorizing the results can decrease the cost of calling functions over and over again when the inputs change gradually over time
+
+
+<br/><br/>
+
+When **making a DOM change**, these things happen: 
+
+- The browser parses the HTML to find the node with this id.
+- It removes the child element of this specific element.
+- Updates the element(DOM) with the ‘updated value’.
+- Recalculates the CSS for the parent and child nodes.
+- Update the layout.
+- Finally, traverse the tree and paint it on the screen(browser) display.
+
+**Virtual DOM**: React uses Virtual DOM exists which is like a **lightweight copy of the actual DOM**(a virtual representation of the DOM). So for every object that exists in the original DOM, there is an object for that in React Virtual DOM. It is exactly the same, but it does not have the power to directly change the layout of the document. Manipulating DOM is slow, but manipulating **Virtual DOM is fast as nothing gets drawn on the screen**. So each time there is a change in the state of our application, the **virtual DOM gets updated first** instead of the real DOM.
+
+**How Virtual DOM actually make things faster**: When anything new is added to the application, **a virtual DOM is created** and it is represented as a tree. Each element in the application is a node in this tree. So, whenever there is a change in the state of any element, a new Virtual DOM tree is created. **This new Virtual DOM tree is then compared with the previous Virtual DOM tree and make a note of the changes**. After this, it finds the best possible ways to **make these changes to the real DOM**. Now **only the updated elements will get rendered** on the page again.
+
+**How Virtual DOM helps React**: In react, everything is treated as a component be it a functional component or class component. A component can contain a state. Each time we change something in our JSX file or let’s put it in simple terms, whenever the state of any component is changed react updates its Virtual DOM tree. Though it may sound that it is ineffective but the cost is not much significant as updating the virtual DOM doesn’t take much time. React maintains **two Virtual DOM** at each time, **one contains the updated Virtual DOM and one which is just the pre-update version of this updated Virtual DOM**. Now it compares the pre-update version with the updated Virtual DOM and figures out what exactly has changed in the DOM like which components have been changed. This process of comparing the current Virtual DOM tree with the previous one is known as **‘diffing’**. Once React finds out what exactly has changed then it updated those objects only, on **real DOM**. React uses something called batch updates to update the real DOM. It just means that the changes to the real DOM are **sent in batches** instead of sending any update for a single change in the state of a component. We have seen that the **re-rendering of the UI is the most expensive part** and React manages to do this most efficiently by ensuring that the **Real DOM receives batch updates to re-render the UI**. This entire process of transforming changes to the real DOM is called **Reconciliation**
+
+This significantly improves the performance and is the main reason why React and its Virtual DOM are much loved by developers all around.
+
+
+<br/><br/><br/><br/><br/>
+
 // jshint ignore: start
 /* eslint-disable */
 import { DELETE_RESULT, SUBTRACT } from "./udemy/redux-app/src/store/actions/actionTypes";
