@@ -63,6 +63,8 @@ _More in [typescript.md#exercise-ts-projects](typescript.md#exercise-ts-projects
 
 # NODE / SERVERS
 
+* `body-parser` (exercise\typescript\understanding-ts-2022\node_express\package.json](../typescript/understanding-ts-2022/node_express)) - 
+
 * `cors` - ([exercise\react\typescript\jbook\packages\local-api](..%5Creact%5Ctypescript%5Cjbook%5Cpackages%5Clocal-api)) - CORS is a node.js package for providing a Connect/Express middleware that can be used to enable CORS with various options.
 
 * `express` ([exercise\react\typescript\jbook\packages\local-api\src\index.ts](..%5Creact%5Ctypescript%5Cjbook%5Cpackages%5Clocal-api%5Csrc%5Cindex.ts)) - Express is a node js web application framework that provides broad features for building web and mobile applications. It is used to build a single page, multipage, and hybrid web application. It's a layer built on the top of the Node js that helps manage servers and routes.
@@ -73,6 +75,8 @@ _More in [typescript.md#exercise-ts-projects](typescript.md#exercise-ts-projects
 * `http-proxy-middleware` ([exercise\react\typescript\jbook\packages\local-api\src\index.ts](..%5Creact%5Ctypescript%5Cjbook%5Cpackages%5Clocal-api%5Csrc%5Cindex.ts)) - Node.js proxying made simple. Configure proxy middleware with ease for connect, express, browser-sync and many more.
 
 * `lite-server` ([exercise\typescript\understanding-ts-2022\Understanding-TS\package.json](..%5Ctypescript%5Cunderstanding-ts-2022%5CUnderstanding-TS%5Cpackage.json)) - Simple and lightweight development only node server that serves a web app, opens it in the browser, refreshes when html or javascript change, injects CSS changes using sockets, and has a fallback page when a route is not found.
+
+* `nodemon` ([exercise\typescript\understanding-ts-2022\node_express\package.json](../typescript/understanding-ts-2022/node_express)) - watch for changes and restarts the node server
 
 <br/><br/><br/>
 

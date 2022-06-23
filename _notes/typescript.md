@@ -10,7 +10,7 @@
 
 
 # INIT
-`npx create-react-app <app_name> --template typescript` - create react ts app
+`npx create-react-app <app_name> --template typescript` - create react ts app; if `<app_name>` is replaced with `.` then the project will be initialized in the current folder
 
 > It's a good practice to install `typescript` to every project so that projects won't break if something changes with the globally installed TS.
 
@@ -32,14 +32,31 @@
 <br/><br/><br/>
 
 
-## TS-NODE
+# NODE
+
+> Node doesn't execute TS.
+
 `npm i -g typescript ts-node`
 
-`ts-node index.ts` - compile `ts` to `js` and run it *(index.ts => index.js; node index.js)*  
+`ts-node index.ts` - compile `ts` to `js` and run it *(index.ts => index.js; node index.js)*. Good for **development**  
 `npm i -g parcel-bundler` - helps run TS in the browser
   * `parcel index.html` - starts the server and when it sees a ts file, it auto converts it to js  
 
+[exercise\typescript\understanding-ts-2022\node_express\app.ts](../typescript/understanding-ts-2022/node_express/app.ts)
 
+`tsconfig.json:`
+```json
+{
+  "target": "es2018",
+  "moduleResolution": "node",
+  "outDir": "./dist",
+  "rootDir": "./src"
+}
+```
+
+Required deps:
+- `@types/node`
+- `@types/express` - starts working if instead `require` we import express like `import express from 'express'` (thanks to TS, which converts it to `require()`)
 
 <br/><br/>
 
@@ -225,6 +242,8 @@ document.querySelector('#user-input')! as HTMLInputElement
 
 # CLASSES  
 [exercise\typescript\understanding-ts-2022\classes_interfaces\src\classes.ts](../typescript/understanding-ts-2022/classes_interfaces/src/classes.ts)
+
+> Every class automatically acts as a **type**.
 
 > **modifiers** - `public`, `private`, `protected` _(by convention `public` methods must be put **before** `private` ones)_
 
@@ -1097,7 +1116,7 @@ courseForm.addEventListener('submit', (event) => {
 
 ## Usage of decorators
 - `class-validator`
-- `nestjs` - node.js framework for SSR apps
+- `nestjs` - node.js framework for SSR apps with TS out-of-the-box
 - `angular`
 
 <br/><br/><br/> 
@@ -1173,7 +1192,7 @@ import { ProjectInput } from './components/project-input.js'
 
 
 # Exercise TS projects
-- Drag & Drop ([exercise\typescript\understanding-ts-2022\project_drag-drop\src](../typescript/understanding-ts-2022/project_drag-drop/src)) - OOP, decorators (autobind, validation), generics, singleton, static, project state management via a class, abstract class for inheritance, accessors, webpack, ES6 modules
+- **Drag & Drop** ([exercise\typescript\understanding-ts-2022\project_drag-drop\src](../typescript/understanding-ts-2022/project_drag-drop/src)) - OOP, decorators (autobind, validation), generics, singleton, static, project state management via a class, abstract class for inheritance, accessors, webpack, ES6 modules
   - `tsconfig.json` settings for running `Webpack`:
   
   ```json
@@ -1197,7 +1216,11 @@ import { ProjectInput } from './components/project-input.js'
   } }
   ```
 
-- Address to Google location ([exercise\typescript\understanding-ts-2022\project_adress-to-location](../typescript/understanding-ts-2022/project_adress-to-location)) - 
+- **Address to Google location** ([exercise\typescript\understanding-ts-2022\project_adress-to-location](../typescript/understanding-ts-2022/project_adress-to-location))
+
+- Todo list ([exercise\typescript\understanding-ts-2022\react-ts\src](../typescript/understanding-ts-2022/react-ts/src))
+
+- **Node & Express simple REST API (CRUD operations with routes & controllers)** [exercise\typescript\understanding-ts-2022\node_express\src](../typescript/understanding-ts-2022/node_express/src)
 
 <br/><br/><br/> 
 
@@ -1212,7 +1235,8 @@ import { ProjectInput } from './components/project-input.js'
 
 # REACT + TS  
 
-`React.FC` ~ `React.FunctionComponent`  
+`React.FC` ~ `React.FunctionComponent` 
+`React.ClassicComponent` - class components 
 <br/>
 
 ## PROPS 

@@ -666,6 +666,8 @@ console.log(last);   // { value: 3, done: true }
 
 # Asynchronous concepts
 
+Asynchronous programming is a technique that enables your program to start a **potentially long-running task**, and then rather than having to wait until that task has finished, to be able to **continue to be responsive** to other events while the task runs. Once the task is **completed**, your program is presented with the **result**.
+
 ## Callbacks
 
 > **Callback hell** - when we have a number ot nested callback which become hard to track. Using `Promises` and `async/await` fns is recommended over callbacks

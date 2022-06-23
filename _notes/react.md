@@ -8,6 +8,7 @@
 
 > **React.Memo()** - it signals the intent to resume code but doesn’t extend to functions passed as parameters. When a component is wrapped with useCallback, React saves a reference to the function. Passing this reference as a property to new components will shorten your rendering time
 
+> When we **pass a function to a child component** as a **prop**, we actually pass a **pointer** to the function.
 
 You should wrap functions with **useCallback** when passing **a function as a dependency** to other **hooks** or wrapping a **functional component in React.Memo()** that accepts your method as a property. You can use **useMemo** when you are working on functions where the inputs gradually change, where data values aren’t large enough to cause memory issues, or if the parameters are large enough so that the cost of comparison doesn’t outweigh the use of the wrapper.
 
@@ -34,7 +35,26 @@ When **making a DOM change**, these things happen:
 This significantly improves the performance and is the main reason why React and its Virtual DOM are much loved by developers all around.
 
 
+<br/><br/>
+
+# Adding an item to a state that's based on its current value
+
+```js
+setTodos(prevTodos => [...prevTodos, newTodo])
+```
+
+This way we make sure that we have the **most recent** todos state. If it was `setTodos([...todos, newTodo])` then `todos` might not be the most up-do-date version.
+
+```js
+<button onClick={() => onDeleteTodo(id)}>DELETE</button>
+// EQUIVALENT
+<button onClick={onDeleteTodo.bind(null, id)}>DELETE</button>
+```
+
 <br/><br/><br/><br/><br/>
+
+
+
 
 // jshint ignore: start
 /* eslint-disable */
