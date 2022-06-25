@@ -1,10 +1,29 @@
 # Webpack
 
-`require, module.exports` -> **common js** syntax modules  
+`require, module.exports` -> **commonjs** syntax modules  
 
 `import ... from, export` -> **es modules** syntax  
 
 `"build": "webpack --mode=development"` - starts from the entry point (index.js) and builds everything related into `/dist/main.js` **bundle**  
+
+**`webpack-html-plugin`** - automatically adds to the `public/index.html` imports to the generated bundle files
+```js
+{
+    plugins: [
+    new HtmlWebpackPlugin({
+      template: './public/index.html'
+    })
+  ]
+}
+```
+
+<br/>
+
+## Webpack Dev Server
+_Takes the output from our webpack process and makes it available in the browser_
+
+[exercise\microfrontends\e-commerce](../../microfrontends/e-commerce)
+
 <br/><br/>
 
 

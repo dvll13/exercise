@@ -666,7 +666,7 @@ console.log(last);   // { value: 3, done: true }
 
 # Asynchronous concepts
 
-Asynchronous programming is a technique that enables your program to start a **potentially long-running task**, and then rather than having to wait until that task has finished, to be able to **continue to be responsive** to other events while the task runs. Once the task is **completed**, your program is presented with the **result**.
+Asynchronous programming is a technique that enables your program to start a **potentially long-running task**, and then rather than having to wait until that task has finished, to be able to **continue to be responsive** to other events while the task runs. Once the task is **completed**, your program is presented with the **result**. Examples: `fetch() API`, `XMLHttpRequest`
 
 ## Callbacks
 
@@ -677,33 +677,48 @@ Asynchronous programming is a technique that enables your program to start a **p
 ## Promises (future values)
 _JavaScript is a **single-threaded** language supporting synchronous and asynchronous operations. And promises are just a more elegant way to deal with these asynchronous tasks than callbacks. And a very handy way to avoid callback hell._
 
-> A promise is an object representing the result of asynchronous tasks which are tasks that **don’t block the execution** until it is finished. This approach is great for time consuming tasks.
+**A promise** is an object representing the **current state of asynchronous tasks**, which are tasks that **don’t block the execution** until it is finished. This approach is great for time consuming tasks. At the time the promise is returned to the caller, the operation often isn't finished, but the promise object provides **methods to handle** the eventual success or failure of the operation.
 
-A Promise is a **proxy for a value** not necessarily known when the promise is created. It allows you to associate handlers with an asynchronous action's eventual success value or failure reason. This lets asynchronous methods return values like synchronous methods: instead of immediately returning the final value, the asynchronous method returns a promise to supply the value at some point in the future.
-
-A Promise is in one of these **states**:
-- pending: initial state, neither fulfilled nor rejected.
-- fulfilled: meaning that the operation was completed successfully.
-- rejected: meaning that the operation failed.
-
-Promises can be **chained**
-
-> The **promise class constructor** takes one argument which is a function with two arguments `(resolve, reject` that will be passed to us  
+With a _callback design_, you call the asynchronous function, passing in your callback function. The function returns immediately and calls your callback when the operation is finished.  
+With a _promise-based API_, the asynchronous function **starts the operation and returns a Promise object**. You can then attach **handlers** to this promise object, and these handlers will be executed when the operation has **succeeded** or **failed**.
 
 ```js
-var p = new Promise((resolveFn, rejectFn) => {
-  // could be resolved OR rejected
-  setTimeout((theParam)=> resolveFn('yeah', theParam), 1000, someParam)
-  // setTimeout(()=> rejectFn('ops'), 3000)
+const fetchPromise = fetch('https://mdn.github.io/learning-area/javascript/apis/fetching-data/can-store/products.json')
+
+console.log(fetchPromise) // Promise { <state>: "pending" }
+
+// When (and if) the fetch operation succeeds, the promise will call our handler, passing in a Response object, which contains the server's response.
+fetchPromise.then( response => { 
+  console.log(`Received response: ${response.status}`) // Received response: 200
 })
 
-p
-  .then(resolvedMessage => console.log(resolvedMessage))
-  .catch(rejectMessage => console.log(rejectMessage))
+console.log("Started request...")
 ```
-<br/>
 
-**Promise chain:**
+A Promise is in one of these **states**:
+- **pending**: initial state, neither fulfilled nor rejected.
+- **fulfilled**: meaning that the operation was completed successfully and the `then()` handler is called
+- **rejected**: meaning that the operation failed and the `catch()` handler is called
+
+### Promises can be **chained**:
+```js
+const fetchPromise = fetch('https://mdn.github.io/learning-area/javascript/apis/fetching-data/can-store/products.json');
+
+fetchPromise
+  .then( response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error: ${response.status}`)
+    }
+    return response.json()
+  })
+  .then( data => {
+    console.log(data[0].name)
+  })
+  .catch( error => { // triggered when ANY promise in the chain fails
+    console.error(`Could not get products: ${error}`)
+  })
+```
+
 ```js
 const getRoleId = new Promise((resolve, reject) => {
   setTimeout(() => resolve('role_1'), 1000)
@@ -720,11 +735,58 @@ getRoleId.then(roleId => {
 }).then(details => console.log(details))
 ```
 
+> The **promise class constructor** takes one argument which is a function with two arguments `(resolve, reject` that will be passed to us  
+
+```js
+var p = new Promise((resolveFn, rejectFn) => {
+  // could be resolved OR rejected
+  setTimeout((theParam)=> resolveFn('yeah', theParam), 1000, someParam)
+  // setTimeout(()=> rejectFn('ops'), 3000)
+})
+
+p
+  .then(resolvedMessage => console.log(resolvedMessage))
+  .catch(rejectMessage => console.log(rejectMessage))
+```
+
+<br/>
+
+### Promises can be **combined**
+
+- **`Promise.all()`** - the promise chain is what you need when your operation consists of several asynchronous functions, and you need each one to complete before starting the next one. Sometimes you need **all** the promises to be fulfilled, but they **don't depend on each other**. In a case like that it's much more efficient to start them all off together, then be notified when they have all fulfilled. The `Promise.all()` method is what you need here. It **takes an array of promises, and **returns a single promise**:
+  - **fulfilled** when and if **all** the promises in the array are **fulfilled**. In this case the `then()` handler is called with an array of all the responses, in the same order that the promises were passed into all()
+  - **rejected** when and if **any** of the promises in the array are **rejected**. In this case the `catch()` handler is called with the error thrown by the promise that rejected.
+  
+  ```js
+  const fetchPromise1 = fetch('https://mdn.github.io/learning-area/javascript/apis/fetching-data/can-store/products.json');
+  const fetchPromise2 = fetch('https://mdn.github.io/learning-area/javascript/apis/fetching-data/can-store/not-found');
+  const fetchPromise3 = fetch('https://mdn.github.io/learning-area/javascript/oojs/json/superheroes.json');
+
+  Promise.all([fetchPromise1, fetchPromise2, fetchPromise3])
+    .then( responses => {
+      for (const response of responses) {
+        console.log(`${response.url}: ${response.status}`)
+      }
+    })
+    .catch( error => {
+      console.error(`Failed to fetch: ${error}`)
+    })
+  ```
+
+- **`Promise.any()`** - Sometimes you might need **any** one of a set of promises to be fulfilled, and don't care which one. This is like `Promise.all()`, except that it is fulfilled as soon as **any** of the array of promises is **fulfilled**, or **rejected if all of them are rejected**
+
+<br/><br/>
+
+## ERRORS handling
+
+To support error handling, Promise objects provide a **`catch()`** method. This is a lot like `then()`: you call it and pass in a handler function. However, while the handler passed to then() is called when the asynchronous operation succeeds, the handler passed to catch() is called when the asynchronous operation **fails**.
+
+If you add `catch()` to the **end of a promise chain**, then it will be called when **any** of the asynchronous function calls **fails**.
+
 <br/><br/>
 
 
-
-## ERRORS: when there's asynchronicity in a try-catch block
+### ERRORS: when there's asynchronicity in a try-catch block
 ```js
 try {
   setTimeout(() => {
@@ -739,7 +801,7 @@ _The try-catch block watches for an error in the block within only in the instan
 <br/><br/>
 
 
-## Catching async errors (2):
+### Catching async errors (2):
 
 [exercise\react\typescript\jbook\packages\local-api\src\index.ts](..%5Creact%5Ctypescript%5Cjbook%5Cpackages%5Clocal-api%5Csrc%5Cindex.ts)
 ```js
@@ -762,9 +824,9 @@ And then in [exercise\react\typescript\jbook\packages\cli\src\commands\serve.ts]
 <br/><br/>
 
 
-## async/await
+## async / await
 
-An async function is a function declared with the async keyword, and the await keyword is permitted within it. The async and await keywords enable asynchronous, **promise-based behavior to be written in a cleaner style, avoiding the need to explicitly configure promise chains**.
+An async function is a function declared with the async keyword, and the await keyword is permitted within it. The `async` and `await` keywords enable asynchronous, **promise-based behavior to be written in a cleaner style, similar to synchronous code, avoiding the need to explicitly configure promise chains**.
 
 > Produced to **consume** promises instead of creating them
 
@@ -782,9 +844,39 @@ const getRoleDetails = (roleId) => {
     setTimeout((id) => resolve('role details for ' + id), 1000, roleId)
   })
 }
-
-
 ```
+
+> We can even use a `try...catch block` for error handling, exactly as we would if the code were synchronous.  
+
+> Note though that async functions **always return a promise**
+
+```js
+async function fetchProducts() {
+  try {
+    const response = await fetch('https://mdn.github.io/learning-area/javascript/apis/fetching-data/can-store/products.json')
+    if (!response.ok) {
+      throw new Error(`HTTP error: ${response.status}`)
+    }
+    const data = await response.json()
+    return data
+  }
+  catch(error) {
+    console.error(`Could not get products: ${error}`)
+  }
+}
+
+const promise = fetchProducts()
+promise.then(data => console.log(data[0].name))
+```
+
+> Keep in mind that just like a promise chain, `await` forces asynchronous operations to be **completed in series**. This is necessary if the result of the next operation depends on the result of the last one, but if that's **not** the case something like `Promise.all()` will be **more performant**.
+
+
+**Conclusion**
+
+**Promises** are the foundation of asynchronous programming in modern JavaScript. They make it easier to express and reason about sequences of asynchronous operations without deeply nested callbacks, and they support a style of error handling that is similar to the synchronous `try...catch` statement.
+
+The `async` and `await` keywords make it easier to build an operation from a series of consecutive asynchronous function calls, **avoiding** the need to create explicit **promise chains**, and allowing you to write code that looks just like synchronous code.
 
 <br/><br/>
 
