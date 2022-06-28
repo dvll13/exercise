@@ -274,7 +274,7 @@ Arrow functions **don't have** their own `this` or `arguments` binding. Instead,
 
 > **`obj1.hasOwnProperty('prop1')`** method - check if a property is present and **not inherited**
 
-> **`delete obj.prop`** - delete a property, returns `true` if it's deleted and `false` otherwise
+> **`delete obj.prop`** - **removes a property** from an object; if no more references to the same property are held, it is eventually released automatically. returns `true` for all cases except when the property is an own non-configurable property, in which case, `false` is returned in non-strict mode
 
 > **`obj1.propertyIsEnumerable('prop1')`**- not all props are enumerable (get cycled in loops), can be checked with this method
 
@@ -289,6 +289,7 @@ var a = {
 }
 
 console.log(a.second) // undefined
+console.log(a._name) // one
 console.log(a.name) // one
 a.name = 'two'
 console.log(a.name) // two
@@ -310,15 +311,15 @@ console.log(a.name) // two
 const object1 = {};
 
 Object.defineProperty(object1, 'property1', {
-  value: 42,
+  value: 4,
   writable: false
 });
 
-object1.property1 = 77;
+object1.property1 = 7;
 // throws an error in strict mode
 
 console.log(object1.property1);
-// expected output: 42
+// expected output: 4
 ```
 <br/>
 
@@ -361,7 +362,7 @@ o.b = 22 // Uncaught TypeError: Assignment to constant variable.
 <br/><br/>
 
 
-# Constructor
+## Constructor
 
 > A function using which we can **create objects** with the same properties and methods
 
@@ -384,13 +385,15 @@ console.log(flight2.constructor === Flight) // true
 <br/><br/>
 
 
-# Prototypes
+## Prototypes
 
 > Every **function** has a reference type property called `prototype` and if we create `objects` using this `function` they will have a property `prototype` that will point to the `function`'s `prototype`.
 
 **Advantages**:
-- if we save a method in the `prototype` of the `function` then the `objects` using it will point to it and **save memory**. we can reuse methods and properties on the prototypes
+- if we save a method in the `prototype` of the `function` then the `objects` using it will point to it and **save memory**. we can reuse methods and properties on the prototypes. _By using prototype property on the constructor function,  Prototype will enable us to easily **define methods to all instances** of the instances while saving memory. What's great is that the method will be applied to the prototype of the object, so it is only stored in the memory once, because objects coming from the same constructor point to one common prototype object. In addition to that, all instances of userOne or userTwo will have access to that method. Thus, we will be able to save quite a good amount of memory compared to the constructor approach. Apart from low memory usage, the prototype approach is obviously faster in execution when creating new object instances since no time is spent on re-declaring any methods._
 - we can use **prototype chaining** to implement **inheritance**
+
+`__proto__` | `[[Prototype]] shows what's in the prototype
 
 ```js
 const passenger = { name: 'John' }
@@ -419,8 +422,8 @@ Flight.prototype = {
   toString: function() {console.log(`Flight ${this.flightNumber}!`)}
 }
 
-var flight1 = new Flight('American Airlines', 'AA123')
-var flight2 = new Flight('South West', 'SW123')
+const flight1 = new Flight('American Airlines', 'AA123')
+const flight2 = new Flight('South West', 'SW123')
 
 console.log(flight1.display === flight2.display) // true
 console.log(flight1.toString()) // Flight AA123!
@@ -439,12 +442,65 @@ console.log(Object.getPrototypeOf(flight1)) // constructor: Flight(airlines, fli
 ```
 
 ```js
-var obj = {}
-var objPrototype = Object.getPrototypeOf(obj)
+const obj = {}
+const objPrototype = Object.getPrototypeOf(obj)
 
 console.log(objPrototype) // {constructor, hasOwnProperty, isPrototypeOf, propertyIsEnumerable, toString, ...}
 console.log(objPrototype === Object.prototype) // true
 console.log(Object.prototype.isPrototypeOf(objPrototype)) // true
+```
+
+```js
+// constructor
+function Book(title, author, year) {
+  this.title = title
+  this.author = author
+  this.year = year
+  
+//   this.getSummary = function() {
+//     console.log(`${this.title} (${this.year}) - ${this.author}`)
+//   }
+}
+
+// Prototype
+Book.prototype.getSummary = function() {
+  console.log(`${this.title} (${this.year}) - ${this.author}`)
+}
+
+Book.prototype.getAge = function() {
+  const years = new Date().getFullYear() - this.year
+  console.log(`${this.title} is ${years} years old.`)
+}
+
+// Change year / manipulate instance data
+Book.prototype.revise = function(newYear) {
+  this.year = newYear
+  this.revised = true
+  console.log(`${this.title}'s new year is ${this.year}.`)
+}
+
+
+const book1 = new Book('title 1', 'author 1', 1925)
+const book2 = new Book('title 2', 'author 2', 1968)
+
+// console.log(book1.getSummary === book2.getSummary) // false
+// console.log(book1.getSummary2 === book2.getSummary2) // true
+
+console.log(book1) /*
+Book {...}
+  author: "author 1"
+  title: "title 1"
+  year: 1925
+  [[Prototype]]: Object
+    getAge: ƒ ()
+    getSummary: ƒ ()
+    constructor: ƒ ()
+    [[Prototype]]: Object
+      constructor: ƒ Object()
+      hasOwnProperty: ƒ hasOwnProperty()
+      isPrototypeOf: ƒ isPrototypeOf()
+      ...
+*/
 ```
 
 ```js
@@ -458,6 +514,240 @@ String.prototype.display = function() {
 ```
 
 <br/><br/>
+
+
+## Inheritance
+
+### Prototype inheritance
+
+```js
+// constructor
+function Book(title, author, year) {
+  this.title = title
+  this.author = author
+  this.year = year
+}
+
+// Prototype
+Book.prototype.getSummary = function() {
+  console.log(`${this.title} (${this.year}) - ${this.author}`)
+}
+
+// 1. Constructor
+function Magazine(title, author, year, month) {
+  Book.call(this, title, author, year)
+  this.month = month
+}
+
+// 2. Inherit Prototype
+Magazine.prototype = Object.create(Book.prototype)
+
+// 3. Use own Constructor
+Magazine.prototype.constructor = Magazine
+
+const mag1 = new Magazine('Mag One', 'John Doe', 2018, 'Jan')
+// mag1.getSummary() // TypeError: mag1.getSummary is not a function (BEFORE inheriting the prototype)
+```
+
+**`Object.create()`** - creates an object and assigns it a _prototype_ property of our choice.
+
+```js
+const project = { name: 'Road Work' }
+// is equivalent to:
+Object.create(Object.prototype, {
+  name: {
+    configurable: true,
+    enumerable: true,
+    value: 'Road Work',
+    writable: false
+  }
+})
+```
+
+**Prototype chaining:**
+```js
+const project1 = {
+  name: 'Road Work',
+  display() { console.log(this.name) }
+}
+
+const project2 = Object.create(project1, {
+  name: {
+    configurable: true,
+    enumerable: true,
+    value: 'Bridge Work',
+    writable: false
+  }
+})
+
+project2.display() // Bridge Work
+```
+
+<br/><br/>
+
+
+### Constructor inheritance
+
+```js
+
+```
+
+<br/><br/>
+
+
+
+### Object.create()
+
+```js
+var bookPrototypes = {
+  getSummary: function() {
+  	console.log(`${this.title} (${this.year}) - ${this.author}`)
+  },
+  
+  getAge: function() {
+    const years = new Date().getFullYear() - this.year
+  	console.log(`${this.title} is ${years} years old.`)
+  }
+}
+
+var book1 = Object.create(bookPrototypes, {
+  title: { value: 'Book One' },
+  author: { value: '...'},
+  ...
+})
+// book1.title = '...'
+// book1.author = '...'
+
+console.log(book1) // same as above example
+```
+
+<br/><br/>
+
+
+# CLASSES
+_The **class** keyword in Javascript is just a Syntactic sugar. And under the hood it’s just a special function. Uses the ES5 JS way of OOP (prototypes, etc.)_
+
+_Function analogue:_
+```js
+function Holiday(destination, days) {
+  this.destination = destination
+  this.days = days
+}
+
+Holiday.prototype.info = function() { console.log(this.destination + ' | ' + this.days) }
+
+const nepal = new Holiday('Nepal', 30)
+nepal.info() // 'Nepal | 30'
+```
+
+**Same with Class:**
+```js
+// SUPER CLASS
+class Holiday {  // has a function with a constructor underneath
+  constructor(destination, days) { // sets the arguments as properties to the class
+    this.destination = destination
+    this.days = days
+  }
+
+  // methods are added to the Prototype
+  info() { console.log(this.destination + ' | ' + this.days)}
+}
+
+const trip = new Holiday('Nepal', 30)
+trip.info() // 'Nepal | 30'
+
+
+// SUB CLASS
+class Expedition extends Holiday {
+  constructor(destination, days, gear) {
+    super(destination, days) // calling the parent class and passing the arguments to it
+    this.gear = gear
+  }
+
+  info() {
+    super.info() // calling the parent's info() method
+    console.log('Gear:', this.gear.join(' and '))
+  }
+}
+
+const tripWithGear = new Expedition('Everest', 30, ['sunglasses', 'flags'])
+tripWithGear.info() // '... Gear: sunglasses and flags'
+```   
+
+<br/>
+
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Public_class_fields
+  
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain
+
+<br/>
+
+> The **class methods** are added to the **prototype**
+
+> **Hoisting** - an important difference between function declarations and class declarations is that while functions can be called in code that appears before they are defined, **classes must be defined before they can be constructed**. 
+
+> Methods can be **overridden**
+
+<br/><br/>
+
+## Getters and Setters
+[exercise\typescript\understanding-ts-2022\classes\src\app.ts](..%5Ctypescript%5Cunderstanding-ts-2022%5Cclasses%5Csrc%5Capp.ts)
+```ts
+class AccountingDepartment extends Department {
+  private lastReport
+
+  // getter (allows access to a prop with additional logic) - later executed as a prop, not as a fn
+  get mostRecentReport() {
+    if (this.lastReport) {
+      return this.lastReport
+    }
+    throw Error('No reports found.')
+  }
+  
+  set mostRecentReport(value: string) {
+    if (!value) {
+      throw new Error('Please pass in a valid value!')
+    }
+    this.addReport(value)
+  }
+  ...
+}
+
+// using getter and setter
+accounting.mostRecentReport = ''
+console.log(accounting.mostRecentReport)
+```
+
+<br/>
+
+## Static properties and methods
+_They can be used **without instantiating** an object_
+
+- allows adding properties and methods to classes which are **not accessible** to class **instances** but only inside the class itself.
+- Usually for **utility** fns and **global constants** for a class. 
+- **Cannot be accessed** by the **non-static** parts of the class. 
+- in static methods `this` refers to the **class**, while in non-static methods `this` refers to the **instance**
+- **No need** for calling `new`. 
+- Example: `Math.PI`, `Math.pow()`  
+
+```ts
+class Department {
+  static fiscalYear = 2022
+  static createEmployee(name: string) {
+    return { name }
+  }
+
+  constructor() {
+    this.fiscalYear // cannot be accessed by the constructor
+    Department.fiscalYear // now can be accessed
+  }
+} 
+
+const employee1 = Department.createEmployee('Max')
+console.log(employee1, Department.fiscalYear) // {name: 'Max'} 2022
+```
+
+<br/><br/><br/>
 
 
 # SPREAD
@@ -500,129 +790,6 @@ const adventureClimbing = {
 }
 ```
 <br/><br/>
-
-
-# CLASSES
-_The **class** keyword in Javascript is just a Syntactic sugar. And under the hood it’s just a special function._
-
-## Function analogue:
-```js
-function Holiday(destination, days) {
-  this.destination = destination
-  this.days = days
-}
-
-Holiday.prototype.info = function() { console.log(this.destination + ' | ' + this.days) }
-
-const nepal = Holiday('Nepal', 30)
-nepal.info() // 'Nepal | 30'
-```
-
-
-## Class:
-```js
-// SUPER CLASS
-class Holiday {  // has a function with a constructor underneath
-  constructor(destination, days) { // sets the arguments as properties to the class
-    this.destination = destination
-    this.days = days
-  }
-
-  info() { console.log(this.destination + ' | ' + this.days)}
-}
-
-const trip = new Holiday('Nepal', 30)
-trip.info() // 'Nepal | 30'
-
-
-// SUB CLASS
-class Expedition extends Holiday {
-  constructor(destination, days, gear) {
-    super(destination, days) // calling the parent class and passing the arguments to it
-    this.gear = gear
-  }
-
-  info() {
-    super.info() // calling the parent info() method
-    console.log('Gear:', this.gear.join(' and '))
-  }
-}
-
-const tripWithGear = new Expedition('Everest', 30, ['sunglasses', 'flags'])
-tripWithGear.info() // '... Gear: sunglasses and flags'
-```   
-
-<br/>
-
-- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Public_class_fields
-  
-- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain
-
-<br/>
-
-> **Hoisting** - an important difference between function declarations and class declarations is that while functions can be called in code that appears before they are defined, classes must be defined before they can be constructed. 
-
-> Methods can be **overridden**
-
-<br/><br/>
-
-## Getters and Setters
-[exercise\typescript\understanding-ts-2022\classes\src\app.ts](..%5Ctypescript%5Cunderstanding-ts-2022%5Cclasses%5Csrc%5Capp.ts)
-```ts
-class AccountingDepartment extends Department {
-  private lastReport
-
-  // getter (allows access to a prop with additional logic) - later executed as a prop, not as a fn
-  get mostRecentReport() {
-    if (this.lastReport) {
-      return this.lastReport
-    }
-    throw Error('No reports found.')
-  }
-  
-  set mostRecentReport(value: string) {
-    if (!value) {
-      throw new Error('Please pass in a valid value!')
-    }
-    this.addReport(value)
-  }
-  ...
-}
-
-// using getter and setter
-accounting.mostRecentReport = ''
-console.log(accounting.mostRecentReport)
-```
-
-<br/>
-
-## Static properties
-
-- allows adding properties and methods to classes which are **not accessible** to class **instances** but only inside the class itself.
-- Usually for **utility** fns and **global constants** for a class. 
-- **Cannot be accessed** by the **non-static** parts of the class. 
-- in static methods `this` refers to the **class**, while in non-static methods `this` refers to the **instance**
-- **No need** for calling `new`. 
-- Example: Math.PI, Math.pow()  
-
-```ts
-class Department {
-  static fiscalYear = 2022
-  static createEmployee(name: string) {
-    return { name }
-  }
-
-  constructor() {
-    this.fiscalYear // cannot be accessed by the constructor
-    Department.fiscalYear // now can be accessed
-  }
-} 
-
-const employee1 = Department.createEmployee('Max')
-console.log(employee1, Department.fiscalYear) // {name: 'Max'} 2022
-```
-
-<br/><br/><br/>
 
 # Default parameters
 

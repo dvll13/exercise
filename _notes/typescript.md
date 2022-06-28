@@ -459,7 +459,7 @@ add = (n1, n2) => {
 <br/><br/>
 
 # Advanced typing concepts
-[exercise\typescript\understanding-ts-2022\advanced-types\src\app.ts](..%5Ctypescript%5Cunderstanding-ts-2022%5Cadvanced-types%5Csrc%5Capp.ts)  
+[exercise\typescript\understanding-ts-2022\advanced-types\src\app.ts](../typescript/understanding-ts-2022/advanced-types/src/app.ts)  
 <br/>
 - **Intersection types / interfaces**. Intersection of:
   - `object` types => combination of props
@@ -1241,7 +1241,7 @@ import { ProjectInput } from './components/project-input.js'
 
 ## PROPS 
 
-[react\typescript\2_react-ts\src\state](..%5Creact%5Ctypescript%5C2_react-ts%5Csrc%5Cprops):
+[exercise\typescript\React and Typescript Build a Portfolio Project\2_react-ts\src\state](../typescript/React%20and%20Typescript%20Build%20a%20Portfolio%20Project/2_react-ts/src/props):
 ```ts
 interface ChildProps {
   color: string
@@ -1269,7 +1269,7 @@ interface ResizableProps {
 
 ## STATE  
 
-[react\typescript\2_react-ts\src\state\GuestList.tsx](..%5Creact%5Ctypescript%5C2_react-ts%5Csrc%5Cstate%5CGuestList.tsx):
+[exercise\typescript\React and Typescript Build a Portfolio Project\2_react-ts\src\state\GuestList.tsx](../typescript/React%20and%20Typescript%20Build%20a%20Portfolio%20Project/2_react-ts/src/state/GuestList.tsx):
 ```ts
   const [guests, setGuests] = useState([]) // TS assumes that the array will be forever empty -> guests: never[]
   const [guests, setGuests] = useState<string[]>([]) // now all is good
@@ -1279,7 +1279,7 @@ interface ResizableProps {
 <br/><br/>
 
 ## EVENTS
-[react\typescript\2_react-ts\src\events\EventComponent.tsx](..%5Creact%5Ctypescript%5C2_react-ts%5Csrc%5Cevents%5CEventComponent.tsx):
+[exercise\typescript\React and Typescript Build a Portfolio Project\2_react-ts\src\events\EventComponent.tsx](../typescript/React%20and%20Typescript%20Build%20a%20Portfolio%20Project/2_react-ts/src/events/EventComponent.tsx):
 ```ts
 // TS knows what `e` is because it's an onChange callback
 <input type="text" onChange={(e) => console.log(e)} />
@@ -1306,7 +1306,7 @@ const onDragStart = (event: React.DragEvent<HTMLDivElement>) => {...}
 <br/><br/>
 
 ## CLASS COMPONENTS
-[react\typescript\2_react-ts\src\classes\UserSearch.tsx](..%5Creact%5Ctypescript%5C2_react-ts%5Csrc%5Cclasses%5CUserSearch.tsx):
+[exercise\typescript\React and Typescript Build a Portfolio Project\2_react-ts\src\classes\UserSearch.tsx](../typescript/React%20and%20Typescript%20Build%20a%20Portfolio%20Project/2_react-ts/src/classes/UserSearch.tsx):
 ```ts
 interface User {
   name: string
@@ -1334,7 +1334,7 @@ class UserSearch extends Component<UserSearchProps> {
 <br/><br/>
 
 ## REFS
-[react\typescript\2_react-ts\src\refs\UserSearch.tsx](..%5Creact%5Ctypescript%5C2_react-ts%5Csrc%5Crefs%5CUserSearch.tsx):
+[exercise\typescript\React and Typescript Build a Portfolio Project\2_react-ts\src\refs\UserSearch.tsx](../typescript/React%20and%20Typescript%20Build%20a%20Portfolio%20Project/2_react-ts/src/refs/UserSearch.tsx):
 ```ts
 const inputRef = useRef<HTMLInputElement | null>(null)
 // we tell TS that we start with a `null` value and at some point in time we could change it to HTML element 
@@ -1356,7 +1356,7 @@ useEffect(() => {
 
 
 # REDUX
-[react\typescript\3_redux-ts\src\state](..%5Creact%5Ctypescript%5C3_redux-ts%5Csrc%5Cstate):
+[exercise\typescript\React and Typescript Build a Portfolio Project\3_redux-ts\src\state](../typescript/React%20and%20Typescript%20Build%20a%20Portfolio%20Project/3_redux-ts/src/state):
 ```ts
 interface RepositoriesState {
   loading: boolean
@@ -1416,7 +1416,7 @@ export * as actionCreators from './action-creators'
 export * from './reducers'
 ```
 
-[react\typescript\3_redux-ts\src\state\action-creators\index.ts](..%5Creact%5Ctypescript%5C3_redux-ts%5Csrc%5Cstate%5Caction-creators%5Cindex.ts)
+[exercise\typescript\React and Typescript Build a Portfolio Project\3_redux-ts\src\state\action-creators\index.ts](../typescript/React%20and%20Typescript%20Build%20a%20Portfolio%20Project/3_redux-ts/src/state/action-creators/index.ts)
 ```ts
 import { Dispatch } from 'redux'
 import { Action } from '../actions'
@@ -1435,7 +1435,7 @@ export const searchRepositories = (term: string) => {
 ```
 <br/>  
 
-[react\typescript\3_redux-ts\src\state\actions\index.ts](..%5Creact%5Ctypescript%5C3_redux-ts%5Csrc%5Cstate%5Cactions%5Cindex.ts)
+[exercise\typescript\React and Typescript Build a Portfolio Project\3_redux-ts\src\state\actions\index.ts](../typescript/React%20and%20Typescript%20Build%20a%20Portfolio%20Project/3_redux-ts/src/state/actions/index.ts)
 ```ts
 import { ActionType } from '../action-types'
 
@@ -1457,7 +1457,7 @@ export type Action = SearchRepositoriesAction | SearchRepositoriesSuccessAction 
 ```
 <br/>
 
-[react\typescript\3_redux-ts\src\state\reducers\repositoriesReducer.ts](..%5Creact%5Ctypescript%5C3_redux-ts%5Csrc%5Cstate%5Creducers%5CrepositoriesReducer.ts)
+[exercise\typescript\React and Typescript Build a Portfolio Project\3_redux-ts\src\state\reducers\repositoriesReducer.ts](../typescript/React%20and%20Typescript%20Build%20a%20Portfolio%20Project/3_redux-ts/src/state/reducers/repositoriesReducer.ts)
 ```ts
 import { ActionType } from '../action-types'
 import { Action } from '../actions'
@@ -1485,7 +1485,7 @@ const reducer = (state: RepositoriesState = initialState, action: Action): Repos
 ```
 <br/>
 
-[react\typescript\3_redux-ts\src\state\reducers\index.ts](..%5Creact%5Ctypescript%5C3_redux-ts%5Csrc%5Cstate%5Creducers%5Cindex.ts)
+[exercise\typescript\React and Typescript Build a Portfolio Project\3_redux-ts\src\state\reducers\index.ts](../typescript/React%20and%20Typescript%20Build%20a%20Portfolio%20Project/3_redux-ts/src/state/reducers/index.ts)
 ```ts
 import { combineReducers } from 'redux'
 import repositoriesReducer from './repositoriesReducer'
@@ -1508,7 +1508,7 @@ export type RootState = ReturnType<typeof reducers>
 <br/>  
 
 
-[react\typescript\3_redux-ts\src\hooks\useActions.ts](..%5Creact%5Ctypescript%5C3_redux-ts%5Csrc%5Chooks%5CuseActions.ts)
+[exercise\typescript\React and Typescript Build a Portfolio Project\3_redux-ts\src\hooks\useActions.ts](../typescript/React%20and%20Typescript%20Build%20a%20Portfolio%20Project/3_redux-ts/src/hooks/useActions.ts)
 ```ts
 import { bindActionCreators } from 'redux'
 import { actionCreators } from '../state'
@@ -1523,7 +1523,7 @@ export const useActions = () => {
 <br/>  
 
 
-[react\typescript\3_redux-ts\src\hooks\useTypedSelector.ts](..%5Creact%5Ctypescript%5C3_redux-ts%5Csrc%5Chooks%5CuseTypedSelector.ts)
+[exercise\typescript\React and Typescript Build a Portfolio Project\3_redux-ts\src\hooks\useTypedSelector.ts](../typescript/React%20and%20Typescript%20Build%20a%20Portfolio%20Project/3_redux-ts/src/hooks/useTypedSelector.ts)
 ```ts
 import { useSelector, TypedUseSelectorHook } from 'react-redux'
 import { RootState } from '../state'
@@ -1533,7 +1533,7 @@ export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector
 <br/>
 
 
-[react\typescript\3_redux-ts\src\components\RepositoriesList.tsx](..%5Creact%5Ctypescript%5C3_redux-ts%5Csrc%5Ccomponents%5CRepositoriesList.tsx)
+[exercise\typescript\React and Typescript Build a Portfolio Project\3_redux-ts\src\components\RepositoriesList.tsx](../typescript/React%20and%20Typescript%20Build%20a%20Portfolio%20Project/3_redux-ts/src/components/RepositoriesList.tsx)
 ```ts
 import { useActions } from '../hooks/useActions'
 import { useTypedSelector } from './../hooks/useTypedSelector'

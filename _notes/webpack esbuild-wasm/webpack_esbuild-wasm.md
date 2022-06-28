@@ -6,7 +6,7 @@
 
 `"build": "webpack --mode=development"` - starts from the entry point (index.js) and builds everything related into `/dist/main.js` **bundle**  
 
-**`webpack-html-plugin`** - automatically adds to the `public/index.html` imports to the generated bundle files
+**`webpack-html-plugin`** - automatically adds in the `public/index.html` the imports to the generated bundle files
 ```js
 {
     plugins: [
