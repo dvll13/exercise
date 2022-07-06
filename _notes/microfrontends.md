@@ -300,6 +300,116 @@ cartMount(document.querySelector('#my-cart'));
 
 # Linking Multiple Apps Together - React
 
+**Requirements:**
+- **Zero coupling** between **child** projects - technologies and frameworks get replaced sometimes
+  - **No importing** of functions/objects/classes/etc
+  - **No shared state**
+  - **Shared libraries** through ModuleFederation is ok
+- **Near-zero coupling** between **container and child** apps
+  - Container **shouldn't assume** that a child is using a particular **framework**
+  - any necessary **communication** is done with **callbacks** and **simple events**
+
+- **CSS** from one project should **never affect** another
+
+- Version control (**monorepo** vs **separate**) **shouldn't have any impact** on the overall project - some people prefer monorepos while others separate repos
+
+- (production) **Container** should be able to decide to always use the **latest version** of a MF **or** specify a **specific version**
+  - always latest version - doesn't need a redeploy of the Container
+  - specific version - requires a redeploy to change
+
+<br/>
+
+**PROJECT:** [microfrontends/react-projects/packages](../microfrontends/react-projects/packages)
+
+> **NOTE:** ModuleFederation plugin configuration is slightly different in dev and prod modes.
+
+`webpack.common.js`
+```js
+module.exports = {
+  module: {
+    // tell webpack how to process different files as we import them into our project
+    rules: [
+      {
+        test: /\.m?js$/, // if ends with .mjs or .js
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            // @babel/preset-react - babel will process all JSX tags
+            // @babel/preset-env - all modern syntax will be converted to ES5
+            presets: ['@babel/preset-react', '@babel/preset-env'],
+            // @babel/plugin-transform-runtime - will add in some additional code to enable additional features in the browser like async/await syntax, etc.
+            plugins: ['@babel/plugin-transform-runtime']
+          }
+        }
+      }
+    ]
+  }
+}
+```
+
+`marketing/config/webpack.dev.js`
+```js
+const { merge } = require('webpack-merge')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin')
+const commonConfig = require('./webpack.common')
+
+const devConfig = {
+  mode: 'development',
+  devServer: {
+    port: 8081,
+    historyApiFallback: {
+      index: 'index.html'
+    }
+  },
+  plugins: [
+    new ModuleFederationPlugin({
+      name: 'marketing', // NOTE: a global var gets declared with that name
+      filename: 'remoteEntry.js',
+      exposes: {
+        './MarketingApp': './src/bootstrap'
+      }
+    }),
+    new HtmlWebpackPlugin({
+      template: './public/index.html'
+    })
+  ]
+}
+
+module.exports = merge(commonConfig, devConfig)
+```
+
+**Merge** is a function that we can use to merge together two different webpack config objects.
+
+> **Note:** `mount` should stay a function so that the container doesn’t assume that a child is using a particular framework.
+
+## Delegating Shared Module Selection
+
+Webpack will automatically take care of the shared packages. You might not always want to use that because you might want to use the exact versions and settings around the shared modules.
+
+Container's `webpack.dev.js`
+```js
+const packageJson = require('../package.json')
+
+{
+  ...
+  plugins: [
+    ...
+      // To configure this, we can connect the dependencies of `package.json` to the shared key in webpack.dev.js
+      shared: packageJson.dependencies,
+    })
+}
+```
 
 <br/><br/>
+
+
+# Deployment
+
+- want to deploy each MF **independently** (incl. the Container)
+- location of child app `remoteEntry.js` files must be known at _build time_
+- many FE development solutions assume you are deploying a single project - we need something that can handle multiple different ones
+- probably some sort of CI/CD
+- _at present_, the `remoteEntry.js` file name is fixed! Need to think about caching issues
 

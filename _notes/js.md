@@ -58,11 +58,11 @@
   - **regular** function - points to the **`object`** that is **calling** the method 
   - **arrow** function - points to the **upper** context 
 
-In a Method	Owner             Object(Which invoked method)
-Alone                         Global Object
-In a function (Default Mode)	Global Object
-In a function (Strict Mode)	  undefined
-In an event	                  the target of the event
+In a Method	Owner -> Object(Which invoked method)  
+Alone -> Global Object  
+In a function (Default Mode) -> Global Object  
+In a function (Strict Mode) -> undefined  
+In an event -> the target of the event
 
   ```js
   const obj1 = {
@@ -76,9 +76,8 @@ In an event	                  the target of the event
       f() // it's a regular fn call => Window 
       
       const fn = function() {} // function expression
-    }, 
-    f3() { console.log(this) }, // { ...obj1 }
-    f4: () => { console.log(this) }, // Window
+    },
+    f3: () => { console.log(this) }, // Window
   }
 
   // method borrowing:
@@ -261,10 +260,17 @@ Arrow functions **don't have** their own `this` or `arguments` binding. Instead,
 
 # REGULAR (R) VS ARROW (A) FUNCTIONS
 
-- **syntax**
-- **no `this` and `arguments` binding in A** - they are resolved in the lexical scope like any other variable (the env in which the A is defined)
-- **`new` keyword** - **R** are **constructible** and they can be called with the `new` keyword
+- `this` and `arguments`:
+  - **no `this` and `arguments` binding in A** - they are resolved in the _lexical scope_ like any other variable (the env in which the A is defined). No matter how or where being executed, `this` value inside of an arrow function **always** equals this value from the **outer function**.
+  - **`this` in R**:
+    - during a _simple invocation_ the value of `this` equals to the **global object** (or `undefined` if the function runs in `strict mode`)
+    - during a _method invocation_ the value of `this` is the **object owning the method**
+    - during an _indirect invocation_ using `myFunc.call(thisVal, arg1, ..., argN)` or `myFunc.apply(thisVal, [arg1, ..., argN])` the value of this equals to the **first argument**
+    - during a _constructor invocation_ using new keyword this equals to the newly created **instance**
+- **R are constructible** and they can be called with the `new` keyword
 - **no duplicate params** in **A**, while **R** allow it if not in `strict mode`
+
+[https://dmitripavlutin.com/differences-between-arrow-and-regular-functions/](https://dmitripavlutin.com/differences-between-arrow-and-regular-functions/)
 
 [https://stackoverflow.com/questions/34361379/are-arrow-functions-and-functions-equivalent-interchangeable](https://stackoverflow.com/questions/34361379/are-arrow-functions-and-functions-equivalent-interchangeable)
 
@@ -1360,3 +1366,24 @@ grouped.a, grouped.b
 - the **global context** is `undefined`
 - assignment to a non-writable **global** or **property**, assignment to a **getter-only** property, assignment to a **new property** on a **non-extensible** object will throw 
 - more **secure**
+
+<br/><br/>
+
+# Array methods
+
+- `map` - the map() method creates a new array populated with the results of **calling a provided function on every element** in the calling array
+
+- `reduce` - The reduce() method executes a user-supplied "reducer" callback function on each element of the array, in order, passing in the return value from the calculation on the preceding element. The final result of running the reducer across all elements of the array is a single value. 
+  ```js
+  const array1 = [1, 2, 3, 4];
+
+  // 0 + 1 + 2 + 3 + 4
+  const initialValue = 0;
+  const sumWithInitial = array1.reduce(
+    (previousValue, currentValue) => previousValue + currentValue,
+    initialValue
+  );
+
+  console.log(sumWithInitial);
+  // expected output: 10
+  ```

@@ -42,7 +42,7 @@
 `npm i -g parcel-bundler` - helps run TS in the browser
   * `parcel index.html` - starts the server and when it sees a ts file, it auto converts it to js  
 
-[exercise\typescript\understanding-ts-2022\node_express\app.ts](../typescript/understanding-ts-2022/node_express/app.ts)
+[exercise\typescript\understanding-ts-2022\node_express\src\app.ts](../typescript/understanding-ts-2022/node_express/src/app.ts)
 
 `tsconfig.json:`
 ```json
@@ -793,7 +793,7 @@ promise.then((data) => {
   ```
 
   - **GENERIC** UTILITY TYPES
-  - `Partial` - TEMPORARY wrap the Type and turn it into a type where all the objects are OPTIONAL
+  - `Partial` - TEMPORARY wrap the Type and turn it into a type where all the props are OPTIONAL
 
   ```ts
   function createCourseGoal(title: string, description: string, date: Date): CourseGoal {

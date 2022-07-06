@@ -30,14 +30,14 @@
 * `parcel-bundler` - helps run TS in the browser (`parcel index.html` - starts the server and when it sees a ts file, it auto converts it to js)
 
 * `webpack` [exercise\typescript\understanding-ts-2022](../typescript/understanding-ts-2022/project_drag-drop) - bundles and optimizes (minifies) project files, and could add additional build steps & tools
-```cli
-npm i --save-dev webpack webpack-cli webpack-dev-server typescript ts-loader
-```
-  * in the `Drag & Drop` project `Webpack` will be used to **transform** TS code to JS and **emit** a bundle, plus its `dev server` is being used
-  * `ts-loader` tells webpack how to **convert** TS to JS
-* `clean-webpack-plugin` - clean the build folder before every `build`
+  ```cli
+  npm i --save-dev webpack webpack-cli webpack-dev-server typescript ts-loader
+  ```
+  * in the `Drag & Drop` project `Webpack` will be used to **transform** TS code to JS and **emit** a bundle, plus its `dev server` is being used. _More in [typescript.md#exercise-ts-projects](typescript.md#exercise-ts-projects)_
 
-_More in [typescript.md#exercise-ts-projects](typescript.md#exercise-ts-projects)_
+  * [microfrontends/react-projects/packages](../microfrontends/react-projects/packages) - common, dev and prod webpack configs
+
+
 <br/><br/><br/>
 
 
@@ -95,3 +95,8 @@ _More in [typescript.md#exercise-ts-projects](typescript.md#exercise-ts-projects
 # TYPESCRIPT
 
 - `class-validator` ([exercise\typescript\understanding-ts-2022\3rd-party-libs\src](../typescript/understanding-ts-2022/3rd-party-libs/src)) - validation by using TS decorators
+
+
+# USEFUL LINKS
+
+- `https://source.unsplash.com/random` - generates a random image

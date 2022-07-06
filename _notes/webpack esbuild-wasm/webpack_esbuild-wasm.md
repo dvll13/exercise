@@ -4,7 +4,7 @@
 
 `import ... from, export` -> **es modules** syntax  
 
-`"build": "webpack --mode=development"` - starts from the entry point (index.js) and builds everything related into `/dist/main.js` **bundle**  
+`"build": "webpack --mode=development"` - starts from the entry point (`index.js`) and builds everything related into `/dist/main.js` **bundle**  
 
 **`webpack-html-plugin`** - automatically adds in the `public/index.html` the imports to the generated bundle files
 ```js
@@ -16,8 +16,78 @@
   ]
 }
 ```
-
 <br/>
+
+`webpack-merge` - merge webpack configs, e.g. common and dev
+
+_Example **common** config (`webpack.common.js`):_
+```js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.m?js$/, // if ends with .mjs or .js
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            // @babel/preset-react - babel will process all JSX tags
+            // @babel/preset-env - all modern syntax will be converted to ES5
+            presets: ['@babel/preset-react', '@babel/preset-env'],
+            // @babel/plugin-transform-runtime - will add in some additional code to enable additional features in the browser like async/await syntax, etc.
+            plugins: ['@babel/plugin-transform-runtime']
+          }
+        }
+      }
+    ]
+  }
+}
+```
+
+_Example **dev** config (`webpack.dev.js`):_
+```js
+const { merge } = require('webpack-merge')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const commonConfig = require('./webpack.common')
+
+const devConfig = {
+  mode: 'development',
+  devServer: {
+    port: 8081,
+    historyApiFallback: {
+      index: 'index.html'
+    }
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './public/index.html'
+    })
+  ]
+}
+
+module.exports = merge(commonConfig, devConfig)
+```
+
+_In `package.json`:_
+```json
+"scripts": {
+  "start": "webpack serve --config config/webpack.dev.js"
+}
+```
+<br/>
+
+## Babel
+
+- **Presets:**
+  - `@babel/preset-react` - babel will process all JSX tags
+  - `@babel/preset-env` - all modern syntax will be converted to ES5
+
+- **Plugins:**
+  - `@babel/plugin-transform-runtime` - will add in some additional code to enable additional features in the browser like async/await syntax, etc.
+  - `clean-webpack-plugin` - clean the build folder before every `build`
+  - `ts-loader` - tells webpack how to **convert** TS to JS
+<br/><br/>
+
 
 ## Webpack Dev Server
 _Takes the output from our webpack process and makes it available in the browser_
