@@ -405,11 +405,66 @@ const packageJson = require('../package.json')
 <br/><br/>
 
 
-# Deployment
+# CI/CD Pipeline
 
-- want to deploy each MF **independently** (incl. the Container)
-- location of child app `remoteEntry.js` files must be known at _build time_
-- many FE development solutions assume you are deploying a single project - we need something that can handle multiple different ones
+## Deployment
+
+- want to deploy each MF **independently** (incl. the Container) - _As different developers will be working independently on the projects._
+- location of child app `remoteEntry.js` files must be known at _build time_ - _The URL of the child apps has to be available for the container’s webpack configuration. The production config will contain the production version of the remote entry URL._
+- many FE development solutions assume you are deploying a single project - we need something that can handle multiple different ones - _Not all hosting providers support MFE builds._
 - probably some sort of CI/CD
-- _at present_, the `remoteEntry.js` file name is fixed! Need to think about caching issues
+- _at present_, the `remoteEntry.js` file name is fixed! Need to think about caching issues - _The module federation plugin has a fixed name for the remoteEntry.js file but a dynamic approach is in development._
 
+<br/>
+
+## Deployment flow
+
+1. Build a GitHub Monorepo (the same flow works for deploying the modules separately)
+2. Make a script that watches the modules for changes.
+3. The script builds a production version of the changed module with webpack
+4. The files are uploaded to Amazon S3
+
+> Amazon S3 will hold the build version of all of the sub-projects.
+
+> The files will be served to the browser through Amazon CloudFront (CDN)
+
+<br/>
+
+## Webpack production config
+
+`container/webpack.prod.js`
+```js
+const { merge } = require('webpack-merge')
+const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin')
+
+const commonConfig = require('./webpack.common')
+const packageJson = require('../package.json')
+
+const domain = process.env.PRODUCTION_DOMAIN // will be set when we build our app by a CI/CD pipeline
+
+const prodConfig = {
+  mode: 'production',
+  output: {
+    filename: '[name].[contenthash].js'
+  },
+  plugins: [
+    new ModuleFederationPlugin({
+      name: 'container',
+      remotes: {
+        marketing: `marketing@${domain}/marketing/remoteEntry.js`
+      },
+      shared: packageJson.dependencies
+    })
+  ]
+}
+
+module.exports = merge(commonConfig, prodConfig)
+```
+
+`container/package.json`
+```json
+  "scripts": {
+    ...
+    "build": "webpack --config config/webpack.prod.js"
+  },
+```

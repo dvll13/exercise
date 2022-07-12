@@ -68,6 +68,24 @@ This way we make sure that we have the **most recent** todos state. If it was `s
 <button onClick={onDeleteTodo.bind(null, id)}>DELETE</button>
 ```
 
+<br/><br/>
+
+
+## Debounce by useEffect
+```js
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      const output = await bundle(input)
+      setCode(output)
+    }, 1000)
+
+    // the cleanup fn will be called the next time the useEffect is called and will clear the previous timer
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [input])
+```
+
 <br/><br/><br/><br/><br/>
 
 

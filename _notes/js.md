@@ -1113,6 +1113,20 @@ function Car(make, model, year) {
 const auto = new Car('Honda', 'Accord', 1998);
 console.log(auto instanceof Car) // true
 console.log(auto instanceof Object) // true
+
+// these are primitive types too:
+typeof undefined // undefined
+typeof null // object (NB! should be checked with `someVar === null` instead)
+
+typeof someFunction // function
+
+typeof someArray // object
+typeof someObject // object
+// BETTER:
+instanceof Array // true
+instanceof Object // true
+instanceof Function // true
+// since all the reference types are children of Object, hence Array/Function instanceof Object -> true
 ```
 
 <br/><br/>
@@ -1158,30 +1172,8 @@ MessageEvent {
 <br/><br/>
 
 
-# DOM
-
-`container.current.contains(event.target)` - check if an element is inside another element
-<br/><br/>
-
 
 # USEFUL
-
-## Debounce by useEffect
-```
-  useEffect(() => {
-    const timer = setTimeout(async () => {
-      const output = await bundle(input)
-      setCode(output)
-    }, 1000)
-
-    // the cleanup fn will be called the next time the useEffect is called and will clear the previous timer
-    return () => {
-      clearTimeout(timer)
-    }
-  }, [input])
-```
-<br/><br/>
-
 
 ## Random ID generation
 ```
@@ -1254,6 +1246,9 @@ button.addEventListener('click', printer.showMessage.bind(printer)) // now this 
 ```
 
 # DOM
+
+- `container.current.contains(event.target)` - check if an element is inside another element
+
 - `document.importNode(node: DocumentFragment, deep?: boolean | undefined): DocumentFragment` - Returns a **copy** of a node. If deep is true, the copy also includes the node's descendants.
 
 - `someDomElement.insertAdjacentElement(where: InsertPosition, element: Element): Element | null` - **inserts** a given element node at a given **position** relative to the element it is invoked upon
