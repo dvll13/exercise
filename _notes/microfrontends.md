@@ -468,3 +468,103 @@ module.exports = merge(commonConfig, prodConfig)
     "build": "webpack --config config/webpack.prod.js"
   },
 ```
+
+<br/><br/>
+
+
+## CI/CD - Automatic code run on a specific event
+
+<br/>
+
+> **Github Actions** - code that executes automatically when some event occurs to the repo.  
+
+_Github automatically detects these files as some workflows we intend to use:_
+
+[`microfrontends/react-projects/.github/workflows/container.yml`](../microfrontends/react-projects/.github/workflows/container.yml)
+```yml
+name: deploy-container
+
+# what events are we watching for (on changes where)
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'packages/container/**'
+
+# sets execution env (all commands will be executed relative to this folder)
+defaults:
+  run:
+    working-directory: packages/container
+
+# we can define multiple parallel jobs
+jobs:
+  build: # build and deploy our project (could be also separate jobs)
+    runs-on: ubuntu-latest # github offers a variety of VMs to run jobs on
+
+    steps: # the commands we want to execute
+      - uses: actions/checkout@v2 # checkout our code into the VM
+      - run: npm install
+      - run: npm run build
+
+      # use the AWS CLI
+      - uses: chrislennon/action-aws-cli@v1.1
+      - run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest # sync our dist folder to aws
+        env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+```
+
+
+`.github > workflows > project.yml`:
+```yml
+// example code
+name: deploy-container
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "packages/container/**"
+
+defaults:
+  run:
+    working-directory: packages/container
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: npm install
+      - run: npm run build
+
+      - uses: shinyinc/action-aws-cli@v1.2
+      - run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ""
+```
+
+<br/><br/>
+
+
+## Workflow for deploying module (e.g. container)
+
+Whenever code is pushed to the main/master branch and this commit contains a change to the module (e.g. container folder):
+
+- Commands executed in a virtual machine hosted by Github
+
+  1. Checkout the code to the repository (load it into the VM environment)
+
+  2. Change into the container folder
+
+  3. Install dependencies
+
+  4. Create a production build using webpack (webpack.prod.js)
+
+  5. Upload the result (dist folder content) to AWS S3

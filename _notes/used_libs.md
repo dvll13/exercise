@@ -96,7 +96,12 @@
 
 - `class-validator` ([exercise\typescript\understanding-ts-2022\3rd-party-libs\src](../typescript/understanding-ts-2022/3rd-party-libs/src)) - validation by using TS decorators
 
+<br/><br/><br/>
+
+
 
 # USEFUL LINKS
+
+- `https://api.thecatapi.com/v1/breeds`
 
 - `https://source.unsplash.com/random` - generates a random image

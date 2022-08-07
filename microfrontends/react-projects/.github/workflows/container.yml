@@ -1,0 +1,31 @@
+name: deploy-container
+
+# what events are we watching for (on changes where)
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'packages/container/**'
+
+# sets execution env (all commands will be executed relative to this folder)
+defaults:
+  run:
+    working-directory: packages/container
+
+# we can define multiple parallel jobs
+jobs:
+  build: # build and deploy our project (could be also separate jobs)
+    runs-on: ubuntu-latest # github offers a variety of VMs to run jobs on
+
+    steps: # the commands we want to execute
+      - uses: actions/checkout@v2 # checkout our code into the VM
+      - run: npm install
+      - run: npm run build
+
+      # use the AWS CLI
+      - uses: chrislennon/action-aws-cli@v1.1
+      - run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest # sync our dist folder to aws
+        env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
