@@ -1561,3 +1561,58 @@ state.data = action.payload.reduce((acc, cell) => {
 }, {} as CellsState['data'])
 ```
 
+### `satisfies` operator
+```ts
+type MyState = StateName | StateCordinates;
+type StateName = "Washington" | "Detriot" | "New Jersey";
+type StateCordinates = {
+  x: number;
+  y: number;
+};
+type User = {
+  birthState: MyState;
+  currentState: MyState;
+};
+const user = {
+  birthState: "Washington",
+  currentState: { x: 8, y: 7 },
+} satisfies User;
+user.birthState.toUpperCase(); // error if satisfies is not used "property toUpperCase() does not exist on type MyState and property to uppercase does not exist on type StateCordinates"
+```
+
+```ts
+type Keys = 'FirstName' |"LastName"| "age"|"school"| "email"
+const student = {
+  FirstName: "Temitope",
+  LastName: "Oyedele",
+  age: 36,
+  school:"oxford",
+} satisfies Partial<Record<Keys, string | number>>;
+
+student.FirstName.toLowerCase();
+student.age.toFixed();
+```
+
+```ts
+type Keys = 'FirstName' |"LastName"| "age"|"school"
+
+const student = {
+  FirstName: "Temitope",
+  LastName: "Oyedele",
+  age: 36,
+  school:"oxford",
+} satisfies Record<Keys, string | number>;
+
+student.age.toFixed(); // if 'age' was '36' then there would be a TS error here
+student.school.toLowerCase();
+```
+
+```ts
+type Book = { author: string; title: string; year: number }
+
+const library = {
+  book1: { title: 'Things fall apart', author: 'Chinua Achebe', year: 1958 },
+  book2: { title: 'Lord of the flies', author: 'William Golding', year: 1993 },
+  book3: { title: 'Harry Potter', author: 'J.k Rowling', year: '1997' }, // Error (Type 'string' is not assignable to type 'number'
+} satisfies Record<string, Book>
+```
