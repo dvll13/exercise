@@ -1,0 +1,43 @@
+import { Link, useNavigate } from 'react-router-dom'
+
+import Modal from '../UI/Modal.jsx'
+import EventForm from './EventForm.jsx'
+import { useMutation } from '@tanstack/react-query'
+import { createNewEvent, queryClient } from '../../utils/http.js'
+import ErrorBlock from '../UI/ErrorBlock.jsx'
+
+export default function NewEvent() {
+  const navigate = useNavigate()
+
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationFn: createNewEvent,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['events'] }) // marks all events including the key 'events' as stale, so their data will be re-fetched when we visit a component that uses it
+      // queryClient.invalidateQueries({ queryKey: ['events'], exact: true }) // this way only queries with exactly that key would be invalidated
+      navigate('/events')
+    },
+  })
+
+  function handleSubmit(formData) {
+    mutate({ event: formData })
+  }
+
+  return (
+    <Modal onClose={() => navigate('../')}>
+      <EventForm onSubmit={handleSubmit}>
+        {isPending && 'Submitting...'}
+        {!isPending && (
+          <>
+            <Link to="../" className="button-text">
+              Cancel
+            </Link>
+            <button type="submit" className="button">
+              Create
+            </button>
+          </>
+        )}
+      </EventForm>
+      {isError && <ErrorBlock title="An error occurred" message={error.info?.message || 'Failed adding event'} />}
+    </Modal>
+  )
+}
