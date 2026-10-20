@@ -1,18 +1,3 @@
-With this course, you learned a lot about React!
-
-If you want to learn more, you can also explore my [book "React Key Concepts"](https://www.amazon.com/React-Key-Concepts-depth-features/dp/183620227X)!
-
-But the React ecosystem is huge and there are tons of things you can do and build with React, for example:
-
-*   Learn how to build server-side rendered (great for SEO!) or fullstack apps with Next.js & React: [https://acad.link/nextjs](https://acad.link/nextjs)
-    
-*   Build mobile Android & iOS apps with React Native: [https://acad.link/react-native](https://acad.link/react-native)
-    
-*   Build fullstack MERN (MongoDB, ExpressJS, React, NodeJS) web apps: [https://acad.link/mern](https://acad.link/mern)
-    
-
-Or dive into one of the many other courses I have on web development, JavaScript etc: [https://academind.com/courses/](https://academind.com/courses/)
-
 RRD **action()** submits data to the BE. We need to have names for the fields in order to be able to extract data. We should use the RRD's `<Form method="post">` element to let RRD handle submission and call the action.
 
 Then `export async function action({ request }) { const formData = await request.formData(); const postData = Object.fromEntries(formData); fetch(...); redirect('/') }`.
@@ -1685,7 +1670,7 @@ We could also return an error **response** in the loader and use the useRouteErr
 
 Redux Devtools works out of the box without additional setup if we use RTK
 
-**Thunk** - a function that **delays and action** until later
+**Thunk** - a function that **delays an action** until later
 
 It's an action creator function that does **NOT return the action** itself but instead **another function** which **eventually** returns the action
 
@@ -1904,7 +1889,7 @@ Modal dialog in a Portal
 20.    )
 21.  }
 
-1.  updatedItems.splice(existingCartItemIdx, 1) // removes and element from the array, and optionally adds new elements on their place. returns the removed element.
+1.  updatedItems.splice(existingCartItemIdx, 1) // removes an element from the array, and optionally adds new elements on their place. returns the removed element.
 
 `const CartContext = createContext({...})`
 
@@ -2038,13 +2023,13 @@ function signupAction(formData) {
 
 **Form elements** should have the **name** prop set, in order for their value to be populated in the **formData** object
 
-Exporting a custom hook for user input functionality: value, isDirty, isValid, onInputChange, onInputBlur, validationFn
+Exporting a custom hook for user input functionality. It could return: value, isDirty, isValid, onInputChange, onInputBlur, validationFn
 
 Mixing custom & built-in validation logic.
 
 Example of passwords-matching logic.
 
-Using browser **built-in** props/attributes for validation:
+Using **browser built-in** props/attributes for validation:
 
 *   required (adding it also makes the browser validate the type of field as well, e.g. email)
     
@@ -2061,13 +2046,13 @@ Two-way binding with combined state
 
 Forms with two-way binding and state per input
 
-Buttons in forms submit them by default, because they have type="submit" by default
+**Buttons in forms** submit them by default, because they have **type="submit" by default**
 
 Custom hook's state update causes the component in which it's used to be executed again.
 
-custom hooks - functions that start with "use" are treated by React as hooks, and thus the rules of hooks are enforced on them
+**Custom hooks** - functions that start with "use" are treated by React as hooks, and thus the rules of hooks are enforced on them
 
-When we are fetching data these three states usually go together: result, isLoadaing, error.
+When we are **fetching data** these three states usually go together: **result, isLoadaing, error**.
 
 **Promise** - a js value, that will eventually resolve to another value.
 
@@ -2089,7 +2074,7 @@ When we are fetching data these three states usually go together: result, isLoad
 
 `TRACE` - performs a message loop-back test along the path to the target resource.
 
-REST API - web server that exposes certain pre-defined routes to which HTTP requests can be sent
+**REST API** \- web server that exposes certain pre-defined routes to which HTTP requests can be sent
 
 **useMemo()** - wraps normal functions that are wrapped in a component function, in order to prevent their execution - in case we have a complex calculation we want to avoid when possible. Shouldn't be over-used as well.
 
@@ -2103,9 +2088,9 @@ when we try to force reloading of elements by using the \`key\` trick, we must t
 
 Loading data to the state from a **synchronous** code like localStorage operations **doesn't need** to be in a useEffect hook as well
 
-the more flexible **use** hook (from React 19) - a React API that lets you read the value of a resource like a **Promise** or **context**. Unlike React Hooks, `use` can be called within loops and conditional statements like `if`
+the more flexible **use()** hook (from React 19) - a React API that lets you read the value of a resource like a **Promise** or **context**. Unlike other React Hooks, `use` can be called within loops and conditional statements like `if`
 
-NB: Variable in the component file outside of the component itself gets **shared** between the component instances tha are based on that component function
+NB: Variable in the component file outside of the component itself gets **shared** between the component instances that are based on that component function
 
 dynamic styling based on passed props to the styled component
 
@@ -2120,8 +2105,6 @@ Different features, different repeatable code -> to **different components**
 className={isSelected ? 'active' : **undefined** }
 
 **Derived state / computed values** are values that shouldn't be managed as separate state since they can be derived from other state. The less state/hooks the better.
-
-setState **schedules** update of the component
 
 1.  setTodos((prevTodos) \=> prevTodos.concat(newTodo))
 
@@ -2154,7 +2137,7 @@ writing a basic test:
 14.    expect(helloWorldEl).toBeInTheDocument()
 15.  })
 
-describe() - grouping tests in a suite
+`describe()` - **grouping** tests in a suite
 
   
 
@@ -2232,7 +2215,7 @@ Compound components (working in conjunction) example:
 9.    )
 10.  }
 
-queryClient.fetchQuery() - trigger a query programatically (instead of using a hook)
+`queryClient.fetchQuery()` - trigger a query programatically (instead of using a hook)
 
   
 
@@ -2389,7 +2372,7 @@ using **query params**
 
 `return **redirect('/events')**` \- creates a response object that redirects the user to some page
 
-router **<Form method="post" />** \- submits form data to the router **action** instead of the backend
+router's **<Form method="post" />** \- submits form data to the router **action** instead of the backend
 
 using **action()** to send data:
 
@@ -2461,9 +2444,7 @@ NavLink **end** prop -  won't be marked as active if the current path has addit
 *   `relative="relative"` - goes back one level of the active **path** (removes the last segment)
     
 
-absolute vs relative paths
-
-If a path starts with `**/**` it's an absolute path, otherwise it's relative.
+If a path **starts with** `**/**` it's an **absolute path**, otherwise it's **relative**.
 
 <Outlet/>
 
@@ -2514,7 +2495,7 @@ object param causing infinite hook loop => extracted outside of the component
 
 **useContext()**;
 
-**useRecucer()** - makes it easier to manage more complex state and allows us to move the logic out of the ContextProvider component.
+**useReducer()** - makes it easier to manage more complex state and allows us to move the logic out of the ContextProvider component.
 
 Good pattern - combine onBlur & startEdit for showing/hiding validation errors
 
@@ -2564,17 +2545,29 @@ all fields must have a **name** prop
 
 **refs** - pros & cons (good when we don't have too much fields and we won't need to reset them, like read-only scenarios)
 
-event.preventDefault()
-
 form onSubmit()
 
 <button **type="button"** ... /> - with this attribute the button **doesn't submit** its parent form, because the default type is submit
 
 **new Promise()** - return a custom **resolve** value;
 
-pass a custom loading function with a Promise to the custom hook.
+pass a custom loading function with a Promise to the custom hook:
 
-optimistic update - update the state immediately, before receiving "update successful response". if unsuccessful response is returned state would be reset.
+  
+
+1.  async function fetchSortedPlaces() {
+2.    const places \= await fetchAvailablePlaces()
+
+4.    return new Promise((resolve, reject) \=> {
+5.      navigator.geolocation.getCurrentPosition((position) \=> {
+6.        const sortedPlaces \= sortPlacesByDistance(places, position.coords.latitude, position.coords.longitude)
+
+8.        resolve(sortedPlaces)
+9.      })
+10.    })
+11.  }
+
+**Optimistic Update** - update the state immediately, before receiving "update successful response". if unsuccessful response is returned state would be reset.
 
 fetch() using **PUT** method for sending data to the backend
 
@@ -2606,11 +2599,11 @@ _In our case we have an index and a +1 or -1 value, which cannot form an unique 
 
 **Virtual DOM** (since real DOM operations are expensive):
 
-1.  React first creates a snapshot, a virtual representation (in memory) of how the DOM should look like.
+1.  React first **creates a snapshot**, a virtual representation (in memory) of how the DOM should look like.
     
-2.  then virtually compares it to the last snapshot it created, if there's one and quickly finds out which parts have changed
+2.  then virtually **compares** it to the last snapshot it created, if there's one and quickly finds out **which parts have changed**
     
-3.  then applies only these changes to the real DOM.
+3.  then **applies only these changes** to the real DOM.
     
 
 don't **overuse** memo, instead wrap the component that's as high up in the hierarchy as possible
@@ -2621,11 +2614,11 @@ a project with plenty of **timers and intervals**
 
 **key** prop cannot be accessed as a normal prop inside of the component that possesses it
 
-we should try to **avoid** the usage of **useEffect** when possible
+using **key attribute** to force component **re-render** when its parent does
 
-using **key attribute** to force component **re-render** when it parent does
+**shuffle** an array:
 
-**shuffle** an array
+`someArray.sort(() => Math.random() - 0.5)`
 
 **optimizing state updates** by exporting part of the component to a new one
 
@@ -2637,7 +2630,7 @@ useEffect setTimeout **cleanup** \- it's called right **before** the useEffect *
 
 **Another side effect** example: **localStorage**.getItem()/setItem(), JSON.stringify()/parse(). Currently doesn't need to be in UseEffect since it doesn't modify app's jsx. useEffect should be used **as little as possible** since it causes additional re-renders.
 
-useEffect fires **after** the function component's execution has finished **and** when the dependencies change if there are any
+`useEffect` fires **after** the function component's execution has finished **and** when the dependencies change if there are any
 
 `navigator.geolocation.getCurrentPosition(`
 
@@ -2687,7 +2680,7 @@ date formatting
 
 using **refs** instead of **two-way binding** (when we wanna just read the field values once we press the Save button)
 
-**useImperativeHandle()** - write props and methods that should be accessible on a component from outside of it
+**useImperativeHandle()** - write props and methods that should be accessible from an outside component
 
 **ref** can't be forwarded as a standard prop, **forwardRef()** should be used instead in React < 19. **From React 19, they can**.
 
@@ -2697,7 +2690,7 @@ state vs refs
 
 imperative vs declarative: use refs for reading and only for safe setting of data
 
-StrictMode:
+**StrictMode**:
 
 *   one of the most important things it does is that during development it **executes** every component function **twice** so that we could notice some problems early
     
@@ -2717,7 +2710,7 @@ export styled components for reusing
 
 prefix styled-components props with a **$**
 
-Scope styles by renaming the css file to **SomeComponent.module.css**.
+**Scope classes** by renaming the css file to **SomeComponent.module.css**.
 
 That's a signal for the Vite build tool to process the file differently.
 
@@ -2731,7 +2724,7 @@ currency formatter example
 
 When NOT to lift state up
 
-use **as little state** as possible, and try to derive as much info as possible from it
+use **as little state** as possible, and try to **derive** as much info as possible from it
 
 2D array deep copy:
 
@@ -2753,13 +2746,13 @@ enables
 
 syntax.
 
-Static data could reside in the index.html.
+**Static data** could reside in the `index.html`.
 
 adding static content in the index.html and in the public folder...
 
   
 
-you can store images in the `public/` folder and then **directly reference** them from inside your `index.html` or `index.css` files.
+you can store **images** in the `public/` folder and then **directly reference** them from inside your `index.html` or `index.css` files.
 
   
 
